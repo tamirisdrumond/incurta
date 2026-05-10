@@ -607,9 +607,29 @@
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
-    #hero { grid-template-columns: 1fr; }
-    .hero-text { padding: 5rem 1.5rem 3rem; }
-    .hero-visual { height: 50vw; }
+    #hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: 70px;
+    }
+    .hero-text {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .hero-label { justify-content: center; }
+    .hero-sub { max-width: 100%; margin-left: auto; margin-right: auto; }
+    .hero-text > div:last-child { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+    .btn-outline { margin-left: 0; }
+    .hero-visual {
+      height: auto;
+      padding: 1.5rem 1.5rem 3rem;
+    }
+    .hero-circle {
+      width: min(300px, 80vw);
+      height: min(300px, 80vw);
+    }
+    .hero-tag.tag-1 { bottom: 12%; left: 0; }
+    .hero-tag.tag-2 { top: 8%; right: 0; }
     section { padding: 4rem 1.5rem; }
     #about, .how-steps, .why-grid, .resources-grid, .q-wrapper, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
     .how-steps { gap: 1rem; }
