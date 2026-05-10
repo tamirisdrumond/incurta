@@ -302,10 +302,10 @@
   <div class="gate-card">
     <div class="gate-icon">🔒</div>
     <h2>Área do Cliente</h2>
-    <p>Esta área é exclusiva para clientes do programa in.curta.<br>Insira a senha fornecida pela Tamiris para continuar.</p>
-    <input type="password" id="gate-password" name="client-access-code" class="gate-input" placeholder="••••••••••••" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false">
-    <div class="gate-error" id="gate-error">Senha incorreta. Tente novamente.</div>
-    <button class="btn-primary" onclick="checkPassword()">Entrar</button>
+    <p>Esta área é exclusiva para clientes do programa in.curta.<br>Insira o código de acesso fornecido pela Tamiris.</p>
+    <div id="gate-input-wrap"></div>
+    <div class="gate-error" id="gate-error">Código incorreto. Tente novamente.</div>
+    <button class="btn-primary" id="gate-btn" onclick="checkPassword()">Entrar</button>
   </div>
 </div>
 
@@ -320,9 +320,9 @@
 
   // ─── GATE ─────────────────────────────────────────────────
   async function checkPassword() {
-    const pwd = document.getElementById('gate-password').value;
+    const pwd = document.getElementById('gate-access-field').value;
     const err = document.getElementById('gate-error');
-    const btn = document.querySelector('#gate .btn-primary');
+    const btn = document.getElementById('gate-btn');
     btn.disabled = true;
     try {
       const res = await fetch('/api/verify-password', {
@@ -341,8 +341,8 @@
         window.scrollTo(0, 0);
       } else {
         err.style.display = 'block';
-        document.getElementById('gate-password').value = '';
-        document.getElementById('gate-password').focus();
+        document.getElementById('gate-access-field').value = '';
+        document.getElementById('gate-access-field').focus();
       }
     } catch(e) {
       err.textContent = 'Erro de ligacao. Tente novamente.';
@@ -351,9 +351,27 @@
       btn.disabled = false;
     }
   }
-  document.getElementById('gate-password').addEventListener('keydown', e => {
-    if (e.key === 'Enter') checkPassword();
-  });
+  // Build password input with JS after page load so password managers never scan it
+  (function() {
+    var wrap = document.getElementById('gate-input-wrap');
+    var inp = document.createElement('input');
+    inp.setAttribute('type', 'text');           // NOT type="password" — avoids all PW manager detection
+    inp.setAttribute('id', 'gate-access-field');
+    inp.setAttribute('class', 'gate-input');
+    inp.setAttribute('placeholder', '••••••••••••');
+    inp.setAttribute('autocomplete', 'off');
+    inp.setAttribute('autocorrect', 'off');
+    inp.setAttribute('autocapitalize', 'off');
+    inp.setAttribute('spellcheck', 'false');
+    inp.style.webkitTextSecurity = 'disc';      // visually mask on Safari/Chrome
+    inp.style.fontFamily = 'monospace';
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+    wrap.appendChild(inp);
+    // Focus after short delay so it feels natural
+    setTimeout(function() { inp.focus(); }, 200);
+  })();
 
   // ─── STEP 1 VALIDATION ───────────────────────────────────────
   function validateStep1(form) {
@@ -442,7 +460,116 @@
     return el ? el.value.trim() : '';
   }
 
-  // ─── SUBMIT (via server-side API — credentials never exposed to browser) ───────
+  function buildFisicaNote() {
+    return `
+<h3>📋 Definição Física — Planner in.curta</h3>
+<p><strong>Data de preenchimento:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+<hr/>
+<h4>Identificação</h4>
+<p><strong>Nome:</strong> ${val('f-nome')}<br/>
+<strong>Nascimento:</strong> ${val('f-nasc')}<br/>
+<strong>Email:</strong> ${val('f-email')}<br/>
+<strong>WhatsApp:</strong> ${val('f-tel')}<br/>
+<strong>Peso:</strong> ${val('f-peso')} kg &nbsp;|&nbsp; <strong>Altura:</strong> ${val('f-altura')} cm</p>
+<hr/>
+<h4>Corpo e rotina</h4>
+<p><strong>Sono:</strong> ${getRadioVal('f-sono')}<br/>
+<strong>Alimentação que o corpo pede:</strong> ${getCheckedVals('f-alim')}<br/>
+<strong>Come com calma?:</strong> ${getRadioVal('f-calma')}<br/>
+<strong>Atividade no trabalho:</strong> ${getCheckedVals('f-trabalho')}<br/>
+<strong>Quem prepara as refeições:</strong> ${val('f-refeicoes')}</p>
+<hr/>
+<h4>Saúde e sintomas</h4>
+<p><strong>Sintomas frequentes:</strong> ${getCheckedVals('f-sintomas')}<br/>
+<strong>Outros sintomas:</strong> ${val('f-sintomas-outro')}<br/>
+<strong>Marcadores de saúde / exames:</strong> ${val('f-marcadores')}</p>
+<hr/>
+<h4>Autoconhecimento</h4>
+<p><strong>Relação com o espelho:</strong> ${getRadioVal('f-espelho')}<br/>
+<strong>Momento que se perde:</strong> ${getRadioVal('f-perde')} ${val('f-perde-outro') ? '— ' + val('f-perde-outro') : ''}<br/>
+<strong>O que sente falta de fazer:</strong> ${val('f-falta')}<br/>
+<strong>O que faria com 1h só sua:</strong> ${val('f-hora')}<br/>
+<strong>O que mais a impede:</strong> ${val('f-impede')}</p>
+<hr/>
+<h4>Objetivos físicos</h4>
+<p><strong>Busca:</strong> ${val('f-objetivo')}<br/>
+<strong>Mudanças já percebidas:</strong> ${val('f-mudancas')}</p>
+<hr/>
+<h4>Maternidade</h4>
+<p><strong>Culpa ao priorizar tempo:</strong> ${getRadioVal('f-culpa')}<br/>
+<strong>Sentimento pós-maternidade:</strong> ${getCheckedVals('f-mat-sentimento')}<br/>
+<strong>Relação corpo/comida após gestação:</strong> ${val('f-gestacao')}<br/>
+<strong>Rotina com filhos:</strong> ${getRadioVal('f-rotina')}</p>
+<hr/>
+<h4>Motivação</h4>
+<p><strong>Nível de motivação (1-10):</strong> ${getScaleVal('f-motivacao')}<br/>
+<strong>Como quer se sentir ao final (3 palavras):</strong> ${val('f-tres-palavras')}<br/>
+<strong>Observações finais:</strong> ${val('f-obs')}</p>
+    `.trim();
+  }
+
+  function buildEmocionalNote() {
+    return `
+<h3>💜 Definição Emocional — Planner in.curta</h3>
+<p><strong>Data de preenchimento:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+<hr/>
+<h4>Identificação</h4>
+<p><strong>Nome:</strong> ${val('e-nome')}<br/>
+<strong>Nascimento:</strong> ${val('e-nasc')}<br/>
+<strong>Email:</strong> ${val('e-email')}<br/>
+<strong>Nova versão de si mesma:</strong> ${val('e-versao')}<br/>
+<strong>Ocasião especial:</strong> ${getCheckedVals('e-ocasiao')}</p>
+<hr/>
+<h4>Gatilhos emocionais</h4>
+<p><strong>Quando busca comida como conforto:</strong> ${getCheckedVals('e-vulneravel')} ${val('e-vulneravel-outro') ? '/ ' + val('e-vulneravel-outro') : ''}<br/>
+<strong>O que a comida oferece além de sabor:</strong> ${getCheckedVals('e-comida-oferece')}<br/>
+<strong>Momentos com mais vontade de comer:</strong> ${getCheckedVals('e-momentos')}<br/>
+<strong>Melhor horário para cuidar de si:</strong> ${val('e-horario')}</p>
+<hr/>
+<h4>Sentimentos e autoconhecimento</h4>
+<p><strong>Sentimento que quer reconstruir:</strong> ${getCheckedVals('e-reconstruir')}<br/>
+<strong>Se a comida não fosse refúgio:</strong> ${getCheckedVals('e-refugio')}<br/>
+<strong>Parte do corpo que quer melhorar:</strong> ${getCheckedVals('e-corpo-parte')}</p>
+<hr/>
+<h4>Escala comportamental</h4>
+<p><strong>Hábito de repetir (1-10):</strong> ${getScaleVal('e-repetir')}<br/>
+<strong>Come para se sentir melhor (1-10):</strong> ${getScaleVal('e-diadicil')}<br/>
+<strong>Come distraída (1-10):</strong> ${getScaleVal('e-distraida')}<br/>
+<strong>Desiste em situações difíceis (1-10):</strong> ${getScaleVal('e-desiste')}</p>
+<hr/>
+<h4>Histórico de peso</h4>
+<p><strong>Eventos que levaram ao aumento de peso:</strong> ${getCheckedVals('e-eventos')} ${val('e-eventos-outro') ? '/ ' + val('e-eventos-outro') : ''}<br/>
+<strong>Última vez satisfeita com imagem:</strong> ${getRadioVal('e-ultima-vez')}<br/>
+<strong>Experiência ao perder peso:</strong> ${getRadioVal('e-experiencia')}</p>
+<hr/>
+<h4>Corpo e rotina física</h4>
+<p><strong>Sono:</strong> ${getRadioVal('e-sono')}<br/>
+<strong>Momento que se perde:</strong> ${getRadioVal('e-perde')} ${val('e-perde-outro') ? '— ' + val('e-perde-outro') : ''}<br/>
+<strong>Come com calma?:</strong> ${getRadioVal('e-calma')}<br/>
+<strong>Alimentação que o corpo pede:</strong> ${getCheckedVals('e-alim')}<br/>
+<strong>Sintomas frequentes:</strong> ${getCheckedVals('e-sintomas')} ${val('e-sintomas-outro') ? '/ ' + val('e-sintomas-outro') : ''}</p>
+<hr/>
+<h4>Maternidade</h4>
+<p><strong>Relação corpo/comida após gestação:</strong> ${val('e-gestacao')}<br/>
+<strong>Rotina com filhos:</strong> ${getRadioVal('e-rotina')}<br/>
+<strong>Sentimento pós-maternidade:</strong> ${getCheckedVals('e-mat-sentimento')}<br/>
+<strong>Culpa ao priorizar tempo:</strong> ${getRadioVal('e-culpa')}<br/>
+<strong>Relação com o espelho desde o parto:</strong> ${getRadioVal('e-espelho-parto')}</p>
+<hr/>
+<h4>Objetivos e motivação</h4>
+<p><strong>O que sente falta de fazer:</strong> ${val('e-falta')}<br/>
+<strong>O que a impede de se cuidar:</strong> ${val('e-impede')}<br/>
+<strong>Busca (definição/volume/energia/leveza):</strong> ${val('e-objetivo')}<br/>
+<strong>Quem prepara as refeições:</strong> ${val('e-refeicoes')}<br/>
+<strong>Mudanças já percebidas:</strong> ${val('e-mudancas')}<br/>
+<strong>Marcadores de saúde / exames:</strong> ${val('e-marcadores')}<br/>
+<strong>Motivação (1-10):</strong> ${getScaleVal('e-motivacao')}<br/>
+<strong>Atividade no trabalho:</strong> ${getCheckedVals('e-trabalho')}<br/>
+<strong>Como quer se sentir ao final (3 palavras):</strong> ${val('e-tres-palavras')}</p>
+    `.trim();
+  }
+
+    // ─── SUBMIT (via server-side API — credentials never exposed to browser) ───────
   async function submitForm(type) {
     const nameId  = type === 'fisica' ? 'f-nome'  : 'e-nome';
     const emailId = type === 'fisica' ? 'f-email' : 'e-email';
