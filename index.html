@@ -14,14 +14,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --burgundy: #8B1536;
-    --blush: #C99D89;
+    --burgundy: #8B1538;
+    --burgundy-vivid: #C41E3A;
+    --blush: #D4A5A5;
     --taupe: #936458;
-    --espresso: #3B2122;
-    --cream: #E8DCD7;
-    --cream-light: #F5F0EE;
-    --text-dark: #3B2122;
-    --text-mid: #6B4A47;
+    --espresso: #2C2C2C;
+    --cream: #F5EBE0;
+    --cream-light: #F5EBE0;
+    --gold: #C9A86A;
+    --text-dark: #2C2C2C;
+    --text-mid: #5a4a3a;
     --text-light: #9A7B78;
   }
 
@@ -30,7 +32,7 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--cream-light);
     color: var(--text-dark);
     overflow-x: hidden;
@@ -46,8 +48,8 @@
     border-bottom: 1px solid rgba(139,21,54,0.08);
   }
   .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.35rem; font-weight: 500; letter-spacing: 0.04em;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em;
     color: var(--espresso); text-decoration: none;
   }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
@@ -83,9 +85,9 @@
     width: 28px; height: 1px; background: var(--blush);
   }
   h1 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: clamp(3.2rem, 5vw, 5rem);
-    font-weight: 300; line-height: 1.1;
+    font-weight: 700; line-height: 1.1;
     color: var(--espresso); margin-bottom: 1.5rem;
   }
   h1 em { font-style: italic; color: var(--burgundy); }
@@ -97,7 +99,7 @@
     display: inline-block; padding: 0.95rem 2.5rem;
     background: var(--burgundy); color: #fff;
     font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    font-family: 'Inter', sans-serif; font-weight: 500;
     text-decoration: none; transition: background 0.2s, transform 0.15s;
     border: none; cursor: pointer;
   }
@@ -106,7 +108,7 @@
     display: inline-block; padding: 0.95rem 2.5rem;
     background: transparent; color: var(--burgundy);
     font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    font-family: 'Inter', sans-serif; font-weight: 500;
     text-decoration: none; border: 1px solid var(--burgundy);
     transition: all 0.2s; cursor: pointer; margin-left: 1rem;
   }
@@ -140,7 +142,7 @@
     text-align: center; padding: 2rem; position: relative; z-index: 2;
   }
   .hero-inner-text .big-number {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 5rem; font-weight: 300; color: var(--burgundy); line-height: 1;
   }
   .hero-inner-text .big-label {
@@ -155,7 +157,7 @@
   .hero-tag.tag-1 { bottom: 28%; left: -2rem; }
   .hero-tag.tag-2 { top: 28%; right: -1rem; }
   .hero-tag .tag-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 1.6rem; font-weight: 500; color: var(--espresso);
   }
   .hero-tag .tag-text {
@@ -197,9 +199,9 @@
     content: ''; display: inline-block; width: 20px; height: 1px; background: var(--blush);
   }
   h2 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: clamp(2.2rem, 3.5vw, 3.2rem);
-    font-weight: 400; line-height: 1.15; color: var(--espresso);
+    font-weight: 700; line-height: 1.15; color: var(--burgundy);
     margin-bottom: 1.5rem;
   }
   h2 em { font-style: italic; color: var(--burgundy); }
@@ -220,15 +222,15 @@
   margin-bottom: 2rem;
 }
   .about-card {
-  grid-column: 1 / -1;
-  background: var(--cream-light);
+  grid-column: 2;
+  background: var(--cream);
   padding: 3.5rem;
   border-left: 3px solid var(--burgundy);
-  margin-top: 2rem;
+  margin-top: 0;
   }
   .about-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem; font-style: italic; font-weight: 300;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 1.5rem; font-style: italic; font-weight: 400;
     color: var(--espresso); line-height: 1.5; margin-bottom: 1.5rem;
   }
   .about-cite {
@@ -258,7 +260,7 @@
   #why .section-label { color: rgba(201,157,137,0.8); }
   #why .section-label::before { background: rgba(201,157,137,0.8); }
   #why h2 { color: var(--cream); }
-  #why h2 em { color: var(--blush); }
+  #why h2 em { color: var(--cream); }
   .why-grid {
     display: grid; grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem; margin-top: 4rem;
@@ -273,13 +275,13 @@
     background: rgba(201,157,137,0.04);
   }
   .why-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 3rem; font-weight: 300;
-    color: rgba(201,157,137,0.25); line-height: 1; margin-bottom: 1.5rem;
+    color: var(--cream); line-height: 1; margin-bottom: 1.5rem;
   }
   .why-item h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem; font-weight: 400; color: var(--cream);
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.4rem; font-weight: 700; color: var(--cream);
     margin-bottom: 0.75rem;
   }
   .why-item p {
@@ -303,16 +305,16 @@
   .step-card:hover { border-color: var(--burgundy); }
   .step-card::after {
     content: '→'; position: absolute; right: -1.25rem; top: 2rem;
-    color: var(--blush); font-size: 1.2rem;
+    color: var(--gold); font-size: 1.2rem;
   }
   .step-card:last-child::after { display: none; }
   .step-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 0.85rem; color: var(--burgundy);
     letter-spacing: 0.1em; margin-bottom: 1.25rem;
   }
   .step-card h3 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 1.3rem; font-weight: 500; color: var(--espresso);
     margin-bottom: 0.75rem;
   }
@@ -325,8 +327,8 @@
     display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
   }
   .pillar-text h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem; font-weight: 400; color: var(--cream); margin-bottom: 1rem;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.8rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem;
   }
   .pillar-text p { font-size: 0.9rem; line-height: 1.8; color: rgba(232,220,215,0.75); font-weight: 300; }
   .pillar-list { list-style: none; }
@@ -346,8 +348,8 @@
   #resources { background: #fff; }
   .resources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
   .resource-category h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem; font-weight: 500; color: var(--espresso);
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.4rem; font-weight: 700; color: var(--espresso);
     margin-bottom: 1.5rem; padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--cream);
   }
@@ -374,8 +376,8 @@
     display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; margin-top: 3rem;
   }
   .q-intro h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem; font-weight: 400; color: var(--espresso); margin-bottom: 1rem;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.5rem; font-weight: 700; color: var(--espresso); margin-bottom: 1rem;
   }
   .q-intro p { font-size: 0.88rem; line-height: 1.8; color: var(--text-mid); font-weight: 300; }
   .q-steps { margin-top: 2rem; }
@@ -407,7 +409,7 @@
   .form-step { display: none; }
   .form-step.visible { display: block; }
   .form-step-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 1.3rem; font-weight: 500; color: var(--espresso);
     margin-bottom: 0.4rem;
   }
@@ -423,7 +425,7 @@
   }
   .field input, .field select, .field textarea {
     border: 1px solid var(--cream); padding: 0.75rem 1rem;
-    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+    font-family: 'Inter', sans-serif; font-size: 0.88rem;
     color: var(--text-dark); background: var(--cream-light);
     outline: none; transition: border-color 0.2s;
     -webkit-appearance: none;
@@ -457,7 +459,7 @@
   .scale-btn {
     width: 44px; height: 44px; border: 1px solid var(--cream);
     background: var(--cream-light); font-size: 0.85rem;
-    color: var(--text-mid); cursor: pointer; font-family: 'DM Sans', sans-serif;
+    color: var(--text-mid); cursor: pointer; font-family: 'Inter', sans-serif;
     transition: all 0.15s; display: flex; align-items: center; justify-content: center;
   }
   .scale-btn:hover { border-color: var(--blush); }
@@ -468,7 +470,7 @@
   .form-nav .btn-back {
     background: none; border: none; color: var(--text-light);
     font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500;
+    cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500;
     transition: color 0.2s;
   }
   .form-nav .btn-back:hover { color: var(--text-mid); }
@@ -483,8 +485,8 @@
     font-size: 1.5rem; color: var(--burgundy);
   }
   .form-success h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem; font-weight: 400; color: var(--espresso); margin-bottom: 0.75rem;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.8rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.75rem;
   }
   .form-success p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; }
 
@@ -493,7 +495,7 @@
   #contact .section-label { color: rgba(201,157,137,0.8); }
   #contact .section-label::before { background: rgba(201,157,137,0.8); }
   #contact h2 { color: var(--cream); }
-  #contact h2 em { color: var(--blush); }
+  #contact h2 em { color: var(--cream); }
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
   .contact-info p {
     font-size: 0.95rem; line-height: 1.85; color: rgba(232,220,215,0.65);
@@ -531,7 +533,7 @@
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
   }
   .footer-logo {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
     font-size: 1rem; color: rgba(232,220,215,0.5); font-weight: 300;
   }
   .footer-copy { font-size: 0.75rem; color: rgba(232,220,215,0.3); }
@@ -557,14 +559,14 @@
   .cookie-btns { display: flex; gap: 0.75rem; flex-shrink: 0; }
   #cookie-accept {
     padding: 0.6rem 1.5rem; background: var(--burgundy); color: #fff;
-    border: none; font-family: 'DM Sans', sans-serif;
+    border: none; font-family: 'Inter', sans-serif;
     font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
     cursor: pointer; font-weight: 500; transition: background 0.2s;
   }
   #cookie-accept:hover { background: #6e1029; }
   #cookie-reject {
     padding: 0.6rem 1.5rem; background: transparent; color: rgba(232,220,215,0.5);
-    border: 1px solid rgba(255,255,255,0.15); font-family: 'DM Sans', sans-serif;
+    border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif;
     font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
     cursor: pointer; transition: all 0.2s;
   }
@@ -577,8 +579,8 @@
     border-top: 1px solid rgba(139,21,54,0.1);
   }
   .client-cta-text h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem; font-weight: 400; color: var(--espresso); margin-bottom: 0.4rem;
+    font-family: 'Futura', 'Trebuchet MS', 'Gill Sans', sans-serif;
+    font-size: 1.6rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.4rem;
   }
   .client-cta-text p { font-size: 0.88rem; color: var(--text-mid); font-weight: 300; }
   @media (max-width: 900px) {
