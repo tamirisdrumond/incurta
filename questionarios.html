@@ -594,14 +594,21 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, name, email, note })
       });
-      if (!res.ok) throw new Error('server error');
+      const resData = await res.json().catch(() => ({}));
+      if (!res.ok || !resData.ok) {
+        const e = new Error(resData.detail || resData.error || `HTTP ${res.status}`);
+        e.serverDetail = resData.detail || resData.error || `HTTP ${res.status}`;
+        throw e;
+      }
 
       document.querySelector(`#${type[0]}-step-${TOTAL_STEPS[type]}`).classList.remove('visible');
       document.getElementById('form-success').style.display = 'block';
       window.scrollTo(0, 0);
     } catch (err) {
       console.error(err);
-      alert('Erro ao enviar. Por favor tente novamente ou contacte a Tamiris directamente.');
+      const errMsg = err.serverDetail || err.message || 'erro desconhecido';
+      document.getElementById('submit-error-msg') && (document.getElementById('submit-error-msg').textContent = 'Erro: ' + errMsg);
+      alert('Erro ao enviar: ' + errMsg);
       btn.disabled = false;
       btn.innerHTML = 'Enviar respostas';
     }
