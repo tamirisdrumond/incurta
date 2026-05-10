@@ -39,18 +39,24 @@ export default async function handler(req, res) {
     });
     const authData = await authRes.json();
     if (!authData.result?.uid) {
-      throw new Error('Odoo authentication failed');
+      const errDetail = JSON.stringify(authData.error || authData.result || 'no uid');
+      throw new Error(`Odoo authentication failed: ${errDetail}`);
     }
 
-    // Extract session cookie for subsequent calls
-    const setCookie = authRes.headers.get('set-cookie') || '';
+    // Extract session cookie — try response body first (Odoo 16+), then header
+    const sessionId = authData.result?.session_id;
+    const rawCookie = authRes.headers.get('set-cookie') || '';
+    const sessionMatch = rawCookie.match(/session_id=[^;]+/);
+    const cookieHeader = sessionId
+      ? `session_id=${sessionId}`
+      : (sessionMatch ? sessionMatch[0] : rawCookie);
 
     async function odooCall(model, method, args, kwargs = {}) {
       const r = await fetch(`${ODOO_URL}/web/dataset/call_kw`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': setCookie
+          'Cookie': cookieHeader
         },
         body: JSON.stringify({
           jsonrpc: '2.0', method: 'call', id: 2,
