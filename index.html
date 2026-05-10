@@ -207,7 +207,7 @@
   /* ─── ABOUT ─── */
   #about {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 6rem; align-items: center;
+    gap: 6rem; align-items: start;
     background: #fff;
   }
   .about-visual {
@@ -221,6 +221,7 @@
 }
   .about-card {
     background: var(--cream-light);
+      grid-column: 2;
     padding: 3.5rem; border-left: 3px solid var(--burgundy);
   }
   .about-quote {
