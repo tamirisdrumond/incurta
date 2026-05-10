@@ -332,6 +332,8 @@
       });
       const data = await res.json();
       if (data.ok && data.html) {
+        // Store password for subsequent per-questionnaire fetches
+        window._clientPwd = pwd;
         const appEl = document.getElementById('app');
         appEl.innerHTML = data.html;
         document.getElementById('gate').style.display = 'none';
@@ -370,24 +372,6 @@
     nextStep(form, 1, 2);
   }
 
-  // ─── SELECTOR ─────────────────────────────────────────────
-  function openForm(type) {
-    activeForm = type;
-    activeStep = 1;
-    document.getElementById('selector').style.display = 'none';
-    document.getElementById('form-area').style.display = 'block';
-    document.getElementById('form-success').style.display = 'none';
-
-    const titles = {
-      fisica: { t: 'Planner in.curta — <em>Definição Física</em>', s: 'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.' },
-      emocional: { t: 'Planner in.curta — <em>Definição Emocional</em>', s: 'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.' }
-    };
-    document.getElementById('form-title').innerHTML = titles[type].t;
-    document.getElementById('form-sub').textContent = titles[type].s;
-
-    showStep(type, 1);
-    window.scrollTo(0, 0);
-  }
 
   function backToSelector() {
     activeForm = null;
@@ -495,6 +479,93 @@
       btn.innerHTML = 'Enviar respostas';
     }
   }
+  // ─── ON-DEMAND QUESTIONNAIRE LOADER ──────────────────────
+  // Called when client clicks a card. Fetches only that form's HTML.
+  async function openForm(type) {
+    const routes = { fisica: '/api/form-fisica', emocional: '/api/form-emocional' };
+    const route = routes[type];
+    if (!route) return;
+
+    // Show loading state in the selector
+    const cards = document.querySelector('.q-cards');
+    if (cards) cards.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">A carregar…</div>';
+
+    try {
+      const res = await fetch(route, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: window._clientPwd })
+      });
+      const data = await res.json();
+      if (!data.ok || !data.html) throw new Error('load failed');
+
+      // Inject steps into the form-area's step container
+      const stepContainer = document.getElementById('form-area');
+      // Insert steps before the success state
+      const successEl = document.getElementById('form-success');
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = data.html;
+      tempDiv.querySelectorAll('.form-step').forEach(s => {
+        stepContainer.insertBefore(s, successEl);
+      });
+
+      // Now activate the form
+      activeForm = type;
+      activeStep = 1;
+      document.getElementById('selector').style.display = 'none';
+      document.getElementById('form-area').style.display = 'block';
+      document.getElementById('form-success').style.display = 'none';
+
+      const titles = {
+        fisica: { t: 'Planner in.curta — <em>Definição Física</em>', s: 'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.' },
+        emocional: { t: 'Planner in.curta — <em>Definição Emocional</em>', s: 'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.' }
+      };
+      document.getElementById('form-title').innerHTML = titles[type].t;
+      document.getElementById('form-sub').textContent = titles[type].s;
+      showStep(type, 1);
+      window.scrollTo(0, 0);
+    } catch(e) {
+      console.error('Form load error:', e);
+      // Restore cards on error
+      document.getElementById('selector').style.display = 'flex';
+      document.getElementById('app').innerHTML = '<p style="padding:2rem;color:var(--burgundy)">Erro ao carregar. Recarregue a página.</p>';
+    }
+  }
+
+  async function openQfa() {
+    const cards = document.querySelector('.q-cards');
+    if (cards) cards.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">A carregar…</div>';
+
+    try {
+      const res = await fetch('/api/form-qfa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: window._clientPwd })
+      });
+      const data = await res.json();
+      if (!data.ok || !data.html) throw new Error('load failed');
+
+      const appEl = document.getElementById('app');
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = data.html;
+      // Inject styles
+      tempDiv.querySelectorAll('style').forEach(s => document.head.appendChild(s));
+      // Inject scripts
+      tempDiv.querySelectorAll('script').forEach(s => {
+        const ns = document.createElement('script');
+        ns.textContent = s.textContent;
+        document.body.appendChild(ns);
+        s.remove();
+      });
+      // Append remaining HTML to app
+      appEl.appendChild(tempDiv.firstElementChild || tempDiv);
+      document.getElementById('selector').style.display = 'none';
+      window.scrollTo(0, 0);
+    } catch(e) {
+      console.error('QFA load error:', e);
+    }
+  }
+
 </script>
 </body>
 </html>
