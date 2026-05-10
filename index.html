@@ -3,10 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>in.curta — Tamiris Drumond · Nutrição Comportamental</title>
+<title>In.curta  Tamiris Drumond · Nutrição Comportamental</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Libre Baskerville as web-safe Baskerville fallback -->
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --burgundy: #8B1536;
@@ -157,6 +162,29 @@
     font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--text-light); margin-top: 0.15rem;
   }
+  /* --- Additional --- */
+  .inline-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.inline-logo-white {
+  height: 0.9em;
+  width: auto;
+  display: block;
+  margin: 0 0.15em;
+}
+  .nav-logo {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo-img {
+  height: 42px;
+  width: auto;
+  display: block;
+}
 
   /* ─── SECTIONS SHARED ─── */
   section { padding: 6rem 4rem; }
@@ -590,7 +618,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#hero" class="nav-logo">in.curta</a>
+  <img src="images/logo.png" alt="in.curta logo" class="nav-logo-img">
   <ul class="nav-links">
     <li><a href="#about">Sobre</a></li>
     <li><a href="#why">O Método</a></li>
@@ -607,7 +635,7 @@
   <div class="hero-text">
     <div class="hero-label">Nutrição Clínica Comportamental</div>
     <h1>Emagrecer não é força<br>de vontade. É <em>neurotreinamento</em>.</h1>
-    <p class="hero-sub">Aprenda a lidar com os impulsos do cérebro, reprogramar seus gatilhos e construir hábitos definitivos — sem dietas restritivas, sem culpa.</p>
+    <p class="hero-sub">Aprenda a lidar com os impulsos do cérebro, reprogramar seus gatilhos e construir hábitos definitivos sem dietas restritivas, sem culpa.</p>
     <div>
       <a href="#questionnaire" class="btn-primary">Começar agora</a>
       <a href="#about" class="btn-outline">Conhecer o método</a>
@@ -641,8 +669,10 @@
     class="about-image"
   >
     <div class="about-card">
-      <div class="about-quote">"Emagrecer não é só força de vontade. É neurotreinamento diário."</div>
-      <div class="about-cite">— Tamiris Drumond</div>
+      <div class="about-quote">"Criei o in.curta porque percebi que muitas pessoas vivem presas no ciclo da
+restrição: começam motivadas, tentam mudar tudo de uma vez, falham, sentem
+culpa e recomeçam toda semana."</div>
+      <div class="about-cite"> Tamiris Drumond</div>
     </div>
     <div class="about-accent"></div>
   </div>
@@ -651,7 +681,7 @@
     <h2>Tamiris <em>Drumond</em></h2>
     <p>Nutricionista com mais de 15 anos de experiência ajudando mulheres a transformarem sua relação com a comida. Especialista em Nutrição Clínica Comportamental, Neurociência e Psicologia Positiva.</p>
     <p>Durante mais de 10 anos contribuiu com entrevistas semanais em TV e rádio, levando conhecimento acessível sobre comportamento alimentar e saúde para um público amplo.</p>
-    <p>Acredito que resultados duradouros não vêm da perfeição — mas de entender seus hábitos, emoções e sua relação com a comida, e agir com estratégia e autocompaixão.</p>
+    <p>Acredito que resultados duradouros não vêm da perfeição mas de entender seus hábitos, emoções e sua relação com a comida, e agir com estratégia e autocompaixão.</p>
     <div class="credentials">
       <span class="cred-tag">Nutricionista Clínica</span>
       <span class="cred-tag">Neurociência</span>
@@ -664,22 +694,28 @@
 <!-- WHY -->
 <section id="why">
   <div class="section-label">O Significado</div>
-  <h2>Por que o <em>in.curta</em> é diferente</h2>
+  <h2>
+  Por que o
+  <span class="inline-logo-wrap">
+    <img src="images/logo-white.png" alt="in.curta" class="inline-logo-white">
+  </span>
+  é diferente
+</h2>
   <div class="why-grid">
     <div class="why-item">
       <div class="why-num">IN</div>
       <h3>Olhar para dentro</h3>
-      <p>O "IN" representa o olhar para dentro — entender seus hábitos, emoções e a relação com a comida. Sem autoconhecimento, nenhuma dieta sustenta resultados duradouros.</p>
+      <p>O "IN" representa o olhar para dentro entender seus hábitos, emoções e a relação com a comida. Sem autoconhecimento, nenhuma dieta sustenta resultados duradouros.</p>
     </div>
     <div class="why-item">
       <div class="why-num">CURTA</div>
       <h3>Curtir o processo</h3>
-      <p>O "curta" é um convite para viver com mais leveza: curtir a vida sem viver sob pressão de calorias, culpa ou dietas extremas. Você não só encurta o caminho — como também curte o processo.</p>
+      <p>O "curta" é um convite para viver com mais leveza: curtir a vida sem viver sob pressão de calorias, culpa ou dietas extremas. Você não só encurta o caminho como também curte o processo.</p>
     </div>
     <div class="why-item">
       <div class="why-num">→</div>
       <h3>Não é falta de força de vontade</h3>
-      <p>Se você começa dietas e não consegue manter, perde o controle com comida ou sente culpa depois de comer — o problema não é você. É falta de estratégia para lidar com os impulsos do cérebro.</p>
+      <p>Se você começa dietas e não consegue manter, perde o controle com comida ou sente culpa depois de comer o problema não é você. É falta de estratégia para lidar com os impulsos do cérebro.</p>
     </div>
   </div>
 </section>
@@ -689,7 +725,7 @@
   <div class="section-label">O Programa</div>
   <h2>Como <em>funciona</em></h2>
   <div class="how-intro">
-    <p>O in.curta é um programa de 3 meses porque as mudanças reais no comportamento alimentar precisam de tempo para se consolidar. Durante esse período trabalhamos gradualmente impulsos alimentares, disciplina e construção de hábitos.</p>
+    <p>O In.curta é um programa de 3 meses porque as mudanças reais no comportamento alimentar precisam de tempo para se consolidar. Durante esse período trabalhamos gradualmente impulsos alimentares, disciplina e construção de hábitos.</p>
   </div>
   <div class="how-steps">
     <div class="step-card">
@@ -710,14 +746,14 @@
     <div class="step-card">
       <div class="step-num">Resultado</div>
       <h3>Hábitos Definitivos</h3>
-      <p>Emagreça de forma consciente, sem dietas restritivas e sem culpa — reprogramando seus gatilhos e consolidando hábitos de forma definitiva.</p>
+      <p>Emagreça de forma consciente, sem dietas restritivas e sem culpa reprogramando seus gatilhos e consolidando hábitos de forma definitiva.</p>
     </div>
   </div>
 
   <div class="program-pillars">
     <div class="pillar-text">
       <h3>O que está incluído no programa</h3>
-      <p>Cada elemento do in.curta foi desenhado para trabalhar em conjunto — oferecendo a estrutura, a ciência e o suporte que a mudança duradoura exige.</p>
+      <p>Cada elemento do In.curta foi desenhado para trabalhar em conjunto oferecendo a estrutura, a ciência e o suporte que a mudança duradoura exige.</p>
     </div>
     <ul class="pillar-list">
       <li>6 consultas online ao vivo (1 a cada 15 dias)</li>
@@ -740,7 +776,7 @@
       <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
         <div class="pdf-icon">PDF</div>
         <div>
-          <div class="pdf-title">Apresentação do Programa in.curta</div>
+          <div class="pdf-title">Apresentação do Programa In.curta</div>
           <div class="pdf-meta">Guia de boas-vindas</div>
         </div>
         <div class="pdf-arrow">↓</div>
@@ -756,7 +792,7 @@
       <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
         <div class="pdf-icon">PDF</div>
         <div>
-          <div class="pdf-title">Planner de Intenções — Semana 1</div>
+          <div class="pdf-title">Planner de Intenções Semana 1</div>
           <div class="pdf-meta">Exercício inicial</div>
         </div>
         <div class="pdf-arrow">↓</div>
@@ -807,7 +843,7 @@
   <h2>Pronta para <em>começar?</em></h2>
   <div class="contact-grid">
     <div class="contact-info">
-      <p>Se você tem dúvidas sobre o programa, quer conversar sobre a sua situação ou está pronta para começar — estou aqui. Entre em contato e vamos conversar.</p>
+      <p>Se você tem dúvidas sobre o programa, quer conversar sobre a sua situação ou está pronta para começar estou aqui. Entre em contato e vamos conversar.</p>
       <div class="contact-detail">
         <div class="contact-detail-icon">✉</div>
         <div>
@@ -846,7 +882,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">in.curta · Tamiris Drumond</div>
+  <div class="footer-logo">In.curta · Tamiris Drumond</div>
   <div class="footer-legal">
     <a href="privacidade.html">Política de Privacidade</a>
     <a href="privacidade.html#termos">Termos de Uso</a>
