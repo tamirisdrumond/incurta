@@ -33,12 +33,20 @@ export default async function handler(req, res) {
       throw new Error('Authentication failed');
     }
 
+    // Extract session cookie reliably (Odoo 16+ returns session_id in body)
+    const sessionId = auth.result?.session_id;
+    const rawCookie = authRes.headers.get('set-cookie') || '';
+    const sessionMatch = rawCookie.match(/session_id=[^;]+/);
+    const cookieHeader = sessionId
+      ? `session_id=${sessionId}`
+      : (sessionMatch ? sessionMatch[0] : '');
+
     // Create CRM Lead
-    await fetch(`${ODOO_URL}/web/dataset/call_kw`, {
+    const leadRes = await fetch(`${ODOO_URL}/web/dataset/call_kw`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Cookie: authRes.headers.get('set-cookie') || ''
+        Cookie: cookieHeader
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
@@ -58,10 +66,13 @@ export default async function handler(req, res) {
       })
     });
 
+    const leadData = await leadRes.json();
+    if (leadData.error) throw new Error(JSON.stringify(leadData.error));
+
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('Contact Odoo error:', err.message);
+    return res.status(500).json({ error: 'Internal server error', detail: err.message });
   }
 }
