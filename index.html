@@ -860,10 +860,10 @@
     const msg = document.getElementById('c-msg').value.trim();
     if (!name || !email || !msg) { alert('Por favor, preencha todos os campos.'); return; }
 
-    const ODOO_URL = 'https://incurta-odoo19-10390.skysize.io';
-    const ODOO_DB = 'incurta';
-    const ODOO_USER = 'SEU_EMAIL_ODOO';
-    const ODOO_PASS = 'SUA_SENHA_ODOO';
+    const ODOO_URL = ${{ secrets.ODOO_URL }};
+    const ODOO_DB = ${{ secrets.ODOO_DB }};
+    const ODOO_USER = ${{ secrets.ODOO_USER }};
+    const ODOO_PASS = ${{ secrets.ODOO_PASS }};
 
     try {
       const authRes = await fetch(`${ODOO_URL}/web/session/authenticate`, {
