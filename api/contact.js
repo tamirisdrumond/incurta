@@ -49,6 +49,10 @@ export default async function handler(req, res) {
       });
       const d = await r.json();
       if (d.error) throw new Error(JSON.stringify(d.error));
+      // Odoo returns the created ID directly — validate it's a number
+      if (typeof d.result !== 'undefined' && d.result === false) {
+        throw new Error(`${model}.${method} returned false`);
+      }
       return d.result;
     }
 
@@ -70,38 +74,38 @@ export default async function handler(req, res) {
       }]);
     }
 
-    // 3. Create CRM lead linked to the partner
+    // 3. Create CRM lead (no `type` field — removed in Odoo 17+)
     const leadId = await odooCall('crm.lead', 'create', [{
       name: `Contato via site: ${name}`,
       contact_name: name,
       email_from: email,
       description: message,
-      partner_id: partnerId,
-      type: 'lead'
+      partner_id: partnerId
     }]);
 
-    // 4. Find the "Email" activity type (or fall back to "To-Do")
+    // Validate leadId before using it
+    if (!leadId || typeof leadId !== 'number') {
+      throw new Error(`crm.lead create returned invalid id: ${JSON.stringify(leadId)}`);
+    }
+
+    // 4. Find activity type — try Email, then To-Do
     const activityTypes = await odooCall(
       'mail.activity.type', 'search_read',
-      [[['name', 'in', ['Email', 'To-Do', 'Todo']]]],
-      { fields: ['id', 'name'], limit: 3 }
+      [[['name', 'in', ['Email', 'To-Do', 'Todo', 'Telefone', 'Phone Call']]]],
+      { fields: ['id', 'name'], limit: 5 }
     );
-    const emailType = activityTypes.find(t =>
-      t.name.toLowerCase() === 'email'
-    ) || activityTypes.find(t =>
-      t.name.toLowerCase().includes('todo') || t.name.toLowerCase().includes('to-do')
-    ) || activityTypes[0];
+    const actType = activityTypes.find(t => t.name.toLowerCase() === 'email')
+      || activityTypes.find(t => t.name.toLowerCase().includes('todo') || t.name.toLowerCase().includes('to-do'))
+      || activityTypes[0];
 
-    if (emailType) {
-      // Today's date in YYYY-MM-DD
+    if (actType && leadId) {
       const today = new Date().toISOString().slice(0, 10);
-
       await odooCall('mail.activity', 'create', [{
         res_model: 'crm.lead',
         res_id: leadId,
-        activity_type_id: emailType.id,
+        activity_type_id: actType.id,
         summary: `Responder a ${name}`,
-        note: `Mensagem recebida via site:\n\n${message}`,
+        note: `<p>Mensagem recebida via site:</p><p>${message.replace(/\n/g, '<br>')}</p>`,
         date_deadline: today,
         user_id: userId
       }]);
