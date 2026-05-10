@@ -394,11 +394,34 @@
   function backToSelector() {
     activeForm = null;
     activeStep = 1;
+    // Remove injected steps so next openForm starts clean
+    document.querySelectorAll('.form-step').forEach(s => s.remove());
+    // Restore selector cards in case they were replaced with loading text
+    const cardsEl = document.querySelector('.q-cards');
+    if (cardsEl && !cardsEl.querySelector('.q-card')) {
+      cardsEl.innerHTML = `
+        <div class="q-card" onclick="openForm('fisica')">
+          <div class="q-card-num">01</div>
+          <h3>Definição Física</h3>
+          <p>Sobre seu corpo, sintomas, rotina, sono, alimentação e objetivos físicos.</p>
+          <span class="q-card-tag">25 perguntas · ~12 min</span>
+        </div>
+        <div class="q-card" onclick="openForm('emocional')">
+          <div class="q-card-num">02</div>
+          <h3>Definição Emocional</h3>
+          <p>Sobre sua relação emocional com a comida, gatilhos, sentimentos e objetivos.</p>
+          <span class="q-card-tag">38 perguntas · ~18 min</span>
+        </div>
+        <div class="q-card" onclick="openQfa()">
+          <div class="q-card-num">03</div>
+          <h3>Frequência Alimentar</h3>
+          <p>Avalie seus hábitos alimentares: quais alimentos come, com que frequência e em que quantidade.</p>
+          <span class="q-card-tag">39 alimentos · ~15 min · com pontuação</span>
+        </div>`;
+    }
     document.getElementById('selector').style.display = 'flex';
     document.getElementById('form-area').style.display = 'none';
     document.getElementById('form-success').style.display = 'none';
-    // hide all steps
-    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('visible'));
     window.scrollTo(0, 0);
   }
 
@@ -418,7 +441,7 @@
 
   function updateProgress(form, n) {
     const total = TOTAL_STEPS[form];
-    const pct = Math.round(((n - 1) / total) * 100);
+    const pct = Math.round((n / total) * 100);
     document.getElementById('prog-fill').style.width = pct + '%';
     document.getElementById('prog-step-label').textContent = `Passo ${n} de ${total}`;
     document.getElementById('prog-pct').textContent = pct + '%';
@@ -633,9 +656,10 @@
       const data = await res.json();
       if (!data.ok || !data.html) throw new Error('load failed');
 
-      // Inject steps into the form-area's step container
+      // Remove any previously injected steps first (handles second+ questionnaire)
+      document.querySelectorAll('.form-step').forEach(s => s.remove());
+      // Inject new steps before the success state
       const stepContainer = document.getElementById('form-area');
-      // Insert steps before the success state
       const successEl = document.getElementById('form-success');
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = data.html;

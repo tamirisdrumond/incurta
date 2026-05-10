@@ -924,7 +924,7 @@ culpa e recomeçam toda semana."</div>
         <div class="field"><label>Mensagem</label><textarea placeholder="O que você gostaria de conversar?" style="min-height: 130px;" id="c-msg"></textarea></div>
       </div>
       <button class="btn-primary" onclick="submitContact()">Enviar mensagem</button>
-      <div id="contact-success" style="display:none; margin-top:1rem; font-size:0.85rem; color:var(--blush);">Mensagem enviada! Responderei em até 48h.</div>
+      <div id="contact-success" style="display:none; margin-top:1rem; font-size:0.85rem; color:var(--blush);">Mensagem enviada! Entrarei em contato assim que possível.</div>
     </div>
   </div>
 </section>
@@ -978,8 +978,9 @@ try {
     })
   });
 
-  if (!res.ok) {
-    throw new Error('Erro ao enviar');
+  const resData = await res.json().catch(() => ({}));
+  if (!res.ok || !resData.success) {
+    throw new Error(resData.detail || resData.error || 'Erro ao enviar');
   }
 
       document.getElementById('contact-success').style.display = 'block';
