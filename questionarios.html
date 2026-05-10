@@ -332,25 +332,12 @@
         body: JSON.stringify({ password: pwd })
       });
       const data = await res.json();
-      if (data.ok) {
-        // Fetch the protected app content from the server
-        const contentRes = await fetch('/api/content', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: pwd })
-        });
-        if (!contentRes.ok) throw new Error('content fetch failed');
-        const appHtml = await contentRes.text();
+      if (data.ok && data.html) {
         const appEl = document.getElementById('app');
-        appEl.innerHTML = appHtml;
-        // Re-run any inline scripts injected
-        appEl.querySelectorAll('script').forEach(s => {
-          const ns = document.createElement('script');
-          ns.textContent = s.textContent;
-          document.body.appendChild(ns);
-        });
+        appEl.innerHTML = data.html;
         document.getElementById('gate').style.display = 'none';
         appEl.style.display = 'block';
+        window.scrollTo(0, 0);
       } else {
         err.style.display = 'block';
         document.getElementById('gate-password').value = '';
