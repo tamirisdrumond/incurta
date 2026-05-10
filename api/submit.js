@@ -95,7 +95,6 @@ export default async function handler(req, res) {
       model: 'res.partner',
       res_id: partnerId,
       message_type: 'comment',
-      subtype_xmlid: 'mail.mt_note',
       subject,
       body: note
     }]);
