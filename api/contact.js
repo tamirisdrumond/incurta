@@ -49,10 +49,6 @@ export default async function handler(req, res) {
       });
       const d = await r.json();
       if (d.error) throw new Error(JSON.stringify(d.error));
-      // Odoo returns the created ID directly — validate it's a number
-      if (typeof d.result !== 'undefined' && d.result === false) {
-        throw new Error(`${model}.${method} returned false`);
-      }
       return d.result;
     }
 
@@ -83,32 +79,38 @@ export default async function handler(req, res) {
       partner_id: partnerId
     }]);
 
-    // Validate leadId before using it
     if (!leadId || typeof leadId !== 'number') {
       throw new Error(`crm.lead create returned invalid id: ${JSON.stringify(leadId)}`);
     }
 
-    // 4. Find activity type — try Email, then To-Do
-    const activityTypes = await odooCall(
-      'mail.activity.type', 'search_read',
-      [[['name', 'in', ['Email', 'To-Do', 'Todo', 'Telefone', 'Phone Call']]]],
-      { fields: ['id', 'name'], limit: 5 }
-    );
-    const actType = activityTypes.find(t => t.name.toLowerCase() === 'email')
-      || activityTypes.find(t => t.name.toLowerCase().includes('todo') || t.name.toLowerCase().includes('to-do'))
-      || activityTypes[0];
+    // 4. Schedule activity using mail.activity.schedule method on the lead
+    //    This is the correct Odoo 17+ approach — avoids res_model_id lookup
+    try {
+      const activityTypes = await odooCall(
+        'mail.activity.type', 'search_read',
+        [[['name', 'in', ['Email', 'To-Do', 'Todo']]]],
+        { fields: ['id', 'name'], limit: 3 }
+      );
+      const actType = activityTypes.find(t => t.name.toLowerCase() === 'email')
+        || activityTypes.find(t => t.name.toLowerCase().includes('todo') || t.name.toLowerCase().includes('to-do'))
+        || activityTypes[0];
 
-    if (actType && leadId) {
-      const today = new Date().toISOString().slice(0, 10);
-      await odooCall('mail.activity', 'create', [{
-        res_model: 'crm.lead',
-        res_id: leadId,
-        activity_type_id: actType.id,
-        summary: `Responder a ${name}`,
-        note: `<p>Mensagem recebida via site:</p><p>${message.replace(/\n/g, '<br>')}</p>`,
-        date_deadline: today,
-        user_id: userId
-      }]);
+      if (actType) {
+        const today = new Date().toISOString().slice(0, 10);
+        // Use activity_schedule on the lead record — Odoo handles res_model internally
+        await odooCall('crm.lead', 'activity_schedule', [
+          [leadId],
+          actType.id
+        ], {
+          summary: `Responder a ${name}`,
+          note: `<p>Mensagem recebida via site:</p><p>${message.replace(/\n/g, '<br>')}</p>`,
+          date_deadline: today,
+          user_id: userId
+        });
+      }
+    } catch (actErr) {
+      // Log activity error but don't fail the whole request — lead was created successfully
+      console.warn('Activity creation failed (non-fatal):', actErr.message);
     }
 
     return res.status(200).json({ success: true });
