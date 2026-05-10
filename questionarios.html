@@ -8,20 +8,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+
   :root {
-    --burgundy: #8B1536;
-    --blush: #C99D89;
+    --burgundy: #8B1538;
+    --burgundy-vivid: #C41E3A;
+    --blush: #D4A5A5;
     --taupe: #936458;
-    --espresso: #3B2122;
-    --cream: #E8DCD7;
-    --cream-light: #F5F0EE;
-    --text-dark: #3B2122;
-    --text-mid: #6B4A47;
+    --espresso: #2C2C2C;
+    --cream: #F5EBE0;
+    --cream-light: #F5EBE0;
+    --gold: #C9A86A;
+    --text-dark: #2C2C2C;
+    --text-mid: #5a4a3a;
     --text-light: #9A7B78;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--cream-light);
     color: var(--text-dark);
     min-height: 100vh;
@@ -33,7 +36,7 @@
     display: flex; justify-content: space-between; align-items: center;
   }
   .topbar-logo {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1.2rem; font-weight: 500; color: var(--cream);
     text-decoration: none;
   }
@@ -61,7 +64,7 @@
     margin: 0 auto 1.5rem; font-size: 1.2rem; color: var(--burgundy);
   }
   .gate-card h2 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1.8rem; font-weight: 400; color: var(--espresso);
     margin-bottom: 0.5rem;
   }
@@ -71,7 +74,7 @@
   }
   .gate-input {
     width: 100%; border: 1px solid var(--cream); padding: 0.85rem 1rem;
-    font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    font-family: 'Inter', sans-serif; font-size: 1rem;
     color: var(--text-dark); background: var(--cream-light);
     outline: none; transition: border-color 0.2s; margin-bottom: 1rem;
     letter-spacing: 0.08em; text-align: center;
@@ -85,7 +88,7 @@
     display: inline-block; padding: 0.95rem 2.5rem;
     background: var(--burgundy); color: #fff;
     font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    font-family: 'Inter', sans-serif; font-weight: 500;
     border: none; cursor: pointer; transition: background 0.2s; width: 100%;
   }
   .btn-primary:hover { background: #6e1029; }
@@ -94,14 +97,14 @@
     display: inline-block; padding: 0.85rem 2rem;
     background: transparent; color: var(--burgundy);
     font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    font-family: 'Inter', sans-serif; font-weight: 500;
     border: 1px solid var(--burgundy); cursor: pointer; transition: all 0.2s;
   }
   .btn-outline:hover { background: var(--burgundy); color: #fff; }
   .btn-back-sm {
     background: none; border: none; color: var(--text-light);
     font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500;
+    cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500;
     transition: color 0.2s;
   }
   .btn-back-sm:hover { color: var(--text-mid); }
@@ -117,7 +120,7 @@
   }
   .selector-inner { max-width: 700px; width: 100%; }
   .selector-inner h1 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 2.5rem; font-weight: 300; color: var(--espresso);
     margin-bottom: 0.5rem;
   }
@@ -135,12 +138,12 @@
   }
   .q-card:hover { border-color: var(--burgundy); transform: translateY(-2px); }
   .q-card-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 2.5rem; color: rgba(139,21,54,0.15);
     line-height: 1; margin-bottom: 1rem;
   }
   .q-card h3 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1.4rem; font-weight: 500; color: var(--espresso);
     margin-bottom: 0.5rem;
   }
@@ -156,7 +159,7 @@
   #form-area { display: none; padding: 3rem; max-width: 860px; margin: 0 auto; }
   .form-header { margin-bottom: 2.5rem; }
   .form-header .form-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 2rem; font-weight: 400; color: var(--espresso); margin-bottom: 0.3rem;
   }
   .form-header .form-title em { font-style: italic; color: var(--burgundy); }
@@ -179,7 +182,7 @@
   .form-step { display: none; }
   .form-step.visible { display: block; }
   .step-heading {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1.35rem; font-weight: 500; color: var(--espresso);
     margin-bottom: 0.25rem;
   }
@@ -192,7 +195,7 @@
   }
   .field input, .field select, .field textarea {
     border: 1px solid var(--cream); padding: 0.75rem 1rem;
-    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+    font-family: 'Inter', sans-serif; font-size: 0.88rem;
     color: var(--text-dark); background: var(--cream-light);
     outline: none; transition: border-color 0.2s; -webkit-appearance: none;
   }
@@ -242,7 +245,7 @@
   .scale-btn {
     width: 42px; height: 42px; border: 1px solid var(--cream);
     background: var(--cream-light); font-size: 0.85rem; color: var(--text-mid);
-    cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+    cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
     display: flex; align-items: center; justify-content: center;
   }
   .scale-btn:hover { border-color: var(--blush); }
@@ -265,7 +268,7 @@
     font-size: 1.5rem; color: var(--burgundy);
   }
   #form-success h2 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 2rem; font-weight: 400; color: var(--espresso); margin-bottom: 0.75rem;
   }
   #form-success p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; max-width: 440px; margin: 0 auto 2rem; }
@@ -290,7 +293,7 @@
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <a href="index.html" class="topbar-logo">in.curta</a>
+  <a href="index.html" class="topbar-logo"><img src="images/logo.png" alt="in.curta" style="height:36px;width:auto;display:block;"></a>
   <a href="index.html" class="topbar-back">← Voltar ao site</a>
 </div>
 
@@ -1056,29 +1059,37 @@
 </div><!-- /app -->
 
 <script>
-  // ─── CONFIG ───────────────────────────────────────────────
-  const CLIENT_PASSWORD = 'incurta2026!';
-  const ODOO_URL  = 'https://incurta-odoo19.com';
-  const ODOO_DB   = 'Main';
-  const ODOO_USER = 'admin';
-  const ODOO_PASS = 'admin';
-
   // ─── STEPS CONFIG ─────────────────────────────────────────
   const TOTAL_STEPS = { fisica: 7, emocional: 8 };
   let activeForm = null;
   let activeStep = 1;
 
   // ─── GATE ─────────────────────────────────────────────────
-  function checkPassword() {
-    const val = document.getElementById('gate-password').value;
+  async function checkPassword() {
+    const pwd = document.getElementById('gate-password').value;
     const err = document.getElementById('gate-error');
-    if (val === CLIENT_PASSWORD) {
-      document.getElementById('gate').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-    } else {
+    const btn = document.querySelector('#gate .btn-primary');
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/verify-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      } else {
+        err.style.display = 'block';
+        document.getElementById('gate-password').value = '';
+        document.getElementById('gate-password').focus();
+      }
+    } catch(e) {
+      err.textContent = 'Erro de ligacao. Tente novamente.';
       err.style.display = 'block';
-      document.getElementById('gate-password').value = '';
-      document.getElementById('gate-password').focus();
+    } finally {
+      btn.disabled = false;
     }
   }
   document.getElementById('gate-password').addEventListener('keydown', e => {
@@ -1173,177 +1184,11 @@
     return el ? el.value.trim() : '';
   }
 
-  // ─── ODOO INTEGRATION ─────────────────────────────────────
-  async function odooAuth() {
-    const res = await fetch(`${ODOO_URL}/web/session/authenticate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        jsonrpc: '2.0', method: 'call', id: 1,
-        params: { db: ODOO_DB, login: ODOO_USER, password: ODOO_PASS }
-      })
-    });
-    const data = await res.json();
-    if (!data.result?.uid) throw new Error('Autenticação Odoo falhou');
-    return data.result.uid;
-  }
-
-  async function odooCall(model, method, args, kwargs = {}) {
-    const res = await fetch(`${ODOO_URL}/web/dataset/call_kw`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        jsonrpc: '2.0', method: 'call', id: 2,
-        params: { model, method, args, kwargs }
-      })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(JSON.stringify(data.error));
-    return data.result;
-  }
-
-  async function findOrCreatePartner(name, email) {
-    // Search by email (unique identifier)
-    const found = await odooCall('res.partner', 'search_read',
-      [[['email', '=', email]]],
-      { fields: ['id', 'name', 'email'], limit: 1 }
-    );
-    if (found.length > 0) return found[0].id;
-    // Create new contact
-    return await odooCall('res.partner', 'create', [{
-      name, email, customer_rank: 1,
-      comment: 'Cliente in.curta — criado via questionário online'
-    }]);
-  }
-
-  async function attachNoteToPartner(partnerId, subject, body) {
-    return await odooCall('mail.message', 'create', [{
-      model: 'res.partner',
-      res_id: partnerId,
-      message_type: 'comment',
-      subtype_xmlid: 'mail.mt_note',
-      subject,
-      body
-    }]);
-  }
-
-  // ─── BUILD NOTE BODY ──────────────────────────────────────
-  function buildFisicaNote() {
-    return `
-<h3>📋 Definição Física — Planner in.curta</h3>
-<p><strong>Data de preenchimento:</strong> ${new Date().toLocaleString('pt-BR')}</p>
-<hr/>
-<h4>Identificação</h4>
-<p><strong>Nome:</strong> ${val('f-nome')}<br/>
-<strong>Nascimento:</strong> ${val('f-nasc')}<br/>
-<strong>Email:</strong> ${val('f-email')}<br/>
-<strong>WhatsApp:</strong> ${val('f-tel')}<br/>
-<strong>Peso:</strong> ${val('f-peso')} kg &nbsp;|&nbsp; <strong>Altura:</strong> ${val('f-altura')} cm</p>
-<hr/>
-<h4>Corpo e rotina</h4>
-<p><strong>Sono:</strong> ${getRadioVal('f-sono')}<br/>
-<strong>Alimentação que o corpo pede:</strong> ${getCheckedVals('f-alim')}<br/>
-<strong>Come com calma?:</strong> ${getRadioVal('f-calma')}<br/>
-<strong>Atividade no trabalho:</strong> ${getCheckedVals('f-trabalho')}<br/>
-<strong>Quem prepara as refeições:</strong> ${val('f-refeicoes')}</p>
-<hr/>
-<h4>Saúde e sintomas</h4>
-<p><strong>Sintomas frequentes:</strong> ${getCheckedVals('f-sintomas')}<br/>
-<strong>Outros sintomas:</strong> ${val('f-sintomas-outro')}<br/>
-<strong>Marcadores de saúde / exames:</strong> ${val('f-marcadores')}</p>
-<hr/>
-<h4>Autoconhecimento</h4>
-<p><strong>Relação com o espelho:</strong> ${getRadioVal('f-espelho')}<br/>
-<strong>Momento que se perde:</strong> ${getRadioVal('f-perde')} ${val('f-perde-outro') ? '— ' + val('f-perde-outro') : ''}<br/>
-<strong>O que sente falta de fazer:</strong> ${val('f-falta')}<br/>
-<strong>O que faria com 1h só sua:</strong> ${val('f-hora')}<br/>
-<strong>O que mais a impede:</strong> ${val('f-impede')}</p>
-<hr/>
-<h4>Objetivos físicos</h4>
-<p><strong>Busca:</strong> ${val('f-objetivo')}<br/>
-<strong>Mudanças já percebidas:</strong> ${val('f-mudancas')}</p>
-<hr/>
-<h4>Maternidade</h4>
-<p><strong>Culpa ao priorizar tempo:</strong> ${getRadioVal('f-culpa')}<br/>
-<strong>Sentimento pós-maternidade:</strong> ${getCheckedVals('f-mat-sentimento')}<br/>
-<strong>Relação corpo/comida após gestação:</strong> ${val('f-gestacao')}<br/>
-<strong>Rotina com filhos:</strong> ${getRadioVal('f-rotina')}</p>
-<hr/>
-<h4>Motivação</h4>
-<p><strong>Nível de motivação (1-10):</strong> ${getScaleVal('f-motivacao')}<br/>
-<strong>Como quer se sentir ao final (3 palavras):</strong> ${val('f-tres-palavras')}<br/>
-<strong>Observações finais:</strong> ${val('f-obs')}</p>
-    `.trim();
-  }
-
-  function buildEmocionalNote() {
-    return `
-<h3>💜 Definição Emocional — Planner in.curta</h3>
-<p><strong>Data de preenchimento:</strong> ${new Date().toLocaleString('pt-BR')}</p>
-<hr/>
-<h4>Identificação</h4>
-<p><strong>Nome:</strong> ${val('e-nome')}<br/>
-<strong>Nascimento:</strong> ${val('e-nasc')}<br/>
-<strong>Email:</strong> ${val('e-email')}<br/>
-<strong>Nova versão de si mesma:</strong> ${val('e-versao')}<br/>
-<strong>Ocasião especial:</strong> ${getCheckedVals('e-ocasiao')}</p>
-<hr/>
-<h4>Gatilhos emocionais</h4>
-<p><strong>Quando busca comida como conforto:</strong> ${getCheckedVals('e-vulneravel')} ${val('e-vulneravel-outro') ? '/ ' + val('e-vulneravel-outro') : ''}<br/>
-<strong>O que a comida oferece além de sabor:</strong> ${getCheckedVals('e-comida-oferece')}<br/>
-<strong>Momentos com mais vontade de comer:</strong> ${getCheckedVals('e-momentos')}<br/>
-<strong>Melhor horário para cuidar de si:</strong> ${val('e-horario')}</p>
-<hr/>
-<h4>Sentimentos e autoconhecimento</h4>
-<p><strong>Sentimento que quer reconstruir:</strong> ${getCheckedVals('e-reconstruir')}<br/>
-<strong>Se a comida não fosse refúgio:</strong> ${getCheckedVals('e-refugio')}<br/>
-<strong>Parte do corpo que quer melhorar:</strong> ${getCheckedVals('e-corpo-parte')}</p>
-<hr/>
-<h4>Escala comportamental</h4>
-<p><strong>Hábito de repetir (1-10):</strong> ${getScaleVal('e-repetir')}<br/>
-<strong>Come para se sentir melhor (1-10):</strong> ${getScaleVal('e-diadicil')}<br/>
-<strong>Come distraída (1-10):</strong> ${getScaleVal('e-distraida')}<br/>
-<strong>Desiste em situações difíceis (1-10):</strong> ${getScaleVal('e-desiste')}</p>
-<hr/>
-<h4>Histórico de peso</h4>
-<p><strong>Eventos que levaram ao aumento de peso:</strong> ${getCheckedVals('e-eventos')} ${val('e-eventos-outro') ? '/ ' + val('e-eventos-outro') : ''}<br/>
-<strong>Última vez satisfeita com imagem:</strong> ${getRadioVal('e-ultima-vez')}<br/>
-<strong>Experiência ao perder peso:</strong> ${getRadioVal('e-experiencia')}</p>
-<hr/>
-<h4>Corpo e rotina física</h4>
-<p><strong>Sono:</strong> ${getRadioVal('e-sono')}<br/>
-<strong>Momento que se perde:</strong> ${getRadioVal('e-perde')} ${val('e-perde-outro') ? '— ' + val('e-perde-outro') : ''}<br/>
-<strong>Come com calma?:</strong> ${getRadioVal('e-calma')}<br/>
-<strong>Alimentação que o corpo pede:</strong> ${getCheckedVals('e-alim')}<br/>
-<strong>Sintomas frequentes:</strong> ${getCheckedVals('e-sintomas')} ${val('e-sintomas-outro') ? '/ ' + val('e-sintomas-outro') : ''}</p>
-<hr/>
-<h4>Maternidade</h4>
-<p><strong>Relação corpo/comida após gestação:</strong> ${val('e-gestacao')}<br/>
-<strong>Rotina com filhos:</strong> ${getRadioVal('e-rotina')}<br/>
-<strong>Sentimento pós-maternidade:</strong> ${getCheckedVals('e-mat-sentimento')}<br/>
-<strong>Culpa ao priorizar tempo:</strong> ${getRadioVal('e-culpa')}<br/>
-<strong>Relação com o espelho desde o parto:</strong> ${getRadioVal('e-espelho-parto')}</p>
-<hr/>
-<h4>Objetivos e motivação</h4>
-<p><strong>O que sente falta de fazer:</strong> ${val('e-falta')}<br/>
-<strong>O que a impede de se cuidar:</strong> ${val('e-impede')}<br/>
-<strong>Busca (definição/volume/energia/leveza):</strong> ${val('e-objetivo')}<br/>
-<strong>Quem prepara as refeições:</strong> ${val('e-refeicoes')}<br/>
-<strong>Mudanças já percebidas:</strong> ${val('e-mudancas')}<br/>
-<strong>Marcadores de saúde / exames:</strong> ${val('e-marcadores')}<br/>
-<strong>Motivação (1-10):</strong> ${getScaleVal('e-motivacao')}<br/>
-<strong>Atividade no trabalho:</strong> ${getCheckedVals('e-trabalho')}<br/>
-<strong>Como quer se sentir ao final (3 palavras):</strong> ${val('e-tres-palavras')}</p>
-    `.trim();
-  }
-
-  // ─── SUBMIT ───────────────────────────────────────────────
+  // ─── SUBMIT (via server-side API — credentials never exposed to browser) ───────
   async function submitForm(type) {
-    const nameId = type === 'fisica' ? 'f-nome' : 'e-nome';
+    const nameId  = type === 'fisica' ? 'f-nome'  : 'e-nome';
     const emailId = type === 'fisica' ? 'f-email' : 'e-email';
-    const name = val(nameId);
+    const name  = val(nameId);
     const email = val(emailId);
 
     if (!name || !email) {
@@ -1356,20 +1201,19 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Enviando…';
 
-    try {
-      await odooAuth();
-      const partnerId = await findOrCreatePartner(name, email);
-      const subject = type === 'fisica'
-        ? `Definição Física — ${name}`
-        : `Definição Emocional — ${name}`;
-      const body = type === 'fisica' ? buildFisicaNote() : buildEmocionalNote();
-      await attachNoteToPartner(partnerId, subject, body);
+    const note = type === 'fisica' ? buildFisicaNote() : buildEmocionalNote();
 
-      // Show success
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, name, email, note })
+      });
+      if (!res.ok) throw new Error('server error');
+
       document.querySelector(`#${type[0]}-step-${TOTAL_STEPS[type]}`).classList.remove('visible');
       document.getElementById('form-success').style.display = 'block';
       window.scrollTo(0, 0);
-
     } catch (err) {
       console.error(err);
       alert('Erro ao enviar. Por favor tente novamente ou contacte a Tamiris directamente.');

@@ -8,19 +8,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+
   :root {
-    --burgundy: #8B1536;
-    --blush: #C99D89;
-    --espresso: #3B2122;
-    --cream: #E8DCD7;
-    --cream-light: #F5F0EE;
-    --text-dark: #3B2122;
-    --text-mid: #6B4A47;
+    --burgundy: #8B1538;
+    --burgundy-vivid: #C41E3A;
+    --blush: #D4A5A5;
+    --taupe: #936458;
+    --espresso: #2C2C2C;
+    --cream: #F5EBE0;
+    --cream-light: #F5EBE0;
+    --gold: #C9A86A;
+    --text-dark: #2C2C2C;
+    --text-mid: #5a4a3a;
     --text-light: #9A7B78;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--cream-light);
     color: var(--text-dark);
   }
@@ -29,7 +33,7 @@
     display: flex; justify-content: space-between; align-items: center;
   }
   .topbar-logo {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1.2rem; font-weight: 500; color: var(--cream); text-decoration: none;
   }
   .topbar-back {
@@ -60,7 +64,7 @@
   .legal-section.visible { display: block; }
 
   .legal-section h1 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 2.2rem; font-weight: 400; color: var(--espresso);
     margin-bottom: 0.4rem;
   }
@@ -70,7 +74,7 @@
     text-transform: uppercase; margin-bottom: 2.5rem; display: block;
   }
   .legal-section h2 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1.3rem; font-weight: 500; color: var(--espresso);
     margin: 2.5rem 0 0.75rem; border-bottom: 1px solid var(--cream);
     padding-bottom: 0.4rem;
@@ -98,7 +102,7 @@
     flex-wrap: wrap; gap: 1rem;
   }
   .footer-logo {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
     font-size: 1rem; color: rgba(232,220,215,0.5); font-weight: 300;
   }
   .footer-copy { font-size: 0.75rem; color: rgba(232,220,215,0.3); }
@@ -113,7 +117,7 @@
 <body>
 
 <div class="topbar">
-  <a href="index.html" class="topbar-logo">in.curta</a>
+  <a href="index.html" class="topbar-logo"><img src="images/logo.png" alt="in.curta" style="height:36px;width:auto;display:block;"></a>
   <a href="index.html" class="topbar-back">← Voltar ao site</a>
 </div>
 
@@ -291,7 +295,7 @@
 </div><!-- /legal-content -->
 
 <footer>
-  <div class="footer-logo">in.curta · Tamiris Drumond</div>
+  <div class="footer-logo"><img src="images/logo.png" alt="in.curta" style="height:28px;width:auto;opacity:0.5;display:block;"></div>
   <div class="footer-copy">© 2025 · Nutrição Clínica Comportamental</div>
 </footer>
 
