@@ -649,12 +649,16 @@
   }
 
   @media (max-width: 480px) {
-    .hero-tag { display: none; }
     .hero-circle {
       width: min(240px, 78vw);
       height: min(240px, 78vw);
     }
-    .hero-visual { padding: 1rem 1.5rem 2.5rem; }
+    .hero-visual { padding: 2rem 1.5rem 3.5rem; }
+    .hero-tag { padding: 0.5rem 0.7rem; }
+    .hero-tag .tag-num { font-size: 1rem; }
+    .hero-tag .tag-text { font-size: 0.58rem; }
+    .hero-tag.tag-1 { bottom: 20%; left: 0; }
+    .hero-tag.tag-2 { top: 10%; right: 0; }
   }
 </style>
 </head>
