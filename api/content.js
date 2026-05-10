@@ -9,7 +9,7 @@ const APP_HTML = `<!-- MAIN APP -->
   <div id="selector">
     <div class="selector-inner">
       <h1>Bem-vinda ao seu<br><em>espaço de autoconhecimento</em></h1>
-      <p class="sub">Escolha o questionário que a Tamiris pediu que você preenchesse.<br>
+      <p class="sub"><br>
       Suas respostas são confidenciais e serão analisadas antes da sua consulta.</p>
       <div class="q-cards">
         <div class="q-card" onclick="openForm('fisica')">
