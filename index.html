@@ -33,24 +33,22 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 1.25rem 4rem;
     display: flex; justify-content: space-between; align-items: center;
-    background: rgba(245,240,238,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(139,21,54,0.08);
+    background: var(--espresso);
   }
   /* lang-toggle is a direct nav child — always visible even on mobile */
   nav > .lang-toggle { flex-shrink: 0; }
-  .nav-logo { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em; color: var(--espresso); text-decoration: none; display: flex; align-items: center; }
+  .nav-logo { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em; color: var(--cream); text-decoration: none; display: flex; align-items: center; }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-  .nav-links a { font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--burgundy); }
+  .nav-links a { font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(232,220,215,0.6); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blush); }
   .nav-logo-img { height: 48px; width: auto; display: block; }
 
   /* ─── LANGUAGE TOGGLE ─── */
-  .lang-toggle { display: flex; align-items: center; border: 1px solid rgba(139,21,54,0.2); overflow: hidden; }
-  .lang-btn { padding: 0.3rem 0.65rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; color: var(--text-light); background: transparent; border: none; cursor: pointer; transition: all 0.2s; line-height: 1; }
-  .lang-btn:hover { color: var(--burgundy); }
+  .lang-toggle { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.15); overflow: hidden; }
+  .lang-btn { padding: 0.3rem 0.65rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; color: rgba(232,220,215,0.5); background: transparent; border: none; cursor: pointer; transition: all 0.2s; line-height: 1; }
+  .lang-btn:hover { color: var(--blush); }
   .lang-btn.active { background: var(--burgundy); color: #fff; }
-  .lang-divider { width: 1px; height: 14px; background: rgba(139,21,54,0.2); }
+  .lang-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
 
   /* ─── HERO ─── */
   #hero { min-height: 100vh; padding-top: 80px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; }
@@ -234,7 +232,7 @@
 
 <!-- NAV -->
 <nav>
-  <img src="images/logo.png" alt="in.curta logo" class="nav-logo-img">
+  <img src="images/logo-white.png" alt="in.curta logo" class="nav-logo-img">
   <ul class="nav-links">
     <li><a href="#about" data-i18n="navAbout">Sobre</a></li>
     <li><a href="#why" data-i18n="navMethod">O Método</a></li>
