@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt" data-title-key="q_pageTitle">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -287,25 +287,42 @@
     #form-area { padding: 1.5rem; }
     .topbar { padding: 1rem 1.5rem; }
   }
+
+  /* ─── LANGUAGE TOGGLE ─── */
+  .lang-toggle { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.15); overflow: hidden; }
+  .lang-btn { padding: 0.3rem 0.65rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; color: rgba(232,220,215,0.5); background: transparent; border: none; cursor: pointer; transition: all 0.2s; line-height: 1; }
+  .lang-btn:hover { color: var(--blush); }
+  .lang-btn.active { background: var(--burgundy); color: #fff; }
+  .lang-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
 </style>
 </head>
 <body>
 
+<!-- Translations engine (shared with index.html) -->
+<script src="translations.js"></script>
+
 <!-- TOP BAR -->
 <div class="topbar">
   <a href="index.html" class="topbar-logo"><img src="images/logo-white.png" alt="in.curta" style="height:36px;width:auto;display:block;"></a>
-  <a href="index.html" class="topbar-back">← Voltar ao site</a>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="pt">PT</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    <a href="index.html" class="topbar-back" data-i18n="q_backToSite">← Voltar ao site</a>
+  </div>
 </div>
 
 <!-- PASSWORD GATE -->
 <div id="gate">
   <div class="gate-card">
     <div class="gate-icon">🔒</div>
-    <h2>Área do Cliente</h2>
-    <p>Esta área é exclusiva para clientes do programa in.curta.<br>Insira o código de acesso fornecido pela Tamiris.</p>
+    <h2 data-i18n="q_gateTitle">Área do Cliente</h2>
+    <p data-i18n="q_gateDesc">Esta área é exclusiva para clientes do programa in.curta.<br>Insira o código de acesso fornecido pela Tamiris.</p>
     <div id="gate-input-wrap"></div>
-    <div class="gate-error" id="gate-error">Código incorreto. Tente novamente.</div>
-    <button class="btn-primary" id="gate-btn" onclick="checkPassword()">Entrar</button>
+    <div class="gate-error" id="gate-error" data-i18n="q_gateError">Código incorreto. Tente novamente.</div>
+    <button class="btn-primary" id="gate-btn" onclick="checkPassword()" data-i18n="q_gateBtn">Entrar</button>
   </div>
 </div>
 
@@ -345,7 +362,7 @@
         document.getElementById('gate-access-field').focus();
       }
     } catch(e) {
-      err.textContent = 'Erro de ligacao. Tente novamente.';
+      err.textContent = t('q_gateConnError');
       err.style.display = 'block';
     } finally {
       btn.disabled = false;
@@ -394,29 +411,27 @@
   function backToSelector() {
     activeForm = null;
     activeStep = 1;
-    // Remove injected steps so next openForm starts clean
     document.querySelectorAll('.form-step').forEach(s => s.remove());
-    // Restore selector cards in case they were replaced with loading text
     const cardsEl = document.querySelector('.q-cards');
     if (cardsEl && !cardsEl.querySelector('.q-card')) {
       cardsEl.innerHTML = `
         <div class="q-card" onclick="openForm('fisica')">
           <div class="q-card-num">01</div>
-          <h3>Definição Física</h3>
-          <p>Sobre seu corpo, sintomas, rotina, sono, alimentação e objetivos físicos.</p>
-          <span class="q-card-tag">25 perguntas · ~12 min</span>
+          <h3>${t('q_card1Title')}</h3>
+          <p>${t('q_card1Desc')}</p>
+          <span class="q-card-tag">${t('q_card1Tag')}</span>
         </div>
         <div class="q-card" onclick="openForm('emocional')">
           <div class="q-card-num">02</div>
-          <h3>Definição Emocional</h3>
-          <p>Sobre sua relação emocional com a comida, gatilhos, sentimentos e objetivos.</p>
-          <span class="q-card-tag">38 perguntas · ~18 min</span>
+          <h3>${t('q_card2Title')}</h3>
+          <p>${t('q_card2Desc')}</p>
+          <span class="q-card-tag">${t('q_card2Tag')}</span>
         </div>
         <div class="q-card" onclick="openQfa()">
           <div class="q-card-num">03</div>
-          <h3>Frequência Alimentar</h3>
-          <p>Avalie seus hábitos alimentares: quais alimentos come, com que frequência e em que quantidade.</p>
-          <span class="q-card-tag">39 alimentos · ~15 min · com pontuação</span>
+          <h3>${t('q_card3Title')}</h3>
+          <p>${t('q_card3Desc')}</p>
+          <span class="q-card-tag">${t('q_card3Tag')}</span>
         </div>`;
     }
     document.getElementById('selector').style.display = 'flex';
@@ -443,7 +458,7 @@
     const total = TOTAL_STEPS[form];
     const pct = Math.round((n / total) * 100);
     document.getElementById('prog-fill').style.width = pct + '%';
-    document.getElementById('prog-step-label').textContent = `Passo ${n} de ${total}`;
+    document.getElementById('prog-step-label').textContent = t('q_step').replace('{n}', n).replace('{total}', total);
     document.getElementById('prog-pct').textContent = pct + '%';
   }
 
@@ -600,14 +615,14 @@
     const email = val(emailId);
 
     if (!name || !email) {
-      alert('Por favor, preencha pelo menos nome e email antes de enviar.');
+      alert(t('q_alertFillNameEmail'));
       showStep(type, 1);
       return;
     }
 
     const btn = document.getElementById(`submit-${type}`);
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Enviando…';
+    btn.innerHTML = `<span class="spinner"></span>${t('q_sending')}`;
 
     const note = type === 'fisica' ? buildFisicaNote() : buildEmocionalNote();
 
@@ -631,9 +646,9 @@
       console.error(err);
       const errMsg = err.serverDetail || err.message || 'erro desconhecido';
       document.getElementById('submit-error-msg') && (document.getElementById('submit-error-msg').textContent = 'Erro: ' + errMsg);
-      alert('Erro ao enviar: ' + errMsg);
+      alert(t('q_alertSendError') + errMsg);
       btn.disabled = false;
-      btn.innerHTML = 'Enviar respostas';
+      btn.innerHTML = t('q_submitBtn');
     }
   }
   // ─── ON-DEMAND QUESTIONNAIRE LOADER ──────────────────────
@@ -645,7 +660,7 @@
 
     // Show loading state in the selector
     const cards = document.querySelector('.q-cards');
-    if (cards) cards.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">A carregar…</div>';
+    if (cards) cards.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">${t('q_loading')}</div>`;
 
     try {
       const res = await fetch(route, {
@@ -675,8 +690,8 @@
       document.getElementById('form-success').style.display = 'none';
 
       const titles = {
-        fisica: { t: 'Planner in.curta — <em>Definição Física</em>', s: 'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.' },
-        emocional: { t: 'Planner in.curta — <em>Definição Emocional</em>', s: 'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.' }
+        fisica:    { t: t('q_formTitleFisica'),    s: t('q_formSub') },
+        emocional: { t: t('q_formTitleEmocional'), s: t('q_formSub') }
       };
       document.getElementById('form-title').innerHTML = titles[type].t;
       document.getElementById('form-sub').textContent = titles[type].s;
@@ -686,13 +701,13 @@
       console.error('Form load error:', e);
       // Restore cards on error
       document.getElementById('selector').style.display = 'flex';
-      document.getElementById('app').innerHTML = '<p style="padding:2rem;color:var(--burgundy)">Erro ao carregar. Recarregue a página.</p>';
+      document.getElementById('app').innerHTML = `<p style="padding:2rem;color:var(--burgundy)">${t('q_loadError')}</p>`;
     }
   }
 
   async function openQfa() {
     const cards = document.querySelector('.q-cards');
-    if (cards) cards.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">A carregar…</div>';
+    if (cards) cards.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">${t('q_loading')}</div>`;
 
     try {
       const res = await fetch('/api/form-qfa', {

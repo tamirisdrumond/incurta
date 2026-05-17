@@ -11,7 +11,8 @@ const translations = {
     htmlLang: 'pt',
 
     // <title>
-    pageTitle: 'In.curta · Tamiris Drumond · Nutrição Comportamental',
+    pageTitle:   'In.curta · Tamiris Drumond · Nutrição Comportamental',
+    q_pageTitle: 'in.curta — Área do Cliente',
 
     // NAV
     navAbout:         'Sobre',
@@ -113,6 +114,39 @@ const translations = {
     // JS ALERTS
     alertFillFields: 'Por favor, preencha todos os campos.',
     alertSendError:  'Erro ao enviar. Por favor tente novamente ou entre em contato por email.',
+
+    // ── questionarios.html ──────────────────────────────────────────
+    q_backToSite:       '← Voltar ao site',
+
+    // Gate
+    q_gateTitle:        'Área do Cliente',
+    q_gateDesc:         'Esta área é exclusiva para clientes do programa in.curta.<br>Insira o código de acesso fornecido pela Tamiris.',
+    q_gateError:        'Código incorreto. Tente novamente.',
+    q_gateConnError:    'Erro de ligação. Tente novamente.',
+    q_gateBtn:          'Entrar',
+
+    // Selector cards
+    q_card1Title:  'Definição Física',
+    q_card1Desc:   'Sobre seu corpo, sintomas, rotina, sono, alimentação e objetivos físicos.',
+    q_card1Tag:    '25 perguntas · ~12 min',
+    q_card2Title:  'Definição Emocional',
+    q_card2Desc:   'Sobre sua relação emocional com a comida, gatilhos, sentimentos e objetivos.',
+    q_card2Tag:    '38 perguntas · ~18 min',
+    q_card3Title:  'Frequência Alimentar',
+    q_card3Desc:   'Avalie seus hábitos alimentares: quais alimentos come, com que frequência e em que quantidade.',
+    q_card3Tag:    '39 alimentos · ~15 min · com pontuação',
+
+    // Form shell
+    q_loading:           'A carregar…',
+    q_step:              'Passo {n} de {total}',
+    q_formTitleFisica:   'Planner in.curta — <em>Definição Física</em>',
+    q_formTitleEmocional:'Planner in.curta — <em>Definição Emocional</em>',
+    q_formSub:           'Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.',
+    q_sending:           'Enviando…',
+    q_submitBtn:         'Enviar respostas',
+    q_alertFillNameEmail:'Por favor, preencha pelo menos nome e email antes de enviar.',
+    q_alertSendError:    'Erro ao enviar: ',
+    q_loadError:         'Erro ao carregar. Recarregue a página.',
   },
 
   // ─────────────────────────────────────────────────────────────────
@@ -120,7 +154,8 @@ const translations = {
   es: {
     htmlLang: 'es',
 
-    pageTitle: 'In.curta · Tamiris Drumond · Nutrición Conductual',
+    pageTitle:   'In.curta · Tamiris Drumond · Nutrición Conductual',
+    q_pageTitle: 'in.curta — Área del Cliente',
 
     navAbout:         'Sobre',
     navMethod:        'El Método',
@@ -212,6 +247,39 @@ const translations = {
 
     alertFillFields: 'Por favor, completa todos los campos.',
     alertSendError:  'Error al enviar. Por favor intenta de nuevo o contáctanos por email.',
+
+    // ── questionarios.html ──────────────────────────────────────────
+    q_backToSite:       '← Volver al sitio',
+
+    // Gate
+    q_gateTitle:        'Área del Cliente',
+    q_gateDesc:         'Esta área es exclusiva para clientes del programa in.curta.<br>Introduce el código de acceso proporcionado por Tamiris.',
+    q_gateError:        'Código incorrecto. Inténtalo de nuevo.',
+    q_gateConnError:    'Error de conexión. Inténtalo de nuevo.',
+    q_gateBtn:          'Entrar',
+
+    // Selector cards
+    q_card1Title:  'Definición Física',
+    q_card1Desc:   'Sobre tu cuerpo, síntomas, rutina, sueño, alimentación y objetivos físicos.',
+    q_card1Tag:    '25 preguntas · ~12 min',
+    q_card2Title:  'Definición Emocional',
+    q_card2Desc:   'Sobre tu relación emocional con la comida, desencadenantes, sentimientos y objetivos.',
+    q_card2Tag:    '38 preguntas · ~18 min',
+    q_card3Title:  'Frecuencia Alimentaria',
+    q_card3Desc:   'Evalúa tus hábitos alimentarios: qué alimentos consumes, con qué frecuencia y en qué cantidad.',
+    q_card3Tag:    '39 alimentos · ~15 min · con puntuación',
+
+    // Form shell
+    q_loading:           'Cargando…',
+    q_step:              'Paso {n} de {total}',
+    q_formTitleFisica:   'Planner in.curta — <em>Definición Física</em>',
+    q_formTitleEmocional:'Planner in.curta — <em>Definición Emocional</em>',
+    q_formSub:           'Antes de cambiar el cuerpo, necesitamos entender qué queremos sentir dentro de él.',
+    q_sending:           'Enviando…',
+    q_submitBtn:         'Enviar respuestas',
+    q_alertFillNameEmail:'Por favor, completa al menos el nombre y el email antes de enviar.',
+    q_alertSendError:    'Error al enviar: ',
+    q_loadError:         'Error al cargar. Recarga la página.',
   },
 
 };
@@ -238,9 +306,10 @@ function applyTranslations(lang) {
   // Update <html lang>
   document.documentElement.lang = translations[lang].htmlLang;
 
-  // Update <title>
-  if (translations[lang].pageTitle) {
-    document.title = translations[lang].pageTitle;
+  // Update <title> — uses data-title-key on <html> if present, else falls back to pageTitle
+  const titleKey = document.documentElement.dataset.titleKey || 'pageTitle';
+  if (translations[lang][titleKey]) {
+    document.title = translations[lang][titleKey];
   }
 
   // Update all elements with data-i18n (innerHTML — supports <em>, <br>, etc.)
