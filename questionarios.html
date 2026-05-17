@@ -356,6 +356,8 @@
         appEl.innerHTML = data.html;
         document.getElementById('gate').style.display = 'none';
         appEl.style.display = 'block';
+        // Re-apply translations so shell elements with data-i18n render in active lang
+        applyTranslations(getLang());
         window.scrollTo(0, 0);
       } else {
         err.style.display = 'block';
@@ -737,6 +739,26 @@
       window.scrollTo(0, 0);
     } catch(e) {
       console.error('QFA load error:', e);
+    }
+  }
+  // ─── LANG CHANGE HOOK ─────────────────────────────────────────────────────
+  // translations.js calls applyTranslations() which handles data-i18n elements.
+  // We override setLang here so the progress label (set by JS, not data-i18n)
+  // also updates, and form titles if a form is currently open.
+  function setLang(lang) {
+    localStorage.setItem('incurta-lang', lang);
+    applyTranslations(lang);
+    // Update progress label if a form is active
+    if (activeForm && activeStep) {
+      updateProgress(activeForm, activeStep);
+      const titles = {
+        fisica:    { t: t('q_formTitleFisica'),    s: t('q_formSub') },
+        emocional: { t: t('q_formTitleEmocional'), s: t('q_formSub') }
+      };
+      const titleEl = document.getElementById('form-title');
+      const subEl   = document.getElementById('form-sub');
+      if (titleEl && titles[activeForm]) titleEl.innerHTML = titles[activeForm].t;
+      if (subEl   && titles[activeForm]) subEl.textContent = titles[activeForm].s;
     }
   }
 
