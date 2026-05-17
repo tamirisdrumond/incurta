@@ -37,6 +37,8 @@
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(139,21,54,0.08);
   }
+  /* lang-toggle is a direct nav child — always visible even on mobile */
+  nav > .lang-toggle { flex-shrink: 0; }
   .nav-logo { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em; color: var(--espresso); text-decoration: none; display: flex; align-items: center; }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
   .nav-links a { font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
@@ -240,14 +242,13 @@
     <!--<li><a href="#resources">Recursos</a></li>-->
     <li><a href="#questionnaire" data-i18n="navQuestionnaire">Questionário</a></li>
     <li><a href="#contact" data-i18n="navContact">Contato</a></li>
-    <li>
-      <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="pt">PT</button>
-        <div class="lang-divider"></div>
-        <button class="lang-btn" data-lang="es">ES</button>
-      </div>
-    </li>
   </ul>
+  <!-- Lang toggle lives outside nav-links so it stays visible on mobile -->
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="pt">PT</button>
+    <div class="lang-divider"></div>
+    <button class="lang-btn" data-lang="es">ES</button>
+  </div>
 </nav>
 
 <!-- HERO -->
