@@ -1,14 +1,275 @@
 // api/form-fisica.js
-// Returns protected HTML fragment after password verification.
-// Env var required: CLIENT_PASSWORD
+// Returns the Definição Física / Definición Física step HTML after auth.
+//
+// WHY A RENDER FUNCTION INSTEAD OF A TEMPLATE STRING:
+//   Hardcoded HTML strings (as in the original) cannot be translated without
+//   duplication. A render function receives the string map `s` and produces
+//   translated HTML in a single code path. Adding ES (or any new lang) requires
+//   only an entry in i18n.js, not a new file.
+//
+// CONTRACT:
+//   POST /api/form-fisica
+//   Body: { password: string, lang: 'pt' | 'es' }
+//   Response (ok): { ok: true, html: string }
+//   Response (fail): { ok: false }
 
-const CONTENT = "<!-- F-STEP 1: Identifica\u00e7\u00e3o -->\n    <div class=\"form-step\" id=\"f-step-1\" data-form=\"fisica\">\n      <div class=\"step-heading\">Identifica\u00e7\u00e3o</div>\n      <div class=\"step-desc\">Passo 1 de 7 \u2014 Dados b\u00e1sicos</div>\n      <div class=\"two-col\">\n        <div class=\"field\"><label>Nome completo *</label><input type=\"text\" id=\"f-nome\" placeholder=\"Seu nome completo\"></div>\n        <div class=\"field\"><label>Data de nascimento *</label><input type=\"date\" id=\"f-nasc\"></div>\n      </div>\n      <div class=\"two-col\">\n        <div class=\"field\"><label>Email *</label><input type=\"email\" id=\"f-email\" placeholder=\"seu@email.com\"></div>\n        <div class=\"field\"><label>WhatsApp</label><input type=\"tel\" id=\"f-tel\" placeholder=\"+55 00 00000-0000\"></div>\n      </div>\n      <div class=\"two-col\">\n        <div class=\"field\"><label>Peso atual (kg)</label><input type=\"text\" id=\"f-peso\" placeholder=\"Ex: 68\"></div>\n        <div class=\"field\"><label>Altura (cm)</label><input type=\"text\" id=\"f-altura\" placeholder=\"Ex: 165\"></div>\n      </div>\n      <div id=\"f-step1-error\" style=\"display:none;color:var(--burgundy);font-size:0.82rem;margin-top:0.75rem;\">Por favor, preencha o nome e o email antes de continuar.</div>\n      <div class=\"form-nav\">\n        <span></span>\n        <button class=\"btn-primary\" onclick=\"validateStep1('fisica')\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- F-STEP 2: Corpo e rotina -->\n    <div class=\"form-step\" id=\"f-step-2\" data-form=\"fisica\">\n      <div class=\"step-heading\">Corpo e rotina</div>\n      <div class=\"step-desc\">Passo 2 de 7 \u2014 Sono, alimenta\u00e7\u00e3o e atividade f\u00edsica</div>\n\n      <div class=\"field\">\n        <label>Quantas horas de sono, em m\u00e9dia, voc\u00ea tem por noite?</label>\n        <div class=\"radio-group\" id=\"f-sono\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-sono')\"><div class=\"radio-dot\"></div>Menos de 5 horas</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-sono')\"><div class=\"radio-dot\"></div>Entre 5 e 7 horas</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-sono')\"><div class=\"radio-dot\"></div>Mais de 7 horas</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Que tipo de alimenta\u00e7\u00e3o voc\u00ea sente que o seu corpo pede hoje? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"f-alim\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Energia r\u00e1pida (doces, p\u00e3es)</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Conforto (comidas quentes, caseiras)</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Leveza e vitalidade (saladas, frutas, \u00e1gua)</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea sente que consegue se alimentar com calma?</label>\n        <div class=\"radio-group\" id=\"f-calma\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-calma')\"><div class=\"radio-dot\"></div>Sim, consigo sempre.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-calma')\"><div class=\"radio-dot\"></div>Sim, mas n\u00e3o sempre.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-calma')\"><div class=\"radio-dot\"></div>\u00c0s vezes.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-calma')\"><div class=\"radio-dot\"></div>N\u00e3o consigo.</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>No trabalho, voc\u00ea passa a maior parte do tempo: (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"f-trabalho\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sentada</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Caminhando</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Em p\u00e9</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Subindo e descendo escadas</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Carregando pesos</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Quem ir\u00e1 preparar as refei\u00e7\u00f5es do plano alimentar?</label>\n        <input type=\"text\" id=\"f-refeicoes\" placeholder=\"Ex: eu mesma, marido, empregada\u2026\">\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('fisica',2,1)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('fisica',2,3)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- F-STEP 3: Sa\u00fade e sintomas -->\n    <div class=\"form-step\" id=\"f-step-3\" data-form=\"fisica\">\n      <div class=\"step-heading\">Sa\u00fade e sintomas</div>\n      <div class=\"step-desc\">Passo 3 de 7 \u2014 Sinais do corpo</div>\n\n      <div class=\"field\">\n        <label>H\u00e1 algum sintoma que percebe com frequ\u00eancia? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"f-sintomas\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Incha\u00e7o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Cansa\u00e7o constante</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Reten\u00e7\u00e3o de l\u00edquido</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Irritabilidade</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Queda de cabelo</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Pele ressecada ou oleosa</label>\n        </div>\n      </div>\n      <div class=\"field\">\n        <label>Outros sintomas que gostaria de mencionar</label>\n        <textarea id=\"f-sintomas-outro\" placeholder=\"Descreva livremente\u2026\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>H\u00e1 algum marcador de sa\u00fade que deseja melhorar (colesterol, energia, sono)? Realizou algum exame laboratorial recente?</label>\n        <textarea id=\"f-marcadores\" placeholder=\"Descreva seus exames ou indicadores de sa\u00fade\u2026\"></textarea>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('fisica',3,2)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('fisica',3,4)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- F-STEP 4: Autoconhecimento -->\n    <div class=\"form-step\" id=\"f-step-4\" data-form=\"fisica\">\n      <div class=\"step-heading\">Autoconhecimento</div>\n      <div class=\"step-desc\">Passo 4 de 7 \u2014 Sua rela\u00e7\u00e3o consigo mesma</div>\n\n      <div class=\"field\">\n        <label>Como est\u00e1 sua rela\u00e7\u00e3o com o espelho?</label>\n        <div class=\"radio-group\" id=\"f-espelho\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-espelho')\"><div class=\"radio-dot\"></div>Evito me olhar</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-espelho')\"><div class=\"radio-dot\"></div>Me olho com indiferen\u00e7a</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-espelho')\"><div class=\"radio-dot\"></div>Me olho com carinho</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-espelho')\"><div class=\"radio-dot\"></div>Estou voltando a me olhar</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-espelho')\"><div class=\"radio-dot\"></div>N\u00e3o me reconhe\u00e7o</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Em que momento do dia sente que \"se perde de si mesma\" e o tempo passa?</label>\n        <div class=\"radio-group\" id=\"f-perde\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-perde')\"><div class=\"radio-dot\"></div>Pela manh\u00e3, ao acordar.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-perde')\"><div class=\"radio-dot\"></div>Ap\u00f3s a dedica\u00e7\u00e3o de cuidar dos filhos, casa e fam\u00edlia</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-perde')\"><div class=\"radio-dot\"></div>\u00c0 noite</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-perde')\"><div class=\"radio-dot\"><br></div>Outro:</label>\n        </div>\n        <input type=\"text\" id=\"f-perde-outro\" placeholder=\"Se outro, descreva aqui\u2026\" style=\"margin-top:0.5rem;\">\n      </div>\n\n      <div class=\"field\">\n        <label>O que voc\u00ea sente falta de fazer por voc\u00ea? (Ex: caminhar sozinha, cuidar do cabelo, almo\u00e7ar sem pressa, ler, treinar\u2026)</label>\n        <textarea id=\"f-falta\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Se tivesse uma hora por dia s\u00f3 sua, o que faria com ela?</label>\n        <textarea id=\"f-hora\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Quando pensa em voltar a se cuidar, o que mais te impede hoje?</label>\n        <textarea id=\"f-impede\" placeholder=\"Ex: falta de energia, apoio, tempo, motiva\u00e7\u00e3o\u2026\"></textarea>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('fisica',4,3)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('fisica',4,5)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- F-STEP 5: Objetivos f\u00edsicos -->\n    <div class=\"form-step\" id=\"f-step-5\" data-form=\"fisica\">\n      <div class=\"step-heading\">Objetivos f\u00edsicos</div>\n      <div class=\"step-desc\">Passo 5 de 7 \u2014 O que voc\u00ea quer conquistar</div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea busca mais defini\u00e7\u00e3o, redu\u00e7\u00e3o de volume, energia, ou leveza corporal?</label>\n        <textarea id=\"f-objetivo\" placeholder=\"Descreva em suas pr\u00f3prias palavras\u2026\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Quais mudan\u00e7as f\u00edsicas voc\u00ea j\u00e1 come\u00e7ou a notar (mesmo pequenas)?</label>\n        <textarea id=\"f-mudancas\" placeholder=\"Mesmo que sejam pequenas percep\u00e7\u00f5es\u2026\"></textarea>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('fisica',5,4)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('fisica',5,6)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- F-STEP 6: Maternidade (opcional) -->\n    <div class=\"form-step\" id=\"f-step-6\" data-form=\"fisica\">\n      <div class=\"step-heading\">Maternidade</div>\n      <div class=\"step-desc\">Passo 6 de 7 \u2014 Responda apenas se for m\u00e3e</div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea sente culpa quando tenta priorizar seu tempo?</label>\n        <div class=\"radio-group\" id=\"f-culpa\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-culpa')\"><div class=\"radio-dot\"></div>Sim, com frequ\u00eancia</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-culpa')\"><div class=\"radio-dot\"></div>\u00c0s vezes.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-culpa')\"><div class=\"radio-dot\"></div>N\u00e3o sinto</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-culpa')\"><div class=\"radio-dot\"></div>N\u00e3o sou m\u00e3e</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Depois da maternidade, qual sentimento mais mudou em rela\u00e7\u00e3o ao seu corpo? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"f-mat-sentimento\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Gratid\u00e3o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Desconex\u00e3o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Apenas cr\u00edticas</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Orgulho</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Cansa\u00e7o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>N\u00e3o se aplica</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Como mudou sua rela\u00e7\u00e3o com o corpo e a comida depois da gesta\u00e7\u00e3o?</label>\n        <textarea id=\"f-gestacao\" placeholder=\"Se n\u00e3o for m\u00e3e, pode deixar em branco.\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Como est\u00e1 sua rotina atual com o beb\u00ea ou os filhos?</label>\n        <div class=\"radio-group\" id=\"f-rotina\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-rotina')\"><div class=\"radio-dot\"></div>Organizada</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-rotina')\"><div class=\"radio-dot\"></div>N\u00e3o consigo ter uma rotina</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-rotina')\"><div class=\"radio-dot\"></div>Alterno entre os dois.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'f-rotina')\"><div class=\"radio-dot\"></div>N\u00e3o se aplica</label>\n        </div>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('fisica',6,5)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('fisica',6,7)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- F-STEP 7: Motiva\u00e7\u00e3o e finaliza\u00e7\u00e3o -->\n    <div class=\"form-step\" id=\"f-step-7\" data-form=\"fisica\">\n      <div class=\"step-heading\">Motiva\u00e7\u00e3o e finaliza\u00e7\u00e3o</div>\n      <div class=\"step-desc\">Passo 7 de 7 \u2014 Quase l\u00e1!</div>\n\n      <div class=\"field\">\n        <label>O quanto voc\u00ea est\u00e1 motivada para atingir seu objetivo? (1 = pouco motivada, 10 = muito motivada)</label>\n        <div class=\"scale-wrap\">\n          <span class=\"scale-label\">Pouco</span>\n          <div id=\"f-motivacao\" style=\"display:flex;gap:0.4rem;flex-wrap:wrap;\">\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">1</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">2</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">3</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">4</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">5</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">6</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">7</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">8</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">9</button>\n            <button class=\"scale-btn\" onclick=\"selectScale(this,'f-motivacao')\">10</button>\n          </div>\n          <span class=\"scale-label\">Muito</span>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Como voc\u00ea gostaria de se sentir ao final do programa em tr\u00eas palavras?</label>\n        <input type=\"text\" id=\"f-tres-palavras\" placeholder=\"Ex: leve, confiante, disciplinada\">\n      </div>\n\n      <div class=\"field\">\n        <label>Algo a mais que queira me contar?</label>\n        <textarea id=\"f-obs\" placeholder=\"Fique \u00e0 vontade para compartilhar o que sentir relevante\u2026\"></textarea>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('fisica',7,6)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" id=\"submit-fisica\" onclick=\"submitForm('fisica')\">Enviar respostas</button>\n      </div>\n    </div>\n\n    <!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->\n    <!-- DEFINI\u00c7\u00c3O EMOCIONAL STEPS                     -->\n    <!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->";
+import { getLangStrings } from './i18n.js';
+
+function scaleButtons(id, count = 10) {
+  return Array.from({ length: count }, (_, i) => i + 1)
+    .map(n => `<button class="scale-btn" onclick="selectScale(this,'${id}')">${n}</button>`)
+    .join('');
+}
+
+function radio(groupId, options) {
+  return options.map(opt =>
+    `<label class="radio-option" onclick="selectRadio(this,'${groupId}')"><div class="radio-dot"></div>${opt}</label>`
+  ).join('\n          ');
+}
+
+function check(options) {
+  return options.map(opt =>
+    `<label class="check-option" onclick="toggleCheck(this)"><div class="check-box">✓</div>${opt}</label>`
+  ).join('\n          ');
+}
+
+function buildFisicaHtml(s) {
+  return `
+<!-- F-STEP 1: Identificação -->
+<div class="form-step" id="f-step-1" data-form="fisica">
+  <div class="step-heading">${s.fStep1Heading}</div>
+  <div class="step-desc">${s.fStep1Desc}</div>
+  <div class="two-col">
+    <div class="field"><label>${s.fNomeLabel}</label><input type="text" id="f-nome" placeholder="${s.fNomePH}"></div>
+    <div class="field"><label>${s.fNascLabel}</label><input type="date" id="f-nasc"></div>
+  </div>
+  <div class="two-col">
+    <div class="field"><label>${s.fEmailLabel}</label><input type="email" id="f-email" placeholder="${s.fEmailPH}"></div>
+    <div class="field"><label>${s.fTelLabel}</label><input type="tel" id="f-tel" placeholder="${s.fTelPH}"></div>
+  </div>
+  <div class="two-col">
+    <div class="field"><label>${s.fPesoLabel}</label><input type="text" id="f-peso" placeholder="${s.fPesoPH}"></div>
+    <div class="field"><label>${s.fAlturaLabel}</label><input type="text" id="f-altura" placeholder="${s.fAlturaPH}"></div>
+  </div>
+  <div id="f-step1-error" style="display:none;color:var(--burgundy);font-size:0.82rem;margin-top:0.75rem;">${s.fStep1Error}</div>
+  <div class="form-nav">
+    <span></span>
+    <button class="btn-primary" onclick="validateStep1('fisica')">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- F-STEP 2: Corpo e rotina -->
+<div class="form-step" id="f-step-2" data-form="fisica">
+  <div class="step-heading">${s.fStep2Heading}</div>
+  <div class="step-desc">${s.fStep2Desc}</div>
+
+  <div class="field">
+    <label>${s.fSonoLabel}</label>
+    <div class="radio-group" id="f-sono">
+      ${radio('f-sono', [s.fSonoOpt1, s.fSonoOpt2, s.fSonoOpt3])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fAlimLabel}</label>
+    <div class="check-group" id="f-alim">
+      ${check([s.fAlimOpt1, s.fAlimOpt2, s.fAlimOpt3])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fCalmaLabel}</label>
+    <div class="radio-group" id="f-calma">
+      ${radio('f-calma', [s.fCalmaOpt1, s.fCalmaOpt2, s.fCalmaOpt3, s.fCalmaOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fTrabalhoLabel}</label>
+    <div class="check-group" id="f-trabalho">
+      ${check([s.fTrabalhoOpt1, s.fTrabalhoOpt2, s.fTrabalhoOpt3, s.fTrabalhoOpt4, s.fTrabalhoOpt5])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fRefeicoesLabel}</label>
+    <input type="text" id="f-refeicoes" placeholder="${s.fRefeicoesPH}">
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('fisica',2,1)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('fisica',2,3)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- F-STEP 3: Saúde e sintomas -->
+<div class="form-step" id="f-step-3" data-form="fisica">
+  <div class="step-heading">${s.fStep3Heading}</div>
+  <div class="step-desc">${s.fStep3Desc}</div>
+
+  <div class="field">
+    <label>${s.fSintomasLabel}</label>
+    <div class="check-group" id="f-sintomas">
+      ${check([s.fSintomasOpt1, s.fSintomasOpt2, s.fSintomasOpt3, s.fSintomasOpt4, s.fSintomasOpt5, s.fSintomasOpt6])}
+    </div>
+  </div>
+  <div class="field">
+    <label>${s.fSintomasOutroLabel}</label>
+    <textarea id="f-sintomas-outro" placeholder="${s.fSintomasOutroPH}"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.fMarcadoresLabel}</label>
+    <textarea id="f-marcadores" placeholder="${s.fMarcadoresPH}"></textarea>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('fisica',3,2)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('fisica',3,4)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- F-STEP 4: Autoconhecimento -->
+<div class="form-step" id="f-step-4" data-form="fisica">
+  <div class="step-heading">${s.fStep4Heading}</div>
+  <div class="step-desc">${s.fStep4Desc}</div>
+
+  <div class="field">
+    <label>${s.fEspelhoLabel}</label>
+    <div class="radio-group" id="f-espelho">
+      ${radio('f-espelho', [s.fEspelhoOpt1, s.fEspelhoOpt2, s.fEspelhoOpt3, s.fEspelhoOpt4, s.fEspelhoOpt5])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fPerdeLabel}</label>
+    <div class="radio-group" id="f-perde">
+      ${radio('f-perde', [s.fPerdeOpt1, s.fPerdeOpt2, s.fPerdeOpt3, s.fPerdeOpt4])}
+    </div>
+    <input type="text" id="f-perde-outro" placeholder="${s.fPerdeOutroPH}" style="margin-top:0.5rem;">
+  </div>
+
+  <div class="field">
+    <label>${s.fFaltaLabel}</label>
+    <textarea id="f-falta"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.fHoraLabel}</label>
+    <textarea id="f-hora"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.fImpedeLabel}</label>
+    <textarea id="f-impede" placeholder="${s.fImpedePH}"></textarea>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('fisica',4,3)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('fisica',4,5)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- F-STEP 5: Objetivos físicos -->
+<div class="form-step" id="f-step-5" data-form="fisica">
+  <div class="step-heading">${s.fStep5Heading}</div>
+  <div class="step-desc">${s.fStep5Desc}</div>
+
+  <div class="field">
+    <label>${s.fObjetivoLabel}</label>
+    <textarea id="f-objetivo" placeholder="${s.fObjetivoPH}"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.fMudancasLabel}</label>
+    <textarea id="f-mudancas" placeholder="${s.fMudancasPH}"></textarea>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('fisica',5,4)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('fisica',5,6)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- F-STEP 6: Maternidade (opcional) -->
+<div class="form-step" id="f-step-6" data-form="fisica">
+  <div class="step-heading">${s.fStep6Heading}</div>
+  <div class="step-desc">${s.fStep6Desc}</div>
+
+  <div class="field">
+    <label>${s.fCulpaLabel}</label>
+    <div class="radio-group" id="f-culpa">
+      ${radio('f-culpa', [s.fCulpaOpt1, s.fCulpaOpt2, s.fCulpaOpt3, s.fCulpaOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fMatSentLabel}</label>
+    <div class="check-group" id="f-mat-sentimento">
+      ${check([s.fMatSentOpt1, s.fMatSentOpt2, s.fMatSentOpt3, s.fMatSentOpt4, s.fMatSentOpt5, s.fMatSentOpt6])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fGestacaoLabel}</label>
+    <textarea id="f-gestacao" placeholder="${s.fGestacaoPH}"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.fRotinaLabel}</label>
+    <div class="radio-group" id="f-rotina">
+      ${radio('f-rotina', [s.fRotinaOpt1, s.fRotinaOpt2, s.fRotinaOpt3, s.fRotinaOpt4])}
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('fisica',6,5)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('fisica',6,7)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- F-STEP 7: Motivação e finalização -->
+<div class="form-step" id="f-step-7" data-form="fisica">
+  <div class="step-heading">${s.fStep7Heading}</div>
+  <div class="step-desc">${s.fStep7Desc}</div>
+
+  <div class="field">
+    <label>${s.fMotivacaoLabel}</label>
+    <div class="scale-wrap">
+      <span class="scale-label">${s.fMotivacaoMin}</span>
+      <div id="f-motivacao" style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+        ${scaleButtons('f-motivacao')}
+      </div>
+      <span class="scale-label">${s.fMotivacaoMax}</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fTresPalavrasLabel}</label>
+    <input type="text" id="f-tres-palavras" placeholder="${s.fTresPalavrasPH}">
+  </div>
+
+  <div class="field">
+    <label>${s.fObsLabel}</label>
+    <textarea id="f-obs" placeholder="${s.fObsPH}"></textarea>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('fisica',7,6)">${s.backSmBtn}</button>
+    <button class="btn-primary" id="submit-fisica" onclick="submitForm('fisica')">${s.submitBtn}</button>
+  </div>
+</div>`;
+}
 
 export default function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const { password } = req.body || {};
+
+  const { password, lang = 'pt' } = req.body || {};
   const correct = process.env.CLIENT_PASSWORD;
+
   if (!correct) return res.status(500).json({ error: 'Server misconfiguration' });
   if (password !== correct) return res.status(200).json({ ok: false });
-  return res.status(200).json({ ok: true, html: CONTENT });
+
+  const s = getLangStrings(lang);
+  return res.status(200).json({ ok: true, html: buildFisicaHtml(s) });
 }
