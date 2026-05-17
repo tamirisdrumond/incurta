@@ -669,6 +669,10 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: window._clientPwd, lang: localStorage.getItem('incurta-lang') || 'pt' })
       });
+      const data = await res.json();
+      if (!data.ok || !data.html) throw new Error('load failed');
+
+      // Remove any previously injected steps first (handles second+ questionnaire)
       document.querySelectorAll('.form-step').forEach(s => s.remove());
       // Inject new steps before the success state
       const stepContainer = document.getElementById('form-area');

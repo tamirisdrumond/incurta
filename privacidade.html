@@ -421,19 +421,18 @@ function showSection(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Override setLang to also re-render the current section
-const _origSetLang = typeof setLang === 'function' ? setLang : null;
+// Override setLang to also re-render the current section.
+// translations.js defines setLang inside DOMContentLoaded, so it won't exist
+// at parse time. We shadow it here: our version calls the real one (by the time
+// a button click fires, translations.js will have run) then re-renders the section.
 function setLang(lang) {
-  if (_origSetLang) _origSetLang(lang);
-  else {
-    // Minimal fallback if translations.js setLang isn't yet available
-    localStorage.setItem('incurta-lang', lang);
-    applyTranslations(lang);
-  }
+  // Update localStorage and apply data-i18n translations (defined in translations.js)
+  localStorage.setItem('incurta-lang', lang);
+  if (typeof applyTranslations === 'function') applyTranslations(lang);
+  // Re-render legal content in new language
   renderSection(activeSection);
 }
 
-// Init
 document.addEventListener('DOMContentLoaded', () => {
   // Handle anchor from external links (#termos, #aviso, #cookies)
   const hash = window.location.hash.replace('#', '');
