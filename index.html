@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>In.curta  Tamiris Drumond · Nutrição Comportamental</title>
+<title>In.curta · Tamiris Drumond · Nutrição Comportamental</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!-- Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- Jost — geometric sans, Futura substitute for headlines -->
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-<!-- Libre Baskerville as web-safe Baskerville fallback -->
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -31,15 +25,8 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; overflow-x: hidden; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--cream-light);
-    color: var(--text-dark);
-    overflow-x: hidden;
-  }
+  body { font-family: 'Inter', sans-serif; background: var(--cream-light); color: var(--text-dark); overflow-x: hidden; }
 
   /* ─── NAV ─── */
   nav {
@@ -50,212 +37,65 @@
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(139,21,54,0.08);
   }
-  .nav-logo {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em;
-    color: var(--espresso); text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--text-mid); text-decoration: none;
-    transition: color 0.2s;
-  }
+  .nav-logo { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.04em; color: var(--espresso); text-decoration: none; display: flex; align-items: center; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+  .nav-links a { font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover { color: var(--burgundy); }
+  .nav-logo-img { height: 48px; width: auto; display: block; }
+
+  /* ─── LANGUAGE TOGGLE ─── */
+  .lang-toggle { display: flex; align-items: center; border: 1px solid rgba(139,21,54,0.2); overflow: hidden; }
+  .lang-btn { padding: 0.3rem 0.65rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; color: var(--text-light); background: transparent; border: none; cursor: pointer; transition: all 0.2s; line-height: 1; }
+  .lang-btn:hover { color: var(--burgundy); }
+  .lang-btn.active { background: var(--burgundy); color: #fff; }
+  .lang-divider { width: 1px; height: 14px; background: rgba(139,21,54,0.2); }
 
   /* ─── HERO ─── */
-  #hero {
-    min-height: 100vh; padding-top: 80px;
-    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
-    position: relative;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 70% 80% at 80% 50%, rgba(201,157,137,0.18) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 60% at 15% 80%, rgba(139,21,54,0.06) 0%, transparent 50%);
-  }
-  .hero-text {
-    padding: 6rem 4rem 4rem 4rem;
-    position: relative; z-index: 2;
-  }
-  .hero-label {
-    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--blush); font-weight: 500; margin-bottom: 1.5rem;
-    display: flex; align-items: center; gap: 0.75rem;
-  }
-  .hero-label::before {
-    content: ''; display: inline-block;
-    width: 28px; height: 1px; background: var(--blush);
-  }
-  h1 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: clamp(3.2rem, 5vw, 5rem);
-    font-weight: 800; line-height: 1.1;
-    color: var(--espresso); margin-bottom: 1.5rem;
-  }
+  #hero { min-height: 100vh; padding-top: 80px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 80% at 80% 50%, rgba(201,157,137,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 15% 80%, rgba(139,21,54,0.06) 0%, transparent 50%); }
+  .hero-text { padding: 6rem 4rem 4rem 4rem; position: relative; z-index: 2; }
+  .hero-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blush); font-weight: 500; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .hero-label::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--blush); }
+  h1 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: clamp(3.2rem, 5vw, 5rem); font-weight: 800; line-height: 1.1; color: var(--espresso); margin-bottom: 1.5rem; }
   h1 em { font-style: italic; color: var(--burgundy); }
-  .hero-sub {
-    font-size: 1rem; line-height: 1.75; color: var(--text-mid);
-    max-width: 420px; margin-bottom: 3rem; font-weight: 300;
-  }
-  .btn-primary {
-    display: inline-block; padding: 0.95rem 2.5rem;
-    background: var(--burgundy); color: #fff;
-    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
-    font-family: 'Inter', sans-serif; font-weight: 500;
-    text-decoration: none; transition: background 0.2s, transform 0.15s;
-    border: none; cursor: pointer;
-  }
+  .hero-sub { font-size: 1rem; line-height: 1.75; color: var(--text-mid); max-width: 420px; margin-bottom: 3rem; font-weight: 300; }
+  .btn-primary { display: inline-block; padding: 0.95rem 2.5rem; background: var(--burgundy); color: #fff; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 500; text-decoration: none; transition: background 0.2s, transform 0.15s; border: none; cursor: pointer; }
   .btn-primary:hover { background: #6e1029; transform: translateY(-1px); }
-  .btn-outline {
-    display: inline-block; padding: 0.95rem 2.5rem;
-    background: transparent; color: var(--burgundy);
-    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
-    font-family: 'Inter', sans-serif; font-weight: 500;
-    text-decoration: none; border: 1px solid var(--burgundy);
-    transition: all 0.2s; cursor: pointer; margin-left: 1rem;
-  }
+  .btn-outline { display: inline-block; padding: 0.95rem 2.5rem; background: transparent; color: var(--burgundy); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 500; text-decoration: none; border: 1px solid var(--burgundy); transition: all 0.2s; cursor: pointer; margin-left: 1rem; }
   .btn-outline:hover { background: var(--burgundy); color: #fff; }
-
-  .hero-visual {
-    position: relative; height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .hero-circle {
-    width: min(480px, 42vw); height: min(480px, 42vw);
-    border-radius: 50%; background: var(--cream);
-    border: 1px solid rgba(201,157,137,0.4);
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .hero-circle::before {
-    content: ''; position: absolute;
-    width: 60%; height: 60%; border-radius: 50%;
-    border: 1px solid rgba(139,21,54,0.12);
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-  }
-  .hero-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: relative;
-  z-index: 2;
-}
-  .hero-inner-text {
-    text-align: center; padding: 2rem; position: relative; z-index: 2;
-  }
-  .hero-inner-text .big-number {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 5rem; font-weight: 300; color: var(--burgundy); line-height: 1;
-  }
-  .hero-inner-text .big-label {
-    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--text-mid); margin-top: 0.5rem;
-  }
-  .hero-tag {
-    position: absolute; background: #fff;
-    padding: 1rem 1.25rem; border: 1px solid var(--cream);
-    box-shadow: 0 8px 32px rgba(59,33,34,0.08);
-  }
+  .hero-visual { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .hero-circle { width: min(480px, 42vw); height: min(480px, 42vw); border-radius: 50%; background: var(--cream); border: 1px solid rgba(201,157,137,0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .hero-circle::before { content: ''; position: absolute; width: 60%; height: 60%; border-radius: 50%; border: 1px solid rgba(139,21,54,0.12); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  .hero-circle img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2; }
+  .hero-inner-text { text-align: center; padding: 2rem; position: relative; z-index: 2; }
+  .hero-inner-text .big-number { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 5rem; font-weight: 300; color: var(--burgundy); line-height: 1; }
+  .hero-inner-text .big-label { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-mid); margin-top: 0.5rem; }
+  .hero-tag { position: absolute; background: #fff; padding: 1rem 1.25rem; border: 1px solid var(--cream); box-shadow: 0 8px 32px rgba(59,33,34,0.08); }
   .hero-tag.tag-1 { bottom: 28%; left: -2rem; z-index: 3; }
   .hero-tag.tag-2 { top: 28%; right: -1rem; }
-  .hero-tag .tag-num {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.6rem; font-weight: 500; color: var(--espresso);
-  }
-  .hero-tag .tag-text {
-    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--text-light); margin-top: 0.15rem;
-  }
-  /* --- Additional --- */
-  .inline-logo-wrap {
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-}
-
-.inline-logo-white {
-  height: 1.8em;
-  width: auto;
-  display: block;
-  margin: 0 0.15em;
-}
-  .nav-logo {
-  display: flex;
-  align-items: center;
-}
-
-.nav-logo-img {
-  height: 48px;
-  width: auto;
-  display: block;
-}
+  .hero-tag .tag-num { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.6rem; font-weight: 500; color: var(--espresso); }
+  .hero-tag .tag-text { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-top: 0.15rem; }
+  .inline-logo-wrap { display: inline-flex; align-items: center; vertical-align: middle; }
+  .inline-logo-white { height: 1.8em; width: auto; display: block; margin: 0 0.15em; }
 
   /* ─── SECTIONS SHARED ─── */
   section { padding: 6rem 4rem; }
-  .section-label {
-    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--blush); font-weight: 500; margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.75rem;
-  }
-  .section-label::before {
-    content: ''; display: inline-block; width: 20px; height: 1px; background: var(--blush);
-  }
-  h2 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
-    font-weight: 800; line-height: 1.15; color: var(--burgundy);
-    margin-bottom: 1.5rem;
-  }
+  .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blush); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+  .section-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--blush); }
+  h2 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 800; line-height: 1.15; color: var(--burgundy); margin-bottom: 1.5rem; }
   h2 em { font-style: italic; color: var(--burgundy); }
 
   /* ─── ABOUT ─── */
-  #about {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 6rem; align-items: start;
-    background: #fff;
-  }
-  .about-visual {
-    position: relative;
-  }
-.about-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin-bottom: 2rem;
-}
-  .about-card {
-  background: var(--cream);
-  padding: 2.5rem;
-  border-left: 3px solid var(--burgundy);
-  margin-top: 2rem;
-  }
-  .about-quote {
-    font-family: 'Libre Baskerville', Georgia, serif;
-    font-size: 1.5rem; font-style: italic; font-weight: 400;
-    color: var(--espresso); line-height: 1.5; margin-bottom: 1.5rem;
-  }
-  .about-cite {
-    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--text-light);
-  }
-  .about-accent {
-    position: absolute; bottom: -1.5rem; right: -1.5rem;
-    width: 140px; height: 140px;
-    border: 2px solid rgba(201,157,137,0.3);
-  }
-  .about-text p {
-    font-size: 1rem; line-height: 1.85; color: var(--text-mid);
-    margin-bottom: 1.25rem; font-weight: 300;
-  }
-  .credentials {
-    display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem;
-  }
-  .cred-tag {
-    padding: 0.4rem 1rem; border: 1px solid rgba(139,21,54,0.25);
-    font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--burgundy); font-weight: 500;
-  }
+  #about { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; background: #fff; }
+  .about-visual { position: relative; }
+  .about-image { width: 100%; height: auto; display: block; margin-bottom: 2rem; }
+  .about-card { background: var(--cream); padding: 2.5rem; border-left: 3px solid var(--burgundy); margin-top: 2rem; }
+  .about-quote { font-family: 'Libre Baskerville', Georgia, serif; font-size: 1.5rem; font-style: italic; font-weight: 400; color: var(--espresso); line-height: 1.5; margin-bottom: 1.5rem; }
+  .about-cite { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); }
+  .about-accent { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 140px; height: 140px; border: 2px solid rgba(201,157,137,0.3); }
+  .about-text p { font-size: 1rem; line-height: 1.85; color: var(--text-mid); margin-bottom: 1.25rem; font-weight: 300; }
+  .credentials { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .cred-tag { padding: 0.4rem 1rem; border: 1px solid rgba(139,21,54,0.25); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--burgundy); font-weight: 500; }
 
   /* ─── WHY ─── */
   #why { background: var(--espresso); color: #fff; }
@@ -263,234 +103,32 @@
   #why .section-label::before { background: rgba(201,157,137,0.8); }
   #why h2 { color: var(--cream); }
   #why h2 em { color: var(--cream); }
-  .why-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem; margin-top: 4rem;
-  }
-  .why-item {
-    padding: 2.5rem; border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.03);
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .why-item:hover {
-    border-color: rgba(201,157,137,0.3);
-    background: rgba(201,157,137,0.04);
-  }
-  .why-num {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 3rem; font-weight: 300;
-    color: var(--cream); line-height: 1; margin-bottom: 1.5rem;
-  }
-  .why-item h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.4rem; font-weight: 700; color: var(--cream);
-    margin-bottom: 0.75rem;
-  }
-  .why-item p {
-    font-size: 0.88rem; line-height: 1.8; color: rgba(232,220,215,0.6);
-    font-weight: 300;
-  }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-top: 4rem; }
+  .why-item { padding: 2.5rem; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); transition: border-color 0.2s, background 0.2s; }
+  .why-item:hover { border-color: rgba(201,157,137,0.3); background: rgba(201,157,137,0.04); }
+  .why-num { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 3rem; font-weight: 300; color: var(--cream); line-height: 1; margin-bottom: 1.5rem; }
+  .why-item h3 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--cream); margin-bottom: 0.75rem; }
+  .why-item p { font-size: 0.88rem; line-height: 1.8; color: rgba(232,220,215,0.6); font-weight: 300; }
 
   /* ─── HOW IT WORKS ─── */
   #how { background: var(--cream-light); }
   .how-intro { max-width: 600px; margin-bottom: 4rem; }
-  .how-intro p {
-    font-size: 1rem; line-height: 1.85; color: var(--text-mid); font-weight: 300;
-  }
+  .how-intro p { font-size: 1rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; }
   .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-  .step-card {
-    background: #fff; padding: 2.5rem 2rem;
-    border-bottom: 3px solid transparent;
-    transition: border-color 0.2s;
-    position: relative;
-  }
+  .step-card { background: #fff; padding: 2.5rem 2rem; border-bottom: 3px solid transparent; transition: border-color 0.2s; position: relative; }
   .step-card:hover { border-color: var(--burgundy); }
-  .step-card::after {
-    content: '→'; position: absolute; right: -1.25rem; top: 2rem;
-    color: var(--gold); font-size: 1.2rem;
-  }
+  .step-card::after { content: '→'; position: absolute; right: -1.25rem; top: 2rem; color: var(--gold); font-size: 1.2rem; }
   .step-card:last-child::after { display: none; }
-  .step-num {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 0.85rem; color: var(--burgundy);
-    letter-spacing: 0.1em; margin-bottom: 1.25rem;
-  }
-  .step-card h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.3rem; font-weight: 500; color: var(--espresso);
-    margin-bottom: 0.75rem;
-  }
-  .step-card p {
-    font-size: 0.85rem; line-height: 1.75; color: var(--text-mid); font-weight: 300;
-  }
-
-  .program-pillars {
-    margin-top: 5rem; background: var(--burgundy); padding: 4rem;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-  }
-  .pillar-text h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.8rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem;
-  }
+  .step-num { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 0.85rem; color: var(--burgundy); letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+  .step-card h3 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.3rem; font-weight: 500; color: var(--espresso); margin-bottom: 0.75rem; }
+  .step-card p { font-size: 0.85rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+  .program-pillars { margin-top: 5rem; background: var(--burgundy); padding: 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .pillar-text h3 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem; }
   .pillar-text p { font-size: 0.9rem; line-height: 1.8; color: rgba(232,220,215,0.75); font-weight: 300; }
   .pillar-list { list-style: none; }
-  .pillar-list li {
-    padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.08);
-    font-size: 0.88rem; color: rgba(232,220,215,0.8); font-weight: 300;
-    display: flex; align-items: center; gap: 1rem;
-  }
+  .pillar-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.88rem; color: rgba(232,220,215,0.8); font-weight: 300; display: flex; align-items: center; gap: 1rem; }
   .pillar-list li:last-child { border-bottom: none; }
-  .pillar-list li::before {
-    content: ''; display: inline-block;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--blush); flex-shrink: 0;
-  }
-
-  /* ─── DOWNLOADS ─── */
-  #resources { background: #fff; }
-  .resources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
-  .resource-category h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.4rem; font-weight: 700; color: var(--espresso);
-    margin-bottom: 1.5rem; padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--cream);
-  }
-  .pdf-item {
-    display: flex; align-items: center; gap: 1rem; padding: 1rem 0;
-    border-bottom: 1px solid rgba(232,220,215,0.6); text-decoration: none;
-    color: var(--text-dark); transition: color 0.2s; cursor: pointer;
-  }
-  .pdf-item:hover .pdf-title { color: var(--burgundy); }
-  .pdf-icon {
-    width: 40px; height: 48px; background: var(--cream-light);
-    border: 1px solid var(--cream); display: flex; align-items: center;
-    justify-content: center; flex-shrink: 0;
-    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.05em;
-    color: var(--burgundy); text-transform: uppercase;
-  }
-  .pdf-title { font-size: 0.88rem; font-weight: 400; color: var(--text-dark); }
-  .pdf-meta { font-size: 0.75rem; color: var(--text-light); margin-top: 0.15rem; }
-  .pdf-arrow { margin-left: auto; color: var(--blush); font-size: 1rem; }
-
-  /* ─── QUESTIONNAIRE ─── */
-  #questionnaire { background: var(--cream-light); }
-  .q-wrapper {
-    display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; margin-top: 3rem;
-  }
-  .q-intro h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.5rem; font-weight: 700; color: var(--espresso); margin-bottom: 1rem;
-  }
-  .q-intro p { font-size: 0.88rem; line-height: 1.8; color: var(--text-mid); font-weight: 300; }
-  .q-steps { margin-top: 2rem; }
-  .q-step {
-    display: flex; gap: 1rem; padding: 0.75rem 0;
-    font-size: 0.82rem; color: var(--text-mid);
-  }
-  .q-step-num {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--burgundy); color: #fff;
-    font-size: 0.7rem; font-weight: 500; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* ─── Form ─── */
-  .form-card {
-    background: #fff; padding: 3rem;
-    border: 1px solid rgba(201,157,137,0.2);
-  }
-  .form-progress {
-    display: flex; gap: 0.5rem; margin-bottom: 2.5rem;
-  }
-  .form-progress-step {
-    flex: 1; height: 3px; background: var(--cream);
-    transition: background 0.3s;
-  }
-  .form-progress-step.active { background: var(--burgundy); }
-  .form-progress-step.done { background: var(--blush); }
-  .form-step { display: none; }
-  .form-step.visible { display: block; }
-  .form-step-title {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.3rem; font-weight: 500; color: var(--espresso);
-    margin-bottom: 0.4rem;
-  }
-  .form-step-desc {
-    font-size: 0.82rem; color: var(--text-light); margin-bottom: 2rem;
-  }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
-  .form-row.full { grid-template-columns: 1fr; }
-  .field { display: flex; flex-direction: column; gap: 0.4rem; }
-  .field label {
-    font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--text-mid); font-weight: 500;
-  }
-  .field input, .field select, .field textarea {
-    border: 1px solid var(--cream); padding: 0.75rem 1rem;
-    font-family: 'Inter', sans-serif; font-size: 0.88rem;
-    color: var(--text-dark); background: var(--cream-light);
-    outline: none; transition: border-color 0.2s;
-    -webkit-appearance: none;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--burgundy);
-    background: #fff;
-  }
-  .field textarea { resize: vertical; min-height: 100px; }
-  .radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-  .radio-option {
-    padding: 0.75rem 1rem; border: 1px solid var(--cream);
-    cursor: pointer; display: flex; align-items: center; gap: 0.6rem;
-    font-size: 0.85rem; color: var(--text-mid);
-    transition: all 0.15s; background: var(--cream-light);
-  }
-  .radio-option input { display: none; }
-  .radio-option.selected {
-    border-color: var(--burgundy); background: rgba(139,21,54,0.04);
-    color: var(--espresso);
-  }
-  .radio-dot {
-    width: 14px; height: 14px; border-radius: 50%;
-    border: 1.5px solid var(--blush); flex-shrink: 0;
-    position: relative; transition: all 0.15s;
-  }
-  .radio-option.selected .radio-dot {
-    border-color: var(--burgundy); background: var(--burgundy);
-  }
-  .scale-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-  .scale-btn {
-    width: 44px; height: 44px; border: 1px solid var(--cream);
-    background: var(--cream-light); font-size: 0.85rem;
-    color: var(--text-mid); cursor: pointer; font-family: 'Inter', sans-serif;
-    transition: all 0.15s; display: flex; align-items: center; justify-content: center;
-  }
-  .scale-btn:hover { border-color: var(--blush); }
-  .scale-btn.selected { background: var(--burgundy); border-color: var(--burgundy); color: #fff; }
-  .form-nav {
-    display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;
-  }
-  .form-nav .btn-back {
-    background: none; border: none; color: var(--text-light);
-    font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500;
-    transition: color 0.2s;
-  }
-  .form-nav .btn-back:hover { color: var(--text-mid); }
-  .form-success {
-    text-align: center; padding: 3rem; display: none;
-  }
-  .form-success.visible { display: block; }
-  .form-success-icon {
-    width: 64px; height: 64px; border-radius: 50%;
-    border: 2px solid var(--burgundy); margin: 0 auto 1.5rem;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; color: var(--burgundy);
-  }
-  .form-success h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.8rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.75rem;
-  }
-  .form-success p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; }
+  .pillar-list li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blush); flex-shrink: 0; }
 
   /* ─── CONTACT ─── */
   #contact { background: var(--espresso); }
@@ -499,106 +137,51 @@
   #contact h2 { color: var(--cream); }
   #contact h2 em { color: var(--cream); }
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
-  .contact-info p {
-    font-size: 0.95rem; line-height: 1.85; color: rgba(232,220,215,0.65);
-    font-weight: 300; margin-bottom: 2.5rem;
-  }
-  .contact-detail {
-    display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;
-  }
-  .contact-detail-icon {
-    width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    font-size: 0.9rem; color: var(--blush);
-  }
-  .contact-detail-label {
-    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: rgba(201,157,137,0.6); margin-bottom: 0.25rem;
-  }
+  .contact-info p { font-size: 0.95rem; line-height: 1.85; color: rgba(232,220,215,0.65); font-weight: 300; margin-bottom: 2.5rem; }
+  .contact-detail { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+  .contact-detail-icon { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; color: var(--blush); }
+  .contact-detail-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(201,157,137,0.6); margin-bottom: 0.25rem; }
   .contact-detail-value { font-size: 0.9rem; color: var(--cream); }
-  .contact-form .field input, .contact-form .field textarea {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--cream);
-  }
-  .contact-form .field input::placeholder,
-  .contact-form .field textarea::placeholder { color: rgba(201,157,137,0.4); }
-  .contact-form .field input:focus,
-  .contact-form .field textarea:focus {
-    border-color: var(--blush); background: rgba(255,255,255,0.06);
-  }
+  .contact-form .field input, .contact-form .field textarea { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--cream); }
+  .contact-form .field input::placeholder, .contact-form .field textarea::placeholder { color: rgba(201,157,137,0.4); }
+  .contact-form .field input:focus, .contact-form .field textarea:focus { border-color: var(--blush); background: rgba(255,255,255,0.06); }
   .contact-form .field label { color: rgba(201,157,137,0.7); }
 
+  /* ─── FORM ─── */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+  .field label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); font-weight: 500; }
+  .field input, .field select, .field textarea { border: 1px solid var(--cream); padding: 0.75rem 1rem; font-family: 'Inter', sans-serif; font-size: 0.88rem; color: var(--text-dark); background: var(--cream-light); outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--burgundy); background: #fff; }
+  .field textarea { resize: vertical; min-height: 100px; }
+
   /* ─── FOOTER ─── */
-  footer {
-    background: #2a1819; padding: 2rem 4rem;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-  }
-  .footer-logo {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1rem; color: rgba(232,220,215,0.5); font-weight: 300;
-  }
+  footer { background: #2a1819; padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1rem; color: rgba(232,220,215,0.5); font-weight: 300; }
   .footer-copy { font-size: 0.75rem; color: rgba(232,220,215,0.3); }
   .footer-legal { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-  .footer-legal a {
-    font-size: 0.72rem; color: rgba(232,220,215,0.35); text-decoration: none;
-    letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
-  }
+  .footer-legal a { font-size: 0.72rem; color: rgba(232,220,215,0.35); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
   .footer-legal a:hover { color: var(--blush); }
 
   /* ─── COOKIE BANNER ─── */
-  #cookie-banner {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
-    background: var(--espresso); border-top: 1px solid rgba(201,157,137,0.2);
-    padding: 1.25rem 3rem; display: flex; align-items: center;
-    justify-content: space-between; gap: 2rem; flex-wrap: wrap;
-  }
-  #cookie-banner p {
-    font-size: 0.82rem; color: rgba(232,220,215,0.75); line-height: 1.6;
-    max-width: 700px; font-weight: 300;
-  }
+  #cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; background: var(--espresso); border-top: 1px solid rgba(201,157,137,0.2); padding: 1.25rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+  #cookie-banner p { font-size: 0.82rem; color: rgba(232,220,215,0.75); line-height: 1.6; max-width: 700px; font-weight: 300; }
   #cookie-banner p a { color: var(--blush); text-decoration: underline; }
   .cookie-btns { display: flex; gap: 0.75rem; flex-shrink: 0; }
-  #cookie-accept {
-    padding: 0.6rem 1.5rem; background: var(--burgundy); color: #fff;
-    border: none; font-family: 'Inter', sans-serif;
-    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
-    cursor: pointer; font-weight: 500; transition: background 0.2s;
-  }
+  #cookie-accept { padding: 0.6rem 1.5rem; background: var(--burgundy); color: #fff; border: none; font-family: 'Inter', sans-serif; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-weight: 500; transition: background 0.2s; }
   #cookie-accept:hover { background: #6e1029; }
-  #cookie-reject {
-    padding: 0.6rem 1.5rem; background: transparent; color: rgba(232,220,215,0.5);
-    border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif;
-    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s;
-  }
+  #cookie-reject { padding: 0.6rem 1.5rem; background: transparent; color: rgba(232,220,215,0.5); border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
   #cookie-reject:hover { color: rgba(232,220,215,0.8); border-color: rgba(255,255,255,0.3); }
 
   /* ─── CLIENT AREA CTA ─── */
-  .client-cta {
-    background: var(--cream); padding: 3rem 4rem;
-    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
-    border-top: 1px solid rgba(139,21,54,0.1);
-  }
-  .client-cta-text h3 {
-    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
-    font-size: 1.6rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.4rem;
-  }
+  .client-cta { background: var(--cream); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; border-top: 1px solid rgba(139,21,54,0.1); }
+  .client-cta-text h3 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.4rem; }
   .client-cta-text p { font-size: 0.88rem; color: var(--text-mid); font-weight: 300; }
-  @media (max-width: 900px) {
-    .client-cta { flex-direction: column; padding: 2.5rem 1.5rem; }
-    #cookie-banner { padding: 1rem 1.5rem; }
-    footer { padding: 1.5rem; }
-  }
 
   /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .hero-text > * {
-    animation: fadeUp 0.7s ease both;
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-text > * { animation: fadeUp 0.7s ease both; }
   .hero-text > *:nth-child(1) { animation-delay: 0.1s; }
   .hero-text > *:nth-child(2) { animation-delay: 0.25s; }
   .hero-text > *:nth-child(3) { animation-delay: 0.4s; }
@@ -607,52 +190,32 @@
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
-
-    #hero {
-      display: flex; flex-direction: column;
-      min-height: auto; padding-top: 70px;
-      width: 100%; max-width: 100vw; overflow-x: hidden;
-    }
-    .hero-text {
-      padding: 2.5rem 1.5rem 1.5rem;
-      text-align: center; width: 100%; max-width: 100%;
-    }
+    #hero { display: flex; flex-direction: column; min-height: auto; padding-top: 70px; width: 100%; max-width: 100vw; overflow-x: hidden; }
+    .hero-text { padding: 2.5rem 1.5rem 1.5rem; text-align: center; width: 100%; max-width: 100%; }
     .hero-label { justify-content: center; }
     h1 { font-size: clamp(1.9rem, 7vw, 3rem); }
     .hero-sub { max-width: 100%; }
     .hero-text > div:last-child { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
     .btn-outline { margin-left: 0; }
-
-    .hero-visual {
-      position: relative; width: 100%; height: auto;
-      padding: 1rem 3rem 3.5rem;
-      display: flex; align-items: center; justify-content: center;
-      overflow: visible;
-    }
-    .hero-circle {
-      width: min(280px, 68vw);
-      height: min(280px, 68vw);
-    }
+    .hero-visual { position: relative; width: 100%; height: auto; padding: 1rem 3rem 3.5rem; display: flex; align-items: center; justify-content: center; overflow: visible; }
+    .hero-circle { width: min(280px, 68vw); height: min(280px, 68vw); }
     .hero-tag { padding: 0.6rem 0.85rem; }
     .hero-tag .tag-num { font-size: 1.1rem; }
     .hero-tag .tag-text { font-size: 0.62rem; }
     .hero-tag.tag-1 { bottom: 16%; left: 2%; }
     .hero-tag.tag-2 { top: 5%; right: 2%; }
-
     section { padding: 4rem 1.5rem; }
-    #about, .how-steps, .why-grid, .resources-grid, .q-wrapper, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    #about, .how-steps, .why-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
     .how-steps { gap: 1rem; }
     .step-card::after { display: none; }
     .program-pillars { grid-template-columns: 1fr; gap: 2rem; }
     .form-row { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .client-cta { flex-direction: column; padding: 2.5rem 1.5rem; }
+    #cookie-banner { padding: 1rem 1.5rem; }
   }
-
   @media (max-width: 480px) {
-    .hero-circle {
-      width: min(240px, 78vw);
-      height: min(240px, 78vw);
-    }
+    .hero-circle { width: min(240px, 78vw); height: min(240px, 78vw); }
     .hero-visual { padding: 2rem 1.5rem 3.5rem; }
     .hero-tag { padding: 0.5rem 0.7rem; }
     .hero-tag .tag-num { font-size: 1rem; }
@@ -664,16 +227,26 @@
 </head>
 <body>
 
+<!-- Translations engine -->
+<script src="translations.js"></script>
+
 <!-- NAV -->
 <nav>
   <img src="images/logo.png" alt="in.curta logo" class="nav-logo-img">
   <ul class="nav-links">
-    <li><a href="#about">Sobre</a></li>
-    <li><a href="#why">O Método</a></li>
-    <li><a href="#how">Programa</a></li>
+    <li><a href="#about" data-i18n="navAbout">Sobre</a></li>
+    <li><a href="#why" data-i18n="navMethod">O Método</a></li>
+    <li><a href="#how" data-i18n="navProgram">Programa</a></li>
     <!--<li><a href="#resources">Recursos</a></li>-->
-    <li><a href="#questionnaire">Questionário</a></li>
-    <li><a href="#contact">Contato</a></li>
+    <li><a href="#questionnaire" data-i18n="navQuestionnaire">Questionário</a></li>
+    <li><a href="#contact" data-i18n="navContact">Contato</a></li>
+    <li>
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="pt">PT</button>
+        <div class="lang-divider"></div>
+        <button class="lang-btn" data-lang="es">ES</button>
+      </div>
+    </li>
   </ul>
 </nav>
 
@@ -681,12 +254,12 @@
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-text">
-    <div class="hero-label">Nutrição Clínica Comportamental</div>
-    <h1>Emagrecer não é força<br>de vontade. É <em>neurotreinamento</em>.</h1>
-    <p class="hero-sub">Aprenda a controlar os impulsos alimentares, reprogramar seus gatilhos e construir hábitos definitivos sem dietas restritivas e sem culpa.</p>
+    <div class="hero-label" data-i18n="heroLabel">Nutrição Clínica Comportamental</div>
+    <h1 data-i18n="heroTitle">Emagrecer não é força<br>de vontade. É <em>neurotreinamento</em>.</h1>
+    <p class="hero-sub" data-i18n="heroSub">Aprenda a controlar os impulsos alimentares, reprogramar seus gatilhos e construir hábitos definitivos sem dietas restritivas e sem culpa.</p>
     <div>
-      <a href="#questionnaire" class="btn-primary">Começar agora</a>
-      <a href="#about" class="btn-outline">Conhecer o método</a>
+      <a href="#questionnaire" class="btn-primary" data-i18n="heroCta">Começar agora</a>
+      <a href="#about" class="btn-outline" data-i18n="heroCtaAlt">Conhecer o método</a>
     </div>
   </div>
   <div class="hero-visual">
@@ -694,237 +267,171 @@
       <img src="images/tamiris-hero.jpg" alt="Tamiris Drumond">
       <div class="hero-inner-text">
         <div class="big-number">3</div>
-        <div class="big-label">Meses de Programa</div>
+        <div class="big-label" data-i18n="heroMonths">Meses de Programa</div>
       </div>
     </div>
     <div class="hero-tag tag-1">
       <div class="tag-num">+15</div>
-      <div class="tag-text">Anos de Experiência</div>
+      <div class="tag-text" data-i18n="heroTag1">Anos de Experiência</div>
     </div>
     <div class="hero-tag tag-2">
       <div class="tag-num">+10</div>
-      <div class="tag-text">Anos em TV e Rádio</div>
+      <div class="tag-text" data-i18n="heroTag2">Anos em TV e Rádio</div>
     </div>
   </div>
 </section>
 
 <!-- ABOUT -->
-<!-- ABOUT -->
 <section id="about">
   <div class="about-visual">
-      <img
-    src="images/tamiris-consultation.JPG"
-    alt="Tamiris Drumond"
-    class="about-image"
-  >
+    <img src="images/tamiris-consultation.JPG" alt="Tamiris Drumond" class="about-image">
     <div class="about-accent"></div>
   </div>
   <div class="about-text">
-    <div class="section-label">Sobre</div>
-    <h2>Tamiris <em>Drumond</em></h2>
-    <p>Nutricionista com mais de 15 anos de experiência ajudando mulheres a transformarem sua relação com a comida. Especialista em Nutrição Clínica Comportamental, Neurociência e Psicologia Positiva.</p>
-    <p>Durante mais de 10 anos contribuiu com entrevistas semanais em TV e rádio, levando conhecimento acessível sobre comportamento alimentar e saúde para um público amplo.</p>
-    <p>Acredito que resultados duradouros não vêm da perfeição mas de entender seus hábitos, emoções e sua relação com a comida, e agir com estratégia e autocompaixão.</p>
+    <div class="section-label" data-i18n="aboutLabel">Sobre</div>
+    <h2 data-i18n="aboutTitle">Tamiris <em>Drumond</em></h2>
+    <p data-i18n="aboutP1">Nutricionista com mais de 15 anos de experiência ajudando mulheres a transformarem sua relação com a comida. Especialista em Nutrição Clínica Comportamental, Neurociência e Psicologia Positiva.</p>
+    <p data-i18n="aboutP2">Durante mais de 10 anos contribuiu com entrevistas semanais em TV e rádio, levando conhecimento acessível sobre comportamento alimentar e saúde para um público amplo.</p>
+    <p data-i18n="aboutP3">Acredito que resultados duradouros não vêm da perfeição mas de entender seus hábitos, emoções e sua relação com a comida, e agir com estratégia e autocompaixão.</p>
     <div class="credentials">
-      <span class="cred-tag">Nutricionista Clínica</span>
-      <span class="cred-tag">Neurociência</span>
-      <span class="cred-tag">Psicologia Positiva</span>
-      <span class="cred-tag">+15 anos de experiência</span>
+      <span class="cred-tag" data-i18n="credClinica">Nutricionista Clínica</span>
+      <span class="cred-tag" data-i18n="credNeuro">Neurociência</span>
+      <span class="cred-tag" data-i18n="credPsico">Psicologia Positiva</span>
+      <span class="cred-tag" data-i18n="credYears">+15 anos de experiência</span>
     </div>
     <div class="about-card">
-      <div class="about-quote">"Criei o in.curta porque percebi que muitas mulheres vivem presas no ciclo da
-restrição: começam motivadas, tentam mudar tudo de uma vez, falham, sentem
-culpa e recomeçam toda semana."</div>
-      <div class="about-cite"> Tamiris Drumond</div>
+      <div class="about-quote" data-i18n="aboutQuote">"Criei o in.curta porque percebi que muitas mulheres vivem presas no ciclo da restrição: começam motivadas, tentam mudar tudo de uma vez, falham, sentem culpa e recomeçam toda semana."</div>
+      <div class="about-cite">— Tamiris Drumond</div>
     </div>
   </div>
 </section>
 
 <!-- WHY -->
 <section id="why">
-  <div class="section-label">O Significado</div>
-  <h2>
-  Por que o
-  <span class="inline-logo-wrap">
-    <img src="images/logo-white.png" alt="in.curta" class="inline-logo-white">
-  </span>
-  é diferente
-</h2>
+  <div class="section-label" data-i18n="whyLabel">O Significado</div>
+  <h2 data-i18n="whyTitle">Por que o <span class="inline-logo-wrap"><img src="images/logo-white.png" alt="in.curta" class="inline-logo-white"></span> é diferente</h2>
   <div class="why-grid">
     <div class="why-item">
       <div class="why-num">IN</div>
-      <h3>Olhar para dentro</h3>
-      <p>O "IN" representa o olhar para dentro entender seus hábitos, emoções e a relação com a comida. Sem autoconhecimento, nenhuma dieta sustenta resultados duradouros.</p>
+      <h3 data-i18n="whyInTitle">Olhar para dentro</h3>
+      <p data-i18n="whyInText">O "IN" representa o olhar para dentro entender seus hábitos, emoções e a relação com a comida. Sem autoconhecimento, nenhuma dieta sustenta resultados duradouros.</p>
     </div>
     <div class="why-item">
       <div class="why-num">CURTA</div>
-      <h3>Curtir o processo</h3>
-      <p>O "curta" é um convite para viver com mais leveza: curtir a vida sem viver sob pressão de calorias, culpa ou dietas extremas. Você não só encurta o caminho como também curte o processo.</p>
+      <h3 data-i18n="whyCurtaTitle">Curtir o processo</h3>
+      <p data-i18n="whyCurtaText">O "curta" é um convite para viver com mais leveza: curtir a vida sem viver sob pressão de calorias, culpa ou dietas extremas. Você não só encurta o caminho como também curte o processo.</p>
     </div>
     <div class="why-item">
       <div class="why-num">→</div>
-      <h3>Não é falta de força de vontade</h3>
-      <p>Se você começa dietas e não consegue manter, perde o controle com comida ou sente culpa depois de comer o problema não é você. É falta de estratégia para lidar com os impulsos do cérebro.</p>
+      <h3 data-i18n="whyArrowTitle">Não é falta de força de vontade</h3>
+      <p data-i18n="whyArrowText">Se você começa dietas e não consegue manter, perde o controle com comida ou sente culpa depois de comer o problema não é você. É falta de estratégia para lidar com os impulsos do cérebro.</p>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section id="how">
-  <div class="section-label">O Programa</div>
-  <h2>Como <em>funciona</em></h2>
+  <div class="section-label" data-i18n="howLabel">O Programa</div>
+  <h2 data-i18n="howTitle">Como <em>funciona</em></h2>
   <div class="how-intro">
-    <p>O In.curta é um programa de 3 meses porque as mudanças reais no comportamento alimentar precisam de tempo para se consolidar. Durante esse período trabalhamos gradualmente impulsos alimentares, disciplina e construção de hábitos.</p>
+    <p data-i18n="howIntroP">O In.curta é um programa de 3 meses porque as mudanças reais no comportamento alimentar precisam de tempo para se consolidar. Durante esse período trabalhamos gradualmente impulsos alimentares, disciplina e construção de hábitos.</p>
   </div>
   <div class="how-steps">
     <div class="step-card">
-      <div class="step-num">Consulta Online</div>
-      <h3>6 Consultas ao Vivo</h3>
-      <p>Uma consulta a cada 15 dias. Explicação prática sobre impulsos alimentares e hábitos, com construção gradual de disciplina alimentar e plano nutricional personalizado.</p>
+      <div class="step-num" data-i18n="step1Num">Consulta Online</div>
+      <h3 data-i18n="step1Title">6 Consultas ao Vivo</h3>
+      <p data-i18n="step1Text">Uma consulta a cada 15 dias. Explicação prática sobre impulsos alimentares e hábitos, com construção gradual de disciplina alimentar e plano nutricional personalizado.</p>
     </div>
     <div class="step-card">
-      <div class="step-num">Aplicativo</div>
-      <h3>Acompanhamento Diário</h3>
-      <p>Consulte o plano alimentar, receba notificações, registe peso e ingestão de água, atividade física, diário alimentar e esclareça dúvidas a qualquer momento.</p>
+      <div class="step-num" data-i18n="step2Num">Aplicativo</div>
+      <h3 data-i18n="step2Title">Acompanhamento Diário</h3>
+      <p data-i18n="step2Text">Consulte o plano alimentar, receba notificações, registe peso e ingestão de água, atividade física, diário alimentar e esclareça dúvidas a qualquer momento.</p>
     </div>
     <div class="step-card">
-      <div class="step-num">Planner</div>
-      <h3>Planner Quinzenal</h3>
-      <p>Exercícios de nutrição comportamental, neurociência e psicologia positiva para lidar com os impulsos, desenvolver disciplina e consolidar hábitos saudáveis.</p>
+      <div class="step-num" data-i18n="step3Num">Planner</div>
+      <h3 data-i18n="step3Title">Planner Quinzenal</h3>
+      <p data-i18n="step3Text">Exercícios de nutrição comportamental, neurociência e psicologia positiva para lidar com os impulsos, desenvolver disciplina e consolidar hábitos saudáveis.</p>
     </div>
     <div class="step-card">
-      <div class="step-num">Resultado</div>
-      <h3>Hábitos Definitivos</h3>
-      <p>Emagreça de forma consciente, sem dietas restritivas e sem culpa reprogramando seus gatilhos e consolidando hábitos de forma definitiva.</p>
+      <div class="step-num" data-i18n="step4Num">Resultado</div>
+      <h3 data-i18n="step4Title">Hábitos Definitivos</h3>
+      <p data-i18n="step4Text">Emagreça de forma consciente, sem dietas restritivas e sem culpa reprogramando seus gatilhos e consolidando hábitos de forma definitiva.</p>
     </div>
   </div>
 
   <div class="program-pillars">
     <div class="pillar-text">
-      <h3>O que está incluído no programa</h3>
-      <p>Cada elemento do In.curta foi desenhado para trabalhar em conjunto oferecendo a estrutura, a ciência e o suporte que a mudança duradoura exige.</p>
+      <h3 data-i18n="pillarTitle">O que está incluído no programa</h3>
+      <p data-i18n="pillarText">Cada elemento do In.curta foi desenhado para trabalhar em conjunto oferecendo a estrutura, a ciência e o suporte que a mudança duradoura exige.</p>
     </div>
     <ul class="pillar-list">
-      <li>6 consultas online ao vivo (1 a cada 15 dias)</li>
-      <li>Plano alimentar personalizado</li>
-      <li>Acompanhamento pelo aplicativo</li>
-      <li>Planner quinzenal com exercícios comportamentais</li>
-      <li>Esclarecimento de dúvidas a qualquer momento</li>
-      <li>Lista de compras e registo de refeições</li>
+      <li data-i18n="pillar1">6 consultas online ao vivo (1 a cada 15 dias)</li>
+      <li data-i18n="pillar2">Plano alimentar personalizado</li>
+      <li data-i18n="pillar3">Acompanhamento pelo aplicativo</li>
+      <li data-i18n="pillar4">Planner quinzenal com exercícios comportamentais</li>
+      <li data-i18n="pillar5">Esclarecimento de dúvidas a qualquer momento</li>
+      <li data-i18n="pillar6">Lista de compras e registo de refeições</li>
     </ul>
   </div>
 </section>
 
-<!-- RESOURCES / DOWNLOADS 
-<section id="resources">
-  <div class="section-label">Materiais para Clientes</div>
-  <h2>Downloads &amp; <em>Recursos</em></h2>
-  <div class="resources-grid">
-    <div class="resource-category">
-      <h3>Para começar</h3>
-      <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
-        <div class="pdf-icon">PDF</div>
-        <div>
-          <div class="pdf-title">Apresentação do Programa In.curta</div>
-          <div class="pdf-meta">Guia de boas-vindas</div>
-        </div>
-        <div class="pdf-arrow">↓</div>
-      </a>
-      <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
-        <div class="pdf-icon">PDF</div>
-        <div>
-          <div class="pdf-title">O que é Nutrição Comportamental</div>
-          <div class="pdf-meta">Material educativo</div>
-        </div>
-        <div class="pdf-arrow">↓</div>
-      </a>
-      <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
-        <div class="pdf-icon">PDF</div>
-        <div>
-          <div class="pdf-title">Planner de Intenções Semana 1</div>
-          <div class="pdf-meta">Exercício inicial</div>
-        </div>
-        <div class="pdf-arrow">↓</div>
-      </a>
-    </div>
-    <div class="resource-category">
-      <h3>Durante o programa</h3>
-      <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
-        <div class="pdf-icon">PDF</div>
-        <div>
-          <div class="pdf-title">Diário Alimentar e Emocional</div>
-          <div class="pdf-meta">Registo semanal</div>
-        </div>
-        <div class="pdf-arrow">↓</div>
-      </a>
-      <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
-        <div class="pdf-icon">PDF</div>
-        <div>
-          <div class="pdf-title">Guia de Impulsos Alimentares</div>
-          <div class="pdf-meta">Neurociência aplicada</div>
-        </div>
-        <div class="pdf-arrow">↓</div>
-      </a>
-      <a class="pdf-item" href="#" onclick="alert('Substitua com o link real do PDF.'); return false;">
-        <div class="pdf-icon">PDF</div>
-        <div>
-          <div class="pdf-title">Planner Quinzenal de Hábitos</div>
-          <div class="pdf-meta">Psicologia positiva</div>
-        </div>
-        <div class="pdf-arrow">↓</div>
-      </a>
-    </div>
-  </div>
-</section>-->
-
 <!-- CLIENT AREA -->
 <div class="client-cta" id="questionnaire">
   <div class="client-cta-text">
-    <h3>Área exclusiva para clientes</h3>
-    <p>Acesse os questionários de anamnese, materiais do programa e seus planners personalizados.</p>
+    <h3 data-i18n="clientTitle">Área exclusiva para clientes</h3>
+    <p data-i18n="clientText">Acesse os questionários de anamnese, materiais do programa e seus planners personalizados.</p>
   </div>
-  <a href="questionarios.html" class="btn-primary">Acessar área do cliente →</a>
+  <a href="questionarios.html" class="btn-primary" data-i18n="clientCta">Acessar área do cliente →</a>
 </div>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-label">Contato</div>
-  <h2>Pronta para <em>começar?</em></h2>
+  <div class="section-label" data-i18n="contactLabel">Contato</div>
+  <h2 data-i18n="contactTitle">Pronta para <em>começar?</em></h2>
   <div class="contact-grid">
     <div class="contact-info">
-      <p>Se você tem dúvidas sobre o programa, quer conversar sobre a sua situação ou está pronta para começar estou aqui. Entre em contato e vamos conversar.</p>
+      <p data-i18n="contactIntro">Se você tem dúvidas sobre o programa, quer conversar sobre a sua situação ou está pronta para começar estou aqui. Entre em contato e vamos conversar.</p>
       <div class="contact-detail">
         <div class="contact-detail-icon">✉</div>
         <div>
-          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-label" data-i18n="contactEmailLbl">Email</div>
           <div class="contact-detail-value">contato.tamirisdrumond@gmail.com</div>
         </div>
       </div>
       <div class="contact-detail">
         <div class="contact-detail-icon">☏</div>
         <div>
-          <div class="contact-detail-label">Telefone / WhatsApp</div>
+          <div class="contact-detail-label" data-i18n="contactPhoneLbl">Telefone / WhatsApp</div>
           <div class="contact-detail-value">+34 645 463 470</div>
         </div>
       </div>
       <div class="contact-detail">
         <div class="contact-detail-icon">◎</div>
         <div>
-          <div class="contact-detail-label">Instagram</div>
+          <div class="contact-detail-label" data-i18n="contactIgLbl">Instagram</div>
           <div class="contact-detail-value">@tamiris.drumond</div>
         </div>
       </div>
     </div>
     <div class="contact-form">
       <div class="form-row">
-        <div class="field"><label>Nome</label><input type="text" placeholder="Seu nome" id="c-name"></div>
-        <div class="field"><label>Email</label><input type="email" placeholder="seu@email.com" id="c-email"></div>
+        <div class="field">
+          <label data-i18n="fieldName">Nome</label>
+          <input type="text" data-i18n-ph="fieldNamePH" placeholder="Seu nome" id="c-name">
+        </div>
+        <div class="field">
+          <label data-i18n="fieldEmail">Email</label>
+          <input type="email" data-i18n-ph="fieldEmailPH" placeholder="seu@email.com" id="c-email">
+        </div>
       </div>
       <div class="form-row full">
-        <div class="field"><label>Mensagem</label><textarea placeholder="O que você gostaria de conversar?" style="min-height: 130px;" id="c-msg"></textarea></div>
+        <div class="field">
+          <label data-i18n="fieldMsg">Mensagem</label>
+          <textarea data-i18n-ph="fieldMsgPH" placeholder="O que você gostaria de conversar?" style="min-height: 130px;" id="c-msg"></textarea>
+        </div>
       </div>
-      <button class="btn-primary" onclick="submitContact()">Enviar mensagem</button>
-      <div id="contact-success" style="display:none; margin-top:1rem; font-size:0.85rem; color:var(--blush);">Mensagem enviada! Entrarei em contato assim que possível.</div>
+      <button class="btn-primary" onclick="submitContact()" data-i18n="submitBtn">Enviar mensagem</button>
+      <div id="contact-success" style="display:none; margin-top:1rem; font-size:0.85rem; color:var(--blush);" data-i18n="contactSuccess">Mensagem enviada! Entrarei em contato assim que possível.</div>
     </div>
   </div>
 </section>
@@ -933,20 +440,20 @@ culpa e recomeçam toda semana."</div>
 <footer>
   <div class="footer-logo">In.curta · Tamiris Drumond</div>
   <div class="footer-legal">
-    <a href="privacidade.html">Política de Privacidade</a>
-    <a href="privacidade.html#termos">Termos de Uso</a>
-    <a href="privacidade.html#aviso">Aviso Legal</a>
-    <a href="privacidade.html#cookies">Política de Cookies</a>
+    <a href="privacidade.html" data-i18n="footerPrivacy">Política de Privacidade</a>
+    <a href="privacidade.html#termos" data-i18n="footerTerms">Termos de Uso</a>
+    <a href="privacidade.html#aviso" data-i18n="footerLegal">Aviso Legal</a>
+    <a href="privacidade.html#cookies" data-i18n="footerCookies">Política de Cookies</a>
   </div>
-  <div class="footer-copy">© 2025 · Nutrição Clínica Comportamental</div>
+  <div class="footer-copy" data-i18n="footerCopy">© 2025 · Nutrição Clínica Comportamental</div>
 </footer>
 
 <!-- COOKIE BANNER -->
 <div id="cookie-banner">
-  <p>Este site utiliza apenas cookies essenciais para o funcionamento da página. Não utilizamos ferramentas de rastreamento ou análise. Ao continuar navegando, você concorda com nossa <a href="privacidade.html#cookies">Política de Cookies</a> e <a href="privacidade.html">Política de Privacidade</a> (conforme LGPD / Lei 13.709/2018).</p>
+  <p data-i18n="cookieText">Este site utiliza apenas cookies essenciais para o funcionamento da página. Não utilizamos ferramentas de rastreamento ou análise. Ao continuar navegando, você concorda com nossa <a href="privacidade.html#cookies">Política de Cookies</a> e <a href="privacidade.html">Política de Privacidade</a> (conforme LGPD / Lei 13.709/2018).</p>
   <div class="cookie-btns">
-    <button id="cookie-reject" onclick="dismissCookie(false)">Apenas essenciais</button>
-    <button id="cookie-accept" onclick="dismissCookie(true)">Entendi</button>
+    <button id="cookie-reject" onclick="dismissCookie(false)" data-i18n="cookieReject">Apenas essenciais</button>
+    <button id="cookie-accept" onclick="dismissCookie(true)" data-i18n="cookieAccept">Entendi</button>
   </div>
 </div>
 
@@ -963,32 +470,25 @@ culpa e recomeçam toda semana."</div>
     const name = document.getElementById('c-name').value.trim();
     const email = document.getElementById('c-email').value.trim();
     const msg = document.getElementById('c-msg').value.trim();
-    if (!name || !email || !msg) { alert('Por favor, preencha todos os campos.'); return; }
+    // Uses t() from translations.js to get the right language alert
+    if (!name || !email || !msg) { alert(t('alertFillFields')); return; }
 
-try {
-  const res = await fetch('/api/contact', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      name,
-      email,
-      message: msg
-    })
-  });
-
-  const resData = await res.json().catch(() => ({}));
-  if (!res.ok || !resData.success) {
-    throw new Error(resData.detail || resData.error || 'Erro ao enviar');
-  }
-
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message: msg })
+      });
+      const resData = await res.json().catch(() => ({}));
+      if (!res.ok || !resData.success) {
+        throw new Error(resData.detail || resData.error || 'Erro ao enviar');
+      }
       document.getElementById('contact-success').style.display = 'block';
       document.getElementById('c-name').value = '';
       document.getElementById('c-email').value = '';
       document.getElementById('c-msg').value = '';
     } catch(e) {
-      alert('Erro ao enviar. Por favor tente novamente ou entre em contato por email.');
+      alert(t('alertSendError'));
       console.error(e);
     }
   }
