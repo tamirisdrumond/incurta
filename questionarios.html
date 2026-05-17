@@ -655,15 +655,18 @@
     }
   }
   // ─── ON-DEMAND QUESTIONNAIRE LOADER ──────────────────────
-  // Called when client clicks a card. Fetches only that form's HTML.
-  async function openForm(type) {
+  // resumeStep: if provided, re-opens at that step (used by setLang re-fetch).
+  // When called from a card click, resumeStep is undefined → starts at step 1.
+  async function openForm(type, resumeStep) {
     const routes = { fisica: '/api/form-fisica', emocional: '/api/form-emocional' };
     const route = routes[type];
     if (!route) return;
 
-    // Show loading state in the selector
-    const cards = document.querySelector('.q-cards');
-    if (cards) cards.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">${t('q_loading')}</div>`;
+    // Only show loading state when opening fresh from the selector (not on re-fetch)
+    if (!resumeStep) {
+      const cards = document.querySelector('.q-cards');
+      if (cards) cards.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">${t('q_loading')}</div>`;
+    }
 
     try {
       const res = await fetch(route, {
@@ -674,7 +677,7 @@
       const data = await res.json();
       if (!data.ok || !data.html) throw new Error('load failed');
 
-      // Remove any previously injected steps first (handles second+ questionnaire)
+      // Remove any previously injected steps
       document.querySelectorAll('.form-step').forEach(s => s.remove());
       // Inject new steps before the success state
       const stepContainer = document.getElementById('form-area');
@@ -685,9 +688,8 @@
         stepContainer.insertBefore(s, successEl);
       });
 
-      // Now activate the form
       activeForm = type;
-      activeStep = 1;
+      activeStep = resumeStep || 1;
       document.getElementById('selector').style.display = 'none';
       document.getElementById('form-area').style.display = 'block';
       document.getElementById('form-success').style.display = 'none';
@@ -698,19 +700,23 @@
       };
       document.getElementById('form-title').innerHTML = titles[type].t;
       document.getElementById('form-sub').textContent = titles[type].s;
-      showStep(type, 1);
-      window.scrollTo(0, 0);
+      showStep(type, activeStep);
+      // Only scroll to top on fresh open, not on silent re-fetch
+      if (!resumeStep) window.scrollTo(0, 0);
     } catch(e) {
       console.error('Form load error:', e);
-      // Restore cards on error
-      document.getElementById('selector').style.display = 'flex';
-      document.getElementById('app').innerHTML = `<p style="padding:2rem;color:var(--burgundy)">${t('q_loadError')}</p>`;
+      if (!resumeStep) {
+        document.getElementById('selector').style.display = 'flex';
+        document.getElementById('app').innerHTML = `<p style="padding:2rem;color:var(--burgundy)">${t('q_loadError')}</p>`;
+      }
     }
   }
 
-  async function openQfa() {
-    const cards = document.querySelector('.q-cards');
-    if (cards) cards.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">${t('q_loading')}</div>`;
+  async function openQfa(resumeQfaStep) {
+    if (!resumeQfaStep) {
+      const cards = document.querySelector('.q-cards');
+      if (cards) cards.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-light);font-size:0.88rem;">${t('q_loading')}</div>`;
+    }
 
     try {
       const res = await fetch('/api/form-qfa', {
@@ -722,43 +728,75 @@
       if (!data.ok || !data.html) throw new Error('load failed');
 
       const appEl = document.getElementById('app');
+
+      // On re-fetch (lang change): replace existing qfa-section in-place
+      const existing = document.getElementById('qfa-section');
+      if (existing) existing.remove();
+
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = data.html;
-      // Inject styles
-      tempDiv.querySelectorAll('style').forEach(s => document.head.appendChild(s));
-      // Inject scripts
+      // Inject styles (deduplicate by checking existing)
+      tempDiv.querySelectorAll('style').forEach(s => {
+        if (!document.head.querySelector(`style[data-qfa]`)) {
+          s.setAttribute('data-qfa', '1');
+          document.head.appendChild(s);
+        }
+      });
+      // Inject / replace scripts
+      document.querySelectorAll('script[data-qfa]').forEach(s => s.remove());
       tempDiv.querySelectorAll('script').forEach(s => {
         const ns = document.createElement('script');
         ns.textContent = s.textContent;
+        ns.setAttribute('data-qfa', '1');
         document.body.appendChild(ns);
         s.remove();
       });
-      // Append remaining HTML to app
       appEl.appendChild(tempDiv.firstElementChild || tempDiv);
+
       document.getElementById('selector').style.display = 'none';
-      window.scrollTo(0, 0);
+      // If resuming at a specific QFA step, navigate there
+      if (resumeQfaStep && typeof qfaGoStep === 'function') {
+        qfaGoStep(resumeQfaStep);
+      }
+      if (!resumeQfaStep) window.scrollTo(0, 0);
     } catch(e) {
       console.error('QFA load error:', e);
     }
   }
+
   // ─── LANG CHANGE HOOK ─────────────────────────────────────────────────────
-  // translations.js calls applyTranslations() which handles data-i18n elements.
-  // We override setLang here so the progress label (set by JS, not data-i18n)
-  // also updates, and form titles if a form is currently open.
+  // When the user switches language:
+  //  1. Persist choice and re-apply data-i18n translations (shell, topbar, gate).
+  //  2. If a standard form (fisica/emocional) is open, re-fetch its steps in the
+  //     new language and resume at the current step — user loses no progress position.
+  //  3. If QFA is open, re-fetch and resume at the current QFA step.
+  //  4. If the selector is showing (no form open), just re-applying translations
+  //     already handles the selector cards via data-i18n.
+  //
+  // NOTE: field values typed so far are lost on re-fetch. This is unavoidable
+  // because the form HTML is server-rendered and cannot be patched in-place.
+  // Users who have started filling in answers should finish before switching lang.
   function setLang(lang) {
     localStorage.setItem('incurta-lang', lang);
     applyTranslations(lang);
-    // Update progress label if a form is active
-    if (activeForm && activeStep) {
-      updateProgress(activeForm, activeStep);
-      const titles = {
-        fisica:    { t: t('q_formTitleFisica'),    s: t('q_formSub') },
-        emocional: { t: t('q_formTitleEmocional'), s: t('q_formSub') }
-      };
-      const titleEl = document.getElementById('form-title');
-      const subEl   = document.getElementById('form-sub');
-      if (titleEl && titles[activeForm]) titleEl.innerHTML = titles[activeForm].t;
-      if (subEl   && titles[activeForm]) subEl.textContent = titles[activeForm].s;
+
+    // Re-fetch open form in new language, resuming at current step
+    if (activeForm && document.getElementById('form-area') &&
+        document.getElementById('form-area').style.display !== 'none') {
+      openForm(activeForm, activeStep);
+      return;
+    }
+
+    // Re-fetch QFA if it's open
+    const qfaSection = document.getElementById('qfa-section');
+    if (qfaSection && qfaSection.style.display !== 'none') {
+      // Detect current QFA step
+      let qfaStep = 1;
+      if (document.getElementById('qfa-step-food') &&
+          document.getElementById('qfa-step-food').style.display !== 'none') qfaStep = 2;
+      if (document.getElementById('qfa-step-result') &&
+          document.getElementById('qfa-step-result').style.display !== 'none') qfaStep = 3;
+      openQfa(qfaStep);
     }
   }
 
