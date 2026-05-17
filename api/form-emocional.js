@@ -1,14 +1,359 @@
 // api/form-emocional.js
-// Returns protected HTML fragment after password verification.
-// Env var required: CLIENT_PASSWORD
+// Returns the Definição Emocional / Definición Emocional step HTML after auth.
+//
+// Same architecture as form-fisica.js — see that file's header for rationale.
+//
+// CONTRACT:
+//   POST /api/form-emocional
+//   Body: { password: string, lang: 'pt' | 'es' }
+//   Response (ok): { ok: true, html: string }
+//   Response (fail): { ok: false }
 
-const CONTENT = "<!-- E-STEP 1: Identifica\u00e7\u00e3o -->\n    <div class=\"form-step\" id=\"e-step-1\" data-form=\"emocional\">\n      <div class=\"step-heading\">Identifica\u00e7\u00e3o</div>\n      <div class=\"step-desc\">Passo 1 de 8 \u2014 Dados b\u00e1sicos</div>\n      <div class=\"two-col\">\n        <div class=\"field\"><label>Nome completo *</label><input type=\"text\" id=\"e-nome\" placeholder=\"Seu nome completo\"></div>\n        <div class=\"field\"><label>Data de nascimento *</label><input type=\"date\" id=\"e-nasc\"></div>\n      </div>\n      <div class=\"field\"><label>Email *</label><input type=\"email\" id=\"e-email\" placeholder=\"seu@email.com\"></div>\n\n      <div class=\"field\">\n        <label>Se voc\u00ea pudesse dar um nome para a nova vers\u00e3o que quer construir, qual seria?</label>\n        <input type=\"text\" id=\"e-versao\" placeholder=\"Ex: minha vers\u00e3o confiante, vers\u00e3o leve, vers\u00e3o disciplinada\u2026\">\n      </div>\n\n      <div class=\"field\">\n        <label>H\u00e1 uma ocasi\u00e3o especial para que queira perder peso? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-ocasiao\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>F\u00e9rias</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Casamento</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Anivers\u00e1rio</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Ver\u00e3o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Viagem</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Festas ou evento familiar</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>N\u00e3o \u00e9 por uma ocasi\u00e3o</label>\n        </div>\n      </div>\n\n      <div id=\"e-step1-error\" style=\"display:none;color:var(--burgundy);font-size:0.82rem;margin-top:0.75rem;\">Por favor, preencha o nome e o email antes de continuar.</div>\n      <div class=\"form-nav\">\n        <span></span>\n        <button class=\"btn-primary\" onclick=\"validateStep1('emocional')\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 2: Gatilhos emocionais -->\n    <div class=\"form-step\" id=\"e-step-2\" data-form=\"emocional\">\n      <div class=\"step-heading\">Gatilhos emocionais</div>\n      <div class=\"step-desc\">Passo 2 de 8 \u2014 Sua rela\u00e7\u00e3o emocional com a comida</div>\n\n      <div class=\"field\">\n        <label>Quando voc\u00ea se sente mais vulner\u00e1vel e busca comida como conforto? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-vulneravel\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sozinha</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Cansada</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Pressionada</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Entediada</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Carente</label>\n        </div>\n        <input type=\"text\" id=\"e-vulneravel-outro\" placeholder=\"Outro: descreva\u2026\" style=\"margin-top:0.5rem;\">\n      </div>\n\n      <div class=\"field\">\n        <label>O que voc\u00ea acha que a comida tem te oferecido al\u00e9m de sabor? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-comida-oferece\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Pausa</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Prazer</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Acolhimento</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Recompensa</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Controle</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Quais momentos do dia voc\u00ea sente mais vontade de comer? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-momentos\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>No fim do dia</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Quando est\u00e1 sozinha</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Ap\u00f3s o trabalho</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Ap\u00f3s brigas</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Qual \u00e9 o melhor hor\u00e1rio do seu dia para cuidar de si e o que costuma atrapalhar isso?</label>\n        <textarea id=\"e-horario\"></textarea>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',2,1)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('emocional',2,3)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 3: Sentimentos e autoconhecimento -->\n    <div class=\"form-step\" id=\"e-step-3\" data-form=\"emocional\">\n      <div class=\"step-heading\">Sentimentos e autoconhecimento</div>\n      <div class=\"step-desc\">Passo 3 de 8 \u2014 O que quer reconstruir</div>\n\n      <div class=\"field\">\n        <label>Qual sentimento voc\u00ea mais quer reconstruir em rela\u00e7\u00e3o a si mesma? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-reconstruir\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Seguran\u00e7a</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Leveza</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Autoconfian\u00e7a</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Feminilidade</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Orgulho</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Se a comida n\u00e3o fosse seu ref\u00fagio, o que poderia ser? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-refugio\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Autocuidado</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Descanso</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Rotina</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Prazer</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Tempo para si</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Qual parte do seu corpo voc\u00ea mais gostaria de melhorar? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-corpo-parte\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Barriga</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Bra\u00e7o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Perna</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Bochechas</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Papada/queixo duplo</label>\n        </div>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',3,2)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('emocional',3,4)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 4: Escala comportamental -->\n    <div class=\"form-step\" id=\"e-step-4\" data-form=\"emocional\">\n      <div class=\"step-heading\">Escala comportamental</div>\n      <div class=\"step-desc\">Passo 4 de 8 \u2014 Assinale de 1 a 5 se a resposta n\u00e3o lhe representa, de 6 a 10 se lhe representa</div>\n\n      <div class=\"field\">\n        <label>Quando voc\u00ea faz uma refei\u00e7\u00e3o, voc\u00ea tem o h\u00e1bito de repetir?</label>\n        <div id=\"e-repetir\" style=\"display:flex;gap:0.4rem;flex-wrap:wrap;\">\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">1</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">2</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">3</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">4</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">5</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">6</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">7</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">8</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">9</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-repetir')\">10</button>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>\u00c0s vezes, se teve um dia dif\u00edcil, come para se sentir melhor?</label>\n        <div id=\"e-diadicil\" style=\"display:flex;gap:0.4rem;flex-wrap:wrap;\">\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">1</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">2</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">3</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">4</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">5</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">6</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">7</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">8</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">9</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-diadicil')\">10</button>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Quando come, est\u00e1 sempre fazendo algo mais, como mexer no telefone ou ver TV?</label>\n        <div id=\"e-distraida\" style=\"display:flex;gap:0.4rem;flex-wrap:wrap;\">\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">1</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">2</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">3</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">4</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">5</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">6</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">7</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">8</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">9</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-distraida')\">10</button>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>\"Posso manter h\u00e1bitos saud\u00e1veis por um tempo, mas logo que passo por alguma situa\u00e7\u00e3o mais desafiante desisto.\" \u2014 Esta frase te representa?</label>\n        <div id=\"e-desiste\" style=\"display:flex;gap:0.4rem;flex-wrap:wrap;\">\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">1</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">2</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">3</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">4</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">5</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">6</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">7</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">8</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">9</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-desiste')\">10</button>\n        </div>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',4,3)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('emocional',4,5)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 5: Hist\u00f3rico de peso -->\n    <div class=\"form-step\" id=\"e-step-5\" data-form=\"emocional\">\n      <div class=\"step-heading\">Hist\u00f3rico de peso</div>\n      <div class=\"step-desc\">Passo 5 de 8 \u2014 Sua trajet\u00f3ria</div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea teve eventos na sua vida que levaram ao aumento de peso? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-eventos\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>N\u00e3o tive.</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sim, medicamentos</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sim, gravidez</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sim, pandemia</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sim, ap\u00f3s o casamento</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sim, ap\u00f3s uma les\u00e3o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sim, ap\u00f3s um novo trabalho</label>\n        </div>\n        <input type=\"text\" id=\"e-eventos-outro\" placeholder=\"Outro: descreva\u2026\" style=\"margin-top:0.5rem;\">\n      </div>\n\n      <div class=\"field\">\n        <label>Quando foi a \u00faltima vez que voc\u00ea se sentiu feliz com sua imagem corporal?</label>\n        <div class=\"radio-group\" id=\"e-ultima-vez\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-ultima-vez')\"><div class=\"radio-dot\"></div>Menos de 1 ano</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-ultima-vez')\"><div class=\"radio-dot\"></div>Entre 1 e 2 anos</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-ultima-vez')\"><div class=\"radio-dot\"></div>Mais de 3 anos</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-ultima-vez')\"><div class=\"radio-dot\"></div>Nunca estive satisfeita.</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Como foi sua experi\u00eancia ao perder peso?</label>\n        <div class=\"radio-group\" id=\"e-experiencia\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-experiencia')\"><div class=\"radio-dot\"></div>J\u00e1 fiz v\u00e1rias dietas</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-experiencia')\"><div class=\"radio-dot\"></div>J\u00e1 perdi peso, mas sempre recupero</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-experiencia')\"><div class=\"radio-dot\"></div>Nunca tentei anteriormente</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-experiencia')\"><div class=\"radio-dot\"></div>Perdi e mantive</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-experiencia')\"><div class=\"radio-dot\"></div>Treino + para poder comer</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-experiencia')\"><div class=\"radio-dot\"></div>J\u00e1 perdi anteriormente com acompanhamento de nutricionista</label>\n        </div>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',5,4)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('emocional',5,6)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 6: Corpo e rotina f\u00edsica -->\n    <div class=\"form-step\" id=\"e-step-6\" data-form=\"emocional\">\n      <div class=\"step-heading\">Corpo e rotina</div>\n      <div class=\"step-desc\">Passo 6 de 8 \u2014 Aspectos f\u00edsicos do dia a dia</div>\n\n      <div class=\"field\">\n        <label>Quantas horas de sono, em m\u00e9dia, voc\u00ea tem por noite?</label>\n        <div class=\"radio-group\" id=\"e-sono\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-sono')\"><div class=\"radio-dot\"></div>Menos de 5 horas</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-sono')\"><div class=\"radio-dot\"></div>Entre 5 e 7 horas</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-sono')\"><div class=\"radio-dot\"></div>Mais de 7 horas</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Em que momento do dia sente que \"se perde de si mesma\"?</label>\n        <div class=\"radio-group\" id=\"e-perde\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-perde')\"><div class=\"radio-dot\"></div>Pela manh\u00e3, ao acordar.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-perde')\"><div class=\"radio-dot\"></div>Ap\u00f3s a dedica\u00e7\u00e3o de cuidar dos filhos, casa e fam\u00edlia</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-perde')\"><div class=\"radio-dot\"></div>\u00c0 noite</label>\n        </div>\n        <input type=\"text\" id=\"e-perde-outro\" placeholder=\"Outro: descreva\u2026\" style=\"margin-top:0.5rem;\">\n      </div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea sente que consegue se alimentar com calma?</label>\n        <div class=\"radio-group\" id=\"e-calma\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-calma')\"><div class=\"radio-dot\"></div>Sim, consigo sempre.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-calma')\"><div class=\"radio-dot\"></div>Sim, mas n\u00e3o sempre.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-calma')\"><div class=\"radio-dot\"></div>\u00c0s vezes.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-calma')\"><div class=\"radio-dot\"></div>N\u00e3o consigo.</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Que tipo de alimenta\u00e7\u00e3o voc\u00ea sente que o seu corpo pede hoje: (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-alim\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Energia r\u00e1pida (doces, p\u00e3es)</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Conforto (comidas quentes, caseiras)</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Leveza e vitalidade (saladas, frutas, \u00e1gua)</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>H\u00e1 algum sintoma que percebe com frequ\u00eancia? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-sintomas\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Incha\u00e7o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Cansa\u00e7o constante</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Reten\u00e7\u00e3o de l\u00edquido</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Irritabilidade</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Queda de cabelo</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Pele ressecada ou oleosa</label>\n        </div>\n        <input type=\"text\" id=\"e-sintomas-outro\" placeholder=\"Outro: descreva\u2026\" style=\"margin-top:0.5rem;\">\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',6,5)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('emocional',6,7)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 7: Maternidade -->\n    <div class=\"form-step\" id=\"e-step-7\" data-form=\"emocional\">\n      <div class=\"step-heading\">Maternidade</div>\n      <div class=\"step-desc\">Passo 7 de 8 \u2014 Responda apenas se for m\u00e3e</div>\n\n      <div class=\"field\">\n        <label>Como mudou sua rela\u00e7\u00e3o com o corpo e a comida depois da gesta\u00e7\u00e3o?</label>\n        <textarea id=\"e-gestacao\" placeholder=\"Se n\u00e3o for m\u00e3e, pode deixar em branco.\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Como est\u00e1 sua rotina atual com o beb\u00ea ou os filhos?</label>\n        <div class=\"radio-group\" id=\"e-rotina\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-rotina')\"><div class=\"radio-dot\"></div>Organizada</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-rotina')\"><div class=\"radio-dot\"></div>N\u00e3o consigo ter uma rotina</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-rotina')\"><div class=\"radio-dot\"></div>Alterno entre os dois.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-rotina')\"><div class=\"radio-dot\"></div>N\u00e3o se aplica</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Depois da maternidade, qual sentimento mais mudou em rela\u00e7\u00e3o ao seu corpo? (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-mat-sentimento\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Gratid\u00e3o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Desconex\u00e3o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Apenas cr\u00edticas</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Orgulho</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Cansa\u00e7o</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>N\u00e3o se aplica</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea sente culpa quando tenta priorizar seu tempo?</label>\n        <div class=\"radio-group\" id=\"e-culpa\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-culpa')\"><div class=\"radio-dot\"></div>Sim, com frequ\u00eancia</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-culpa')\"><div class=\"radio-dot\"></div>\u00c0s vezes.</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-culpa')\"><div class=\"radio-dot\"></div>N\u00e3o sinto</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-culpa')\"><div class=\"radio-dot\"></div>N\u00e3o se aplica</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Como est\u00e1 sua rela\u00e7\u00e3o com o espelho desde o parto?</label>\n        <div class=\"radio-group\" id=\"e-espelho-parto\">\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-espelho-parto')\"><div class=\"radio-dot\"></div>Evito me olhar</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-espelho-parto')\"><div class=\"radio-dot\"></div>Me olho com indiferen\u00e7a</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-espelho-parto')\"><div class=\"radio-dot\"></div>Me olho com carinho</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-espelho-parto')\"><div class=\"radio-dot\"></div>Estou voltando a me olhar</label>\n          <label class=\"radio-option\" onclick=\"selectRadio(this,'e-espelho-parto')\"><div class=\"radio-dot\"></div>N\u00e3o se aplica</label>\n        </div>\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',7,6)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" onclick=\"nextStep('emocional',7,8)\">Continuar \u2192</button>\n      </div>\n    </div>\n\n    <!-- E-STEP 8: Objetivos e motiva\u00e7\u00e3o final -->\n    <div class=\"form-step\" id=\"e-step-8\" data-form=\"emocional\">\n      <div class=\"step-heading\">Objetivos e motiva\u00e7\u00e3o</div>\n      <div class=\"step-desc\">Passo 8 de 8 \u2014 Quase l\u00e1!</div>\n\n      <div class=\"field\">\n        <label>O que voc\u00ea sente falta de fazer por voc\u00ea?</label>\n        <textarea id=\"e-falta\" placeholder=\"Ex: caminhar sozinha, cuidar do cabelo, almo\u00e7ar sem pressa, ler, treinar\u2026\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Quando pensa em voltar a se cuidar, o que mais te impede hoje?</label>\n        <textarea id=\"e-impede\" placeholder=\"Ex: falta de energia, apoio, tempo, motiva\u00e7\u00e3o\u2026\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Voc\u00ea busca mais defini\u00e7\u00e3o, redu\u00e7\u00e3o de volume, energia, ou leveza corporal?</label>\n        <textarea id=\"e-objetivo\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>Quem ir\u00e1 preparar as refei\u00e7\u00f5es do plano alimentar?</label>\n        <input type=\"text\" id=\"e-refeicoes\" placeholder=\"Ex: eu mesma, marido, empregada\u2026\">\n      </div>\n\n      <div class=\"field\">\n        <label>Quais mudan\u00e7as f\u00edsicas voc\u00ea j\u00e1 come\u00e7ou a notar (mesmo pequenas)?</label>\n        <textarea id=\"e-mudancas\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>H\u00e1 algum marcador de sa\u00fade que deseja melhorar? Realizou algum exame laboratorial recente?</label>\n        <textarea id=\"e-marcadores\"></textarea>\n      </div>\n\n      <div class=\"field\">\n        <label>O quanto voc\u00ea est\u00e1 motivada para atingir seu objetivo? (1 = pouco, 10 = muito)</label>\n        <div id=\"e-motivacao\" style=\"display:flex;gap:0.4rem;flex-wrap:wrap;\">\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">1</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">2</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">3</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">4</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">5</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">6</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">7</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">8</button>\n          <button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">9</button><button class=\"scale-btn\" onclick=\"selectScale(this,'e-motivacao')\">10</button>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>No trabalho, voc\u00ea passa a maior parte do tempo: (pode marcar mais de um)</label>\n        <div class=\"check-group\" id=\"e-trabalho\">\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Sentada</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Caminhando</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Em p\u00e9</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Subindo e descendo escadas</label>\n          <label class=\"check-option\" onclick=\"toggleCheck(this)\"><div class=\"check-box\">\u2713</div>Carregando pesos</label>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label>Como voc\u00ea gostaria de se sentir ao final do programa em tr\u00eas palavras?</label>\n        <input type=\"text\" id=\"e-tres-palavras\" placeholder=\"Ex: leve, confiante, disciplinada\">\n      </div>\n\n      <div class=\"form-nav\">\n        <button class=\"btn-back-sm\" onclick=\"nextStep('emocional',8,7)\">\u2190 Voltar</button>\n        <button class=\"btn-primary\" id=\"submit-emocional\" onclick=\"submitForm('emocional')\">Enviar respostas</button>\n      </div>\n    </div>";
+import { getLangStrings } from './i18n.js';
+
+function scaleButtons(id, count = 10) {
+  return Array.from({ length: count }, (_, i) => i + 1)
+    .map(n => `<button class="scale-btn" onclick="selectScale(this,'${id}')">${n}</button>`)
+    .join('');
+}
+
+function radio(groupId, options) {
+  return options.map(opt =>
+    `<label class="radio-option" onclick="selectRadio(this,'${groupId}')"><div class="radio-dot"></div>${opt}</label>`
+  ).join('\n          ');
+}
+
+function check(options) {
+  return options.map(opt =>
+    `<label class="check-option" onclick="toggleCheck(this)"><div class="check-box">✓</div>${opt}</label>`
+  ).join('\n          ');
+}
+
+function buildEmocionalHtml(s) {
+  return `
+<!-- E-STEP 1: Identificação -->
+<div class="form-step" id="e-step-1" data-form="emocional">
+  <div class="step-heading">${s.eStep1Heading}</div>
+  <div class="step-desc">${s.eStep1Desc}</div>
+  <div class="two-col">
+    <div class="field"><label>${s.eNomeLabel}</label><input type="text" id="e-nome" placeholder="${s.eNomePH}"></div>
+    <div class="field"><label>${s.eNascLabel}</label><input type="date" id="e-nasc"></div>
+  </div>
+  <div class="field"><label>${s.eEmailLabel}</label><input type="email" id="e-email" placeholder="${s.eEmailPH}"></div>
+
+  <div class="field">
+    <label>${s.eVersaoLabel}</label>
+    <input type="text" id="e-versao" placeholder="${s.eVersaoPH}">
+  </div>
+
+  <div class="field">
+    <label>${s.eOcasiaoLabel}</label>
+    <div class="check-group" id="e-ocasiao">
+      ${check([s.eOcasiaoOpt1, s.eOcasiaoOpt2, s.eOcasiaoOpt3, s.eOcasiaoOpt4, s.eOcasiaoOpt5, s.eOcasiaoOpt6, s.eOcasiaoOpt7])}
+    </div>
+  </div>
+
+  <div id="e-step1-error" style="display:none;color:var(--burgundy);font-size:0.82rem;margin-top:0.75rem;">${s.eStep1Error}</div>
+  <div class="form-nav">
+    <span></span>
+    <button class="btn-primary" onclick="validateStep1('emocional')">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 2: Gatilhos emocionais -->
+<div class="form-step" id="e-step-2" data-form="emocional">
+  <div class="step-heading">${s.eStep2Heading}</div>
+  <div class="step-desc">${s.eStep2Desc}</div>
+
+  <div class="field">
+    <label>${s.eVulneravelLabel}</label>
+    <div class="check-group" id="e-vulneravel">
+      ${check([s.eVulneravelOpt1, s.eVulneravelOpt2, s.eVulneravelOpt3, s.eVulneravelOpt4, s.eVulneravelOpt5])}
+    </div>
+    <input type="text" id="e-vulneravel-outro" placeholder="${s.eVulneravelOutroPH}" style="margin-top:0.5rem;">
+  </div>
+
+  <div class="field">
+    <label>${s.eComidaOferecLabel}</label>
+    <div class="check-group" id="e-comida-oferece">
+      ${check([s.eComidaOferecOpt1, s.eComidaOferecOpt2, s.eComidaOferecOpt3, s.eComidaOferecOpt4, s.eComidaOferecOpt5])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eMomentosLabel}</label>
+    <div class="check-group" id="e-momentos">
+      ${check([s.eMomentosOpt1, s.eMomentosOpt2, s.eMomentosOpt3, s.eMomentosOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eHorarioLabel}</label>
+    <textarea id="e-horario"></textarea>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',2,1)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('emocional',2,3)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 3: Sentimentos e autoconhecimento -->
+<div class="form-step" id="e-step-3" data-form="emocional">
+  <div class="step-heading">${s.eStep3Heading}</div>
+  <div class="step-desc">${s.eStep3Desc}</div>
+
+  <div class="field">
+    <label>${s.eReconstruirLabel}</label>
+    <div class="check-group" id="e-reconstruir">
+      ${check([s.eReconstruirOpt1, s.eReconstruirOpt2, s.eReconstruirOpt3, s.eReconstruirOpt4, s.eReconstruirOpt5])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eRefugioLabel}</label>
+    <div class="check-group" id="e-refugio">
+      ${check([s.eRefugioOpt1, s.eRefugioOpt2, s.eRefugioOpt3, s.eRefugioOpt4, s.eRefugioOpt5])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eCorpoParteLabel}</label>
+    <div class="check-group" id="e-corpo-parte">
+      ${check([s.eCorpoParteOpt1, s.eCorpoParteOpt2, s.eCorpoParteOpt3, s.eCorpoParteOpt4, s.eCorpoParteOpt5])}
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',3,2)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('emocional',3,4)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 4: Escala comportamental -->
+<div class="form-step" id="e-step-4" data-form="emocional">
+  <div class="step-heading">${s.eStep4Heading}</div>
+  <div class="step-desc">${s.eStep4Desc}</div>
+
+  <div class="field">
+    <label>${s.eRepetirLabel}</label>
+    <div id="e-repetir" style="display:flex;gap:0.4rem;flex-wrap:wrap;">${scaleButtons('e-repetir')}</div>
+  </div>
+
+  <div class="field">
+    <label>${s.eDiadicilLabel}</label>
+    <div id="e-diadicil" style="display:flex;gap:0.4rem;flex-wrap:wrap;">${scaleButtons('e-diadicil')}</div>
+  </div>
+
+  <div class="field">
+    <label>${s.eDistraidaLabel}</label>
+    <div id="e-distraida" style="display:flex;gap:0.4rem;flex-wrap:wrap;">${scaleButtons('e-distraida')}</div>
+  </div>
+
+  <div class="field">
+    <label>${s.eDesisteLabel}</label>
+    <div id="e-desiste" style="display:flex;gap:0.4rem;flex-wrap:wrap;">${scaleButtons('e-desiste')}</div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',4,3)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('emocional',4,5)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 5: Histórico de peso -->
+<div class="form-step" id="e-step-5" data-form="emocional">
+  <div class="step-heading">${s.eStep5Heading}</div>
+  <div class="step-desc">${s.eStep5Desc}</div>
+
+  <div class="field">
+    <label>${s.eEventosLabel}</label>
+    <div class="check-group" id="e-eventos">
+      ${check([s.eEventosOpt1, s.eEventosOpt2, s.eEventosOpt3, s.eEventosOpt4, s.eEventosOpt5, s.eEventosOpt6, s.eEventosOpt7])}
+    </div>
+    <input type="text" id="e-eventos-outro" placeholder="${s.eEventosOutroPH}" style="margin-top:0.5rem;">
+  </div>
+
+  <div class="field">
+    <label>${s.eUltimaVezLabel}</label>
+    <div class="radio-group" id="e-ultima-vez">
+      ${radio('e-ultima-vez', [s.eUltimaVezOpt1, s.eUltimaVezOpt2, s.eUltimaVezOpt3, s.eUltimaVezOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eExperienciaLabel}</label>
+    <div class="radio-group" id="e-experiencia">
+      ${radio('e-experiencia', [s.eExperienciaOpt1, s.eExperienciaOpt2, s.eExperienciaOpt3, s.eExperienciaOpt4, s.eExperienciaOpt5, s.eExperienciaOpt6])}
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',5,4)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('emocional',5,6)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 6: Corpo e rotina física -->
+<div class="form-step" id="e-step-6" data-form="emocional">
+  <div class="step-heading">${s.eStep6Heading}</div>
+  <div class="step-desc">${s.eStep6Desc}</div>
+
+  <div class="field">
+    <label>${s.fSonoLabel}</label>
+    <div class="radio-group" id="e-sono">
+      ${radio('e-sono', [s.fSonoOpt1, s.fSonoOpt2, s.fSonoOpt3])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fPerdeLabel}</label>
+    <div class="radio-group" id="e-perde">
+      ${radio('e-perde', [s.fPerdeOpt1, s.fPerdeOpt2, s.fPerdeOpt3])}
+    </div>
+    <input type="text" id="e-perde-outro" placeholder="${s.ePerdeOutroPH}" style="margin-top:0.5rem;">
+  </div>
+
+  <div class="field">
+    <label>${s.fCalmaLabel}</label>
+    <div class="radio-group" id="e-calma">
+      ${radio('e-calma', [s.fCalmaOpt1, s.fCalmaOpt2, s.fCalmaOpt3, s.fCalmaOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fAlimLabel}</label>
+    <div class="check-group" id="e-alim">
+      ${check([s.fAlimOpt1, s.fAlimOpt2, s.fAlimOpt3])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.fSintomasLabel}</label>
+    <div class="check-group" id="e-sintomas">
+      ${check([s.fSintomasOpt1, s.fSintomasOpt2, s.fSintomasOpt3, s.fSintomasOpt4, s.fSintomasOpt5, s.fSintomasOpt6])}
+    </div>
+    <input type="text" id="e-sintomas-outro" placeholder="${s.eSintomasOutroPH}" style="margin-top:0.5rem;">
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',6,5)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('emocional',6,7)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 7: Maternidade -->
+<div class="form-step" id="e-step-7" data-form="emocional">
+  <div class="step-heading">${s.eStep7Heading}</div>
+  <div class="step-desc">${s.eStep7Desc}</div>
+
+  <div class="field">
+    <label>${s.eGestacaoLabel}</label>
+    <textarea id="e-gestacao" placeholder="${s.eGestacaoPH}"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.eRotinaLabel}</label>
+    <div class="radio-group" id="e-rotina">
+      ${radio('e-rotina', [s.eRotinaOpt1, s.eRotinaOpt2, s.eRotinaOpt3, s.eRotinaOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eMatSentLabel}</label>
+    <div class="check-group" id="e-mat-sentimento">
+      ${check([s.eMatSentOpt1, s.eMatSentOpt2, s.eMatSentOpt3, s.eMatSentOpt4, s.eMatSentOpt5, s.eMatSentOpt6])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eCulpaLabel}</label>
+    <div class="radio-group" id="e-culpa">
+      ${radio('e-culpa', [s.eCulpaOpt1, s.eCulpaOpt2, s.eCulpaOpt3, s.eCulpaOpt4])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eEspelhoParto}</label>
+    <div class="radio-group" id="e-espelho-parto">
+      ${radio('e-espelho-parto', [s.eEspelhoPartoOpt1, s.eEspelhoPartoOpt2, s.eEspelhoPartoOpt3, s.eEspelhoPartoOpt4, s.eEspelhoPartoOpt5])}
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',7,6)">${s.backSmBtn}</button>
+    <button class="btn-primary" onclick="nextStep('emocional',7,8)">${s.continueBtn}</button>
+  </div>
+</div>
+
+<!-- E-STEP 8: Objetivos e motivação final -->
+<div class="form-step" id="e-step-8" data-form="emocional">
+  <div class="step-heading">${s.eStep8Heading}</div>
+  <div class="step-desc">${s.eStep8Desc}</div>
+
+  <div class="field">
+    <label>${s.eFaltaLabel}</label>
+    <textarea id="e-falta" placeholder="${s.eFaltaPH}"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.eImpedeLabel}</label>
+    <textarea id="e-impede" placeholder="${s.eImpedePH}"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.eObjetivoLabel}</label>
+    <textarea id="e-objetivo"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.eRefeicoesLabel}</label>
+    <input type="text" id="e-refeicoes" placeholder="${s.eRefeicoesPH}">
+  </div>
+
+  <div class="field">
+    <label>${s.eMudancasLabel}</label>
+    <textarea id="e-mudancas"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.eMarcadoresLabel}</label>
+    <textarea id="e-marcadores"></textarea>
+  </div>
+
+  <div class="field">
+    <label>${s.eMotivacaoLabel}</label>
+    <div id="e-motivacao" style="display:flex;gap:0.4rem;flex-wrap:wrap;">${scaleButtons('e-motivacao')}</div>
+  </div>
+
+  <div class="field">
+    <label>${s.eTrabalhoLabel}</label>
+    <div class="check-group" id="e-trabalho">
+      ${check([s.eTrabalhoOpt1, s.eTrabalhoOpt2, s.eTrabalhoOpt3, s.eTrabalhoOpt4, s.eTrabalhoOpt5])}
+    </div>
+  </div>
+
+  <div class="field">
+    <label>${s.eTresPalavrasLabel}</label>
+    <input type="text" id="e-tres-palavras" placeholder="${s.eTresPalavrasPH}">
+  </div>
+
+  <div class="form-nav">
+    <button class="btn-back-sm" onclick="nextStep('emocional',8,7)">${s.backSmBtn}</button>
+    <button class="btn-primary" id="submit-emocional" onclick="submitForm('emocional')">${s.submitBtn}</button>
+  </div>
+</div>`;
+}
 
 export default function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const { password } = req.body || {};
+
+  const { password, lang = 'pt' } = req.body || {};
   const correct = process.env.CLIENT_PASSWORD;
+
   if (!correct) return res.status(500).json({ error: 'Server misconfiguration' });
   if (password !== correct) return res.status(200).json({ ok: false });
-  return res.status(200).json({ ok: true, html: CONTENT });
+
+  const s = getLangStrings(lang);
+  return res.status(200).json({ ok: true, html: buildEmocionalHtml(s) });
 }

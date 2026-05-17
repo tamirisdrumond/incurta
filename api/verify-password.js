@@ -1,11 +1,88 @@
 // api/verify-password.js
-const SHELL_HTML = "<!-- QUESTIONNAIRE SELECTOR -->\n  <div id=\"selector\">\n    <div class=\"selector-inner\">\n      <h1>Bem-vinda ao seu<br><em>espa\u00e7o de autoconhecimento</em></h1>\n      <p class=\"sub\">Suas respostas s\u00e3o confidenciais e ser\u00e3o analisadas antes da sua consulta.</p>\n      <div class=\"q-cards\">\n        <div class=\"q-card\" onclick=\"openForm('fisica')\">\n          <div class=\"q-card-num\">01</div>\n          <h3>Defini\u00e7\u00e3o F\u00edsica</h3>\n          <p>Sobre seu corpo, sintomas, rotina, sono, alimenta\u00e7\u00e3o e objetivos f\u00edsicos. Antes de mudar o corpo, precisamos entender o que queremos sentir dentro dele.</p>\n          <span class=\"q-card-tag\">25 perguntas \u00b7 ~12 min</span>\n        </div>\n        <div class=\"q-card\" onclick=\"openForm('emocional')\">\n          <div class=\"q-card-num\">02</div>\n          <h3>Defini\u00e7\u00e3o Emocional</h3>\n          <p>Sobre sua rela\u00e7\u00e3o emocional com a comida, gatilhos, sentimentos e a vers\u00e3o de si mesma que quer construir.</p>\n          <span class=\"q-card-tag\">38 perguntas \u00b7 ~18 min</span>\n        </div>\n        <div class=\"q-card\" onclick=\"openQfa()\">\n          <div class=\"q-card-num\">03</div>\n          <h3>Frequ\u00eancia Alimentar</h3>\n          <p>Avalie seus h\u00e1bitos alimentares habituais: quais alimentos come, com que frequ\u00eancia e em que quantidade.</p>\n          <span class=\"q-card-tag\">39 alimentos \u00b7 ~15 min \u00b7 com pontua\u00e7\u00e3o</span>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- FORM AREA -->\n  <div id=\"form-area\">\n    <div class=\"form-header\">\n      <div style=\"margin-bottom:1rem;\">\n        <button class=\"btn-back-sm\" onclick=\"backToSelector()\">\u2190 Escolher outro question\u00e1rio</button>\n      </div>\n      <div class=\"form-title\" id=\"form-title\"></div>\n      <div class=\"form-sub\" id=\"form-sub\"></div>\n    </div>\n\n    <div class=\"progress-wrap\">\n      <div class=\"progress-label\">\n        <span id=\"prog-step-label\">Passo 1</span>\n        <span id=\"prog-pct\">0%</span>\n      </div>\n      <div class=\"progress-bar\"><div class=\"progress-fill\" id=\"prog-fill\" style=\"width:0%\"></div></div>\n    </div>\n\n    <!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->\n    <!-- DEFINI\u00c7\u00c3O F\u00cdSICA STEPS                        -->\n    <!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->\n\n    <!-- SUCCESS STATE -->\n    <div id=\"form-success\">\n      <div class=\"success-icon\">\u2713</div>\n      <h2>Obrigada por compartilhar!</h2>\n      <p>Suas respostas foram registradas com seguran\u00e7a. A Tamiris ir\u00e1 analis\u00e1-las antes da sua consulta e entrar\u00e1 em contato em breve.</p>\n      <button class=\"btn-outline\" onclick=\"backToSelector()\">Preencher outro question\u00e1rio</button>\n    </div>\n\n  </div><!-- /form-area -->";
+// Thin auth endpoint used by questionarios.html password gate.
+// Shell HTML is now built by importing the same render logic used in content.js.
+//
+// WHY NOT DUPLICATE THE SHELL STRING HERE:
+//   The original had a hardcoded PT HTML copy here and in content.js.
+//   Now both share buildShellHtml() from a single import, eliminating drift.
+//
+// CONTRACT:
+//   POST /api/verify-password
+//   Body: { password: string, lang: 'pt' | 'es' }
+//   Response (ok): { ok: true, html: string }
+//   Response (fail): { ok: false }
+
+import { getLangStrings } from './i18n.js';
+
+function buildShellHtml(s) {
+  return `
+<!-- QUESTIONNAIRE SELECTOR -->
+<div id="selector">
+  <div class="selector-inner">
+    <h1>${s.selectorTitle}</h1>
+    <p class="sub">${s.selectorSub}</p>
+    <div class="q-cards">
+      <div class="q-card" onclick="openForm('fisica')">
+        <div class="q-card-num">01</div>
+        <h3>${s.card1Title}</h3>
+        <p>${s.card1Desc}</p>
+        <span class="q-card-tag">${s.card1Tag}</span>
+      </div>
+      <div class="q-card" onclick="openForm('emocional')">
+        <div class="q-card-num">02</div>
+        <h3>${s.card2Title}</h3>
+        <p>${s.card2Desc}</p>
+        <span class="q-card-tag">${s.card2Tag}</span>
+      </div>
+      <div class="q-card" onclick="openQfa()">
+        <div class="q-card-num">03</div>
+        <h3>${s.card3Title}</h3>
+        <p>${s.card3Desc}</p>
+        <span class="q-card-tag">${s.card3Tag}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM AREA -->
+<div id="form-area">
+  <div class="form-header">
+    <div style="margin-bottom:1rem;">
+      <button class="btn-back-sm" onclick="backToSelector()">${s.backBtn}</button>
+    </div>
+    <div class="form-title" id="form-title"></div>
+    <div class="form-sub" id="form-sub"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-step-label">${s.progStep.replace('{n}', '1')}</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div id="form-success">
+    <div class="success-icon">${s.successIcon}</div>
+    <h2>${s.successTitle}</h2>
+    <p>${s.successText}</p>
+    <button class="btn-outline" onclick="backToSelector()">${s.successBackBtn}</button>
+  </div>
+
+</div><!-- /form-area -->`;
+}
 
 export default function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const { password } = req.body || {};
+
+  const { password, lang = 'pt' } = req.body || {};
   const correct = process.env.CLIENT_PASSWORD;
+
   if (!correct) return res.status(500).json({ error: 'Server misconfiguration' });
-  if (password === correct) return res.status(200).json({ ok: true, html: SHELL_HTML });
+  if (password === correct) {
+    const s = getLangStrings(lang);
+    return res.status(200).json({ ok: true, html: buildShellHtml(s) });
+  }
   return res.status(200).json({ ok: false });
 }
