@@ -1,6 +1,458 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-title-key="pagePrivTitle">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>in.curta — Informações Legais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --burgundy: #8B1538;
+    --burgundy-vivid: #C41E3A;
+    --blush: #D4A5A5;
+    --taupe: #936458;
+    --espresso: #2C2C2C;
+    --cream: #F5EBE0;
+    --cream-light: #F5EBE0;
+    --gold: #C9A86A;
+    --text-dark: #2C2C2C;
+    --text-mid: #5a4a3a;
+    --text-light: #9A7B78;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream-light);
+    color: var(--text-dark);
+  }
+  .topbar {
+    background: var(--espresso); padding: 1rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar-logo {
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
+    font-size: 1.2rem; font-weight: 500; color: var(--cream); text-decoration: none;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 1.5rem; }
+  .topbar-back {
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(232,220,215,0.5); text-decoration: none; transition: color 0.2s;
+  }
+  .topbar-back:hover { color: var(--blush); }
+
+  /* Language toggle */
+  .lang-toggle { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.15); overflow: hidden; }
+  .lang-btn { padding: 0.3rem 0.65rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; color: rgba(232,220,215,0.5); background: transparent; border: none; cursor: pointer; transition: all 0.2s; line-height: 1; }
+  .lang-btn:hover { color: var(--blush); }
+  .lang-btn.active { background: var(--burgundy); color: #fff; }
+  .lang-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
+
+  /* ─── NAV TABS ─── */
+  .legal-tabs {
+    background: #fff; border-bottom: 1px solid var(--cream);
+    display: flex; overflow-x: auto; padding: 0 3rem;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .legal-tab {
+    padding: 1rem 1.5rem; font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-light); text-decoration: none;
+    border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: all 0.2s; cursor: pointer;
+  }
+  .legal-tab:hover { color: var(--text-mid); }
+  .legal-tab.active { color: var(--burgundy); border-bottom-color: var(--burgundy); }
+
+  /* ─── CONTENT ─── */
+  .legal-content { max-width: 760px; margin: 0 auto; padding: 4rem 2rem; }
+
+  .legal-section { display: none; }
+  .legal-section.visible { display: block; }
+
+  .legal-section h1 {
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
+    font-size: 2.2rem; font-weight: 400; color: var(--espresso);
+    margin-bottom: 0.4rem;
+  }
+  .legal-section h1 em { font-style: italic; color: var(--burgundy); }
+  .updated {
+    font-size: 0.75rem; color: var(--text-light); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 2.5rem; display: block;
+  }
+  .legal-section h2 {
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
+    font-size: 1.3rem; font-weight: 500; color: var(--espresso);
+    margin: 2.5rem 0 0.75rem; border-bottom: 1px solid var(--cream);
+    padding-bottom: 0.4rem;
+  }
+  .legal-section p {
+    font-size: 0.9rem; line-height: 1.85; color: var(--text-mid);
+    margin-bottom: 1rem; font-weight: 300;
+  }
+  .legal-section ul {
+    margin: 0.5rem 0 1rem 1.5rem;
+    font-size: 0.9rem; line-height: 1.85; color: var(--text-mid); font-weight: 300;
+  }
+  .legal-section li { margin-bottom: 0.4rem; }
+  .legal-section strong { color: var(--text-dark); font-weight: 500; }
+  .legal-section a { color: var(--burgundy); }
+  .highlight-box {
+    background: rgba(139,21,54,0.04); border-left: 3px solid var(--burgundy);
+    padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: 0.85rem; color: var(--text-mid); line-height: 1.7;
+  }
+
+  footer {
+    background: #2a1819; padding: 1.5rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
+    font-size: 1rem; color: rgba(232,220,215,0.5); font-weight: 300;
+  }
+  .footer-copy { font-size: 0.75rem; color: rgba(232,220,215,0.3); }
+
+  @media (max-width: 700px) {
+    .topbar, footer { padding: 1rem 1.5rem; }
+    .topbar-back { display: none; }
+    .legal-tabs { padding: 0 1rem; }
+    .legal-content { padding: 2.5rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Translations engine -->
+<script src="translations.js"></script>
+
+<div class="topbar">
+  <a href="index.html" class="topbar-logo"><img src="images/logo-white.png" alt="in.curta" style="height:36px;width:auto;display:block;"></a>
+  <div class="topbar-right">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="pt">PT</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    <a href="index.html" class="topbar-back" data-i18n="q_backToSite">← Voltar ao site</a>
+  </div>
+</div>
+
+<div class="legal-tabs">
+  <a class="legal-tab active" onclick="showSection('privacidade')" id="tab-privacidade" data-i18n="footerPrivacy">Política de Privacidade</a>
+  <a class="legal-tab" onclick="showSection('termos')" id="tab-termos" data-i18n="footerTerms">Termos de Uso</a>
+  <a class="legal-tab" onclick="showSection('aviso')" id="tab-aviso" data-i18n="footerLegal">Aviso Legal</a>
+  <a class="legal-tab" onclick="showSection('cookies')" id="tab-cookies" data-i18n="footerCookies">Política de Cookies</a>
+</div>
+
+<div class="legal-content" id="legal-content-area">
+  <!-- Content rendered by JS based on active language -->
+</div>
+
+<footer>
+  <div class="footer-logo"><img src="images/logo-white.png" alt="in.curta" style="height:28px;width:auto;opacity:0.5;display:block;"></div>
+  <div class="footer-copy" data-i18n="footerCopy">© 2025 · Nutrição Clínica Comportamental</div>
+</footer>
+
+<script>
+// ─── LEGAL CONTENT ────────────────────────────────────────────────────────────
+// Each language has all four sections. Content is rendered into the DOM on
+// language switch so it stays in sync without page reload.
+const LEGAL = {
+  pt: {
+    privacidade: `
+      <h1><em>Política de</em> Privacidade</h1>
+      <span class="updated">Última atualização: maio de 2025</span>
+      <div class="highlight-box">
+        Esta política está em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD) — Lei nº 13.709/2018</strong> do Brasil. Visitantes localizados na União Europeia são informados de que as mesmas práticas de proteção de dados descritas neste documento se aplicam igualmente às suas informações.
+      </div>
+      <h2>1. Quem somos</h2>
+      <p>Este site é operado por <strong>Tamiris Tirloni Bueno Drumond</strong>, nutricionista inscrita no CRN10 sob número <strong>9098</strong>, CPF <strong>047.535.569-56</strong>, com domicílio fiscal em Rua João Ambrósio da Silva, nº 1123, Bairro Ipiranga, Blumenau – SC, CEP 89057-111, Brasil.</p>
+      <p>Para questões relacionadas à privacidade, entre em contato pelo e-mail: <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a></p>
+      <h2>2. Quais dados coletamos</h2>
+      <p>Coletamos dados pessoais apenas quando você os fornece voluntariamente através dos nossos formulários:</p>
+      <ul>
+        <li><strong>Formulário de contato:</strong> nome e endereço de e-mail.</li>
+        <li><strong>Questionários de anamnese (área do cliente):</strong> nome completo, data de nascimento, e-mail, telefone, dados de saúde (peso, altura, sintomas, histórico alimentar), dados comportamentais e emocionais relacionados à alimentação.</li>
+      </ul>
+      <p>Não coletamos dados de navegação, não utilizamos cookies de rastreamento, Google Analytics, pixels de redes sociais, ou qualquer ferramenta de monitoramento de comportamento online.</p>
+      <h2>3. Finalidade do tratamento</h2>
+      <p>Os dados são tratados para as seguintes finalidades:</p>
+      <ul>
+        <li><strong>Prestação do serviço contratado:</strong> elaboração de plano alimentar personalizado e acompanhamento nutricional (base legal: execução de contrato — Art. 7º, V, LGPD).</li>
+        <li><strong>Contato inicial e comunicações de interesse legítimo:</strong> resposta a mensagens enviadas pelo formulário de contato e, no caso de download de materiais, eventual comunicação de ofertas ou informações relacionadas ao programa (base legal: legítimo interesse — Art. 7º, IX, LGPD).</li>
+        <li><strong>Cumprimento de obrigação legal:</strong> quando aplicável (Art. 7º, II, LGPD).</li>
+      </ul>
+      <h2>4. Dados sensíveis de saúde</h2>
+      <p>Os dados relativos à saúde coletados nos questionários de anamnese são tratados com base no <strong>Art. 11, II, "a" da LGPD</strong> (consentimento para finalidades específicas), uma vez que são essenciais para a prestação do serviço de nutrição clínica comportamental. Ao preencher o questionário, você está fornecendo esse consentimento explícito.</p>
+      <h2>5. Armazenamento e segurança</h2>
+      <p>Seus dados são armazenados em um sistema Odoo 19 Community hospedado de forma segura e protegida por senha, acessível apenas à Tamiris Drumond. Não compartilhamos seus dados com terceiros, exceto quando exigido por lei.</p>
+      <p>Adotamos medidas técnicas e organizacionais razoáveis para proteger seus dados contra acesso não autorizado, alteração, divulgação ou destruição.</p>
+      <h2>6. Retenção de dados</h2>
+      <p>Os dados são mantidos pelo período necessário à prestação do serviço e, após o encerramento da relação, por até <strong>5 (cinco) anos</strong>, em conformidade com as obrigações legais aplicáveis a profissionais de saúde no Brasil (Resolução CFN nº 600/2018).</p>
+      <h2>7. Seus direitos (LGPD, Art. 18)</h2>
+      <p>Você tem direito a:</p>
+      <ul>
+        <li>Confirmação da existência de tratamento de seus dados;</li>
+        <li>Acesso aos dados que possuímos sobre você;</li>
+        <li>Correção de dados incompletos, inexatos ou desatualizados;</li>
+        <li>Anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desconformidade;</li>
+        <li>Portabilidade dos dados a outro fornecedor de serviço;</li>
+        <li>Eliminação dos dados tratados com base no consentimento;</li>
+        <li>Revogação do consentimento a qualquer momento;</li>
+        <li>Informação sobre entidades com as quais seus dados foram compartilhados.</li>
+      </ul>
+      <p>Para exercer qualquer desses direitos, entre em contato pelo e-mail <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a>. Responderemos em até 15 (quinze) dias.</p>
+      <h2>8. Autoridade supervisora</h2>
+      <p>A autoridade responsável pela supervisão da proteção de dados no Brasil é a <strong>ANPD — Autoridade Nacional de Proteção de Dados</strong> (<a href="https://www.gov.br/anpd" target="_blank" rel="noopener">www.gov.br/anpd</a>).</p>
+      <p>Visitantes localizados na União Europeia podem também recorrer à autoridade de proteção de dados do seu país de residência.</p>
+      <h2>9. Alterações a esta política</h2>
+      <p>Esta política pode ser atualizada periodicamente. A data de "última atualização" no topo deste documento indica quando a versão vigente entrou em vigor. Recomendamos que a reveja periodicamente.</p>`,
+
+    termos: `
+      <h1><em>Termos de</em> Uso</h1>
+      <span class="updated">Última atualização: maio de 2025</span>
+      <h2>1. Aceitação</h2>
+      <p>Ao acessar e utilizar este site, você declara ter lido, compreendido e concordado com os presentes Termos de Uso. Caso não concorde com qualquer disposição, por favor, não utilize este site.</p>
+      <h2>2. Serviços oferecidos</h2>
+      <p>Este site apresenta os serviços de nutrição clínica comportamental oferecidos por Tamiris Tirloni Bueno Drumond (CRN10-9098). O conteúdo informativo disponível não substitui consulta nutricional individualizada, diagnóstico médico ou tratamento de saúde.</p>
+      <h2>3. Área do cliente</h2>
+      <p>A área protegida por senha é de acesso exclusivo a clientes com vínculo ativo com a nutricionista. O acesso não autorizado é proibido. A senha é pessoal e intransferível; o cliente é responsável pela sua confidencialidade.</p>
+      <h2>4. Propriedade intelectual</h2>
+      <p>Todo o conteúdo deste site — incluindo textos, metodologias, planners, marcas e identidade visual — é de propriedade exclusiva de Tamiris Tirloni Bueno Drumond e está protegido pela legislação aplicável. É proibida a reprodução, distribuição ou uso comercial sem autorização prévia e expressa por escrito.</p>
+      <h2>5. Limitação de responsabilidade</h2>
+      <p>As informações disponibilizadas neste site têm caráter educativo e informativo. Tamiris Drumond não se responsabiliza por decisões tomadas com base no conteúdo do site sem acompanhamento profissional adequado.</p>
+      <h2>6. Links externos</h2>
+      <p>Este site pode conter links para recursos externos. Não nos responsabilizamos pelo conteúdo ou práticas de privacidade de sites de terceiros.</p>
+      <h2>7. Lei aplicável e foro</h2>
+      <p>Estes Termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da comarca de Blumenau – SC para dirimir quaisquer controvérsias, com renúncia expressa a qualquer outro, por mais privilegiado que seja.</p>
+      <h2>8. Contato</h2>
+      <p>Dúvidas sobre estes Termos: <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a></p>`,
+
+    aviso: `
+      <h1><em>Aviso</em> Legal</h1>
+      <span class="updated">Última atualização: maio de 2025</span>
+      <h2>Responsável pelo site</h2>
+      <p>
+        <strong>Nome completo:</strong> Tamiris Tirloni Bueno Drumond<br>
+        <strong>CPF:</strong> 047.535.569-56<br>
+        <strong>Registro profissional:</strong> CRN10 nº 9098 — Conselho Regional de Nutricionistas da 10ª Região (Santa Catarina)<br>
+        <strong>Endereço fiscal:</strong> Rua João Ambrósio da Silva, nº 1123, Bairro Ipiranga, Blumenau – SC, CEP 89057-111, Brasil<br>
+        <strong>E-mail de contato:</strong> <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a><br>
+        <strong>Telefone / WhatsApp:</strong> +34 645 463 470<br>
+        <strong>Instagram:</strong> @tamiris.drumond
+      </p>
+      <h2>Atividade profissional regulamentada</h2>
+      <p>Tamiris Tirloni Bueno Drumond é nutricionista regularmente inscrita no Conselho Federal de Nutricionistas (CFN) e no Conselho Regional de Nutricionistas da 10ª Região (CRN10 – Santa Catarina), habilitada ao exercício da profissão nos termos da Lei nº 8.234/1991.</p>
+      <h2>Natureza do conteúdo</h2>
+      <p>O conteúdo deste site é de natureza informativa e comercial, destinado à apresentação do programa de nutrição clínica comportamental in.curta. Não constitui aconselhamento médico, diagnóstico ou prescrição.</p>
+      <h2>Jurisdição</h2>
+      <p>A responsável pelo site tem domicílio fiscal no Brasil e está sujeita à legislação brasileira, incluindo a LGPD (Lei nº 13.709/2018) e o Código de Defesa do Consumidor (Lei nº 8.078/1990).</p>`,
+
+    cookies: `
+      <h1><em>Política de</em> Cookies</h1>
+      <span class="updated">Última atualização: maio de 2025</span>
+      <h2>O que são cookies</h2>
+      <p>Cookies são pequenos arquivos de texto armazenados no seu dispositivo quando você acessa um site. Podem ser usados para diversas finalidades, incluindo funcionamento técnico, personalização e rastreamento.</p>
+      <h2>Cookies que utilizamos</h2>
+      <p>Este site utiliza <strong>apenas cookies essenciais</strong>, estritamente necessários ao seu funcionamento básico:</p>
+      <ul>
+        <li><strong>cookie-consent</strong> — armazena a sua preferência em relação ao aviso de cookies, para não exibir o banner repetidamente. Duração: sessão / até ser apagado pelo utilizador.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>Não utilizamos</strong> cookies de publicidade, de rastreamento, ferramentas de análise (como Google Analytics), pixels de redes sociais, nem qualquer outro mecanismo de monitoramento de comportamento online.
+      </div>
+      <h2>Cookies de sessão de autenticação Odoo</h2>
+      <p>Quando um cliente acede à área protegida e os formulários de questionário são submetidos, o sistema utiliza cookies de sessão técnicos gerados pelo servidor Odoo (<code>session_id</code>) para autenticação. Estes cookies são essenciais, temporários e não são utilizados para rastreamento.</p>
+      <h2>Visitantes da União Europeia</h2>
+      <p>Uma vez que este site não utiliza cookies não essenciais, não é necessário obter consentimento prévio nos termos da Diretiva ePrivacy europeia (2002/58/CE) para fins de rastreamento. O banner informativo exibido serve apenas para transparência e cumprimento das boas práticas.</p>
+      <h2>Como gerir cookies</h2>
+      <p>Pode gerir ou eliminar cookies a qualquer momento através das configurações do seu navegador. Eliminar o cookie <code>cookie-consent</code> fará com que o banner informativo seja exibido novamente na próxima visita. A eliminação do cookie de sessão Odoo encerrará a sessão na área do cliente.</p>
+      <p>Para mais informações sobre gestão de cookies no seu navegador:</p>
+      <ul>
+        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+        <li><a href="https://support.mozilla.org/kb/enable-and-disable-cookies-website-preferences" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+        <li><a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471" target="_blank" rel="noopener">Safari</a></li>
+      </ul>
+      <h2>Contacto</h2>
+      <p>Dúvidas sobre esta política: <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a></p>`
+  },
+
+  es: {
+    privacidade: `
+      <h1><em>Política de</em> Privacidad</h1>
+      <span class="updated">Última actualización: mayo de 2025</span>
+      <div class="highlight-box">
+        Esta política cumple con la <strong>Ley General de Protección de Datos de Brasil (LGPD — Ley nº 13.709/2018)</strong>. Los visitantes ubicados en la Unión Europea son informados de que las mismas prácticas de protección de datos descritas en este documento se aplican igualmente a su información.
+      </div>
+      <h2>1. Quiénes somos</h2>
+      <p>Este sitio web es operado por <strong>Tamiris Tirloni Bueno Drumond</strong>, nutricionista registrada en el CRN10 con el número <strong>9098</strong>, CPF <strong>047.535.569-56</strong>, con domicilio fiscal en Rua João Ambrósio da Silva, nº 1123, Bairro Ipiranga, Blumenau – SC, CEP 89057-111, Brasil.</p>
+      <p>Para cuestiones relacionadas con la privacidad, contáctenos por correo electrónico: <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a></p>
+      <h2>2. Qué datos recopilamos</h2>
+      <p>Recopilamos datos personales únicamente cuando usted los proporciona voluntariamente a través de nuestros formularios:</p>
+      <ul>
+        <li><strong>Formulario de contacto:</strong> nombre y dirección de correo electrónico.</li>
+        <li><strong>Cuestionarios de anamnesis (área del cliente):</strong> nombre completo, fecha de nacimiento, correo electrónico, teléfono, datos de salud (peso, altura, síntomas, historial alimentario), datos conductuales y emocionales relacionados con la alimentación.</li>
+      </ul>
+      <p>No recopilamos datos de navegación, no utilizamos cookies de seguimiento, Google Analytics, píxeles de redes sociales ni ninguna herramienta de monitorización del comportamiento en línea.</p>
+      <h2>3. Finalidad del tratamiento</h2>
+      <p>Los datos se tratan para las siguientes finalidades:</p>
+      <ul>
+        <li><strong>Prestación del servicio contratado:</strong> elaboración de un plan alimentario personalizado y seguimiento nutricional (base legal: ejecución de contrato — Art. 7º, V, LGPD).</li>
+        <li><strong>Contacto inicial y comunicaciones de interés legítimo:</strong> respuesta a mensajes enviados a través del formulario de contacto y, en caso de descarga de materiales, posible comunicación de ofertas o información relacionada con el programa (base legal: interés legítimo — Art. 7º, IX, LGPD).</li>
+        <li><strong>Cumplimiento de obligación legal:</strong> cuando corresponda (Art. 7º, II, LGPD).</li>
+      </ul>
+      <h2>4. Datos sensibles de salud</h2>
+      <p>Los datos de salud recopilados en los cuestionarios de anamnesis se tratan con base en el <strong>Art. 11, II, "a" de la LGPD</strong> (consentimiento para finalidades específicas), ya que son esenciales para la prestación del servicio de nutrición clínica conductual. Al completar el cuestionario, usted otorga ese consentimiento explícito.</p>
+      <h2>5. Almacenamiento y seguridad</h2>
+      <p>Sus datos se almacenan en un sistema Odoo 19 Community alojado de forma segura y protegida por contraseña, accesible únicamente para Tamiris Drumond. No compartimos sus datos con terceros, salvo cuando lo exija la ley.</p>
+      <p>Adoptamos medidas técnicas y organizativas razonables para proteger sus datos contra acceso no autorizado, alteración, divulgación o destrucción.</p>
+      <h2>6. Retención de datos</h2>
+      <p>Los datos se conservan durante el período necesario para la prestación del servicio y, tras la finalización de la relación, hasta <strong>5 (cinco) años</strong>, de conformidad con las obligaciones legales aplicables a los profesionales de la salud en Brasil (Resolución CFN nº 600/2018).</p>
+      <h2>7. Sus derechos (LGPD, Art. 18)</h2>
+      <p>Usted tiene derecho a:</p>
+      <ul>
+        <li>Confirmación de la existencia del tratamiento de sus datos;</li>
+        <li>Acceso a los datos que conservamos sobre usted;</li>
+        <li>Corrección de datos incompletos, inexactos o desactualizados;</li>
+        <li>Anonimización, bloqueo o eliminación de datos innecesarios o tratados de manera no conforme;</li>
+        <li>Portabilidad de los datos a otro proveedor de servicios;</li>
+        <li>Eliminación de los datos tratados con base en el consentimiento;</li>
+        <li>Revocación del consentimiento en cualquier momento;</li>
+        <li>Información sobre las entidades con las que se han compartido sus datos.</li>
+      </ul>
+      <p>Para ejercer cualquiera de estos derechos, contáctenos por correo electrónico en <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a>. Responderemos en un plazo de 15 (quince) días.</p>
+      <h2>8. Autoridad supervisora</h2>
+      <p>La autoridad responsable de supervisar la protección de datos en Brasil es la <strong>ANPD — Autoridade Nacional de Proteção de Dados</strong> (<a href="https://www.gov.br/anpd" target="_blank" rel="noopener">www.gov.br/anpd</a>).</p>
+      <p>Los visitantes ubicados en la Unión Europea también pueden recurrir a la autoridad de protección de datos de su país de residencia.</p>
+      <h2>9. Cambios en esta política</h2>
+      <p>Esta política puede actualizarse periódicamente. La fecha de "última actualización" en la parte superior de este documento indica cuándo entró en vigor la versión vigente. Le recomendamos que la revise periódicamente.</p>`,
+
+    termos: `
+      <h1><em>Términos de</em> Uso</h1>
+      <span class="updated">Última actualización: mayo de 2025</span>
+      <h2>1. Aceptación</h2>
+      <p>Al acceder y utilizar este sitio web, usted declara haber leído, comprendido y aceptado los presentes Términos de Uso. Si no está de acuerdo con alguna disposición, por favor no utilice este sitio.</p>
+      <h2>2. Servicios ofrecidos</h2>
+      <p>Este sitio web presenta los servicios de nutrición clínica conductual ofrecidos por Tamiris Tirloni Bueno Drumond (CRN10-9098). El contenido informativo disponible no sustituye a una consulta nutricional individualizada, diagnóstico médico o tratamiento de salud.</p>
+      <h2>3. Área del cliente</h2>
+      <p>El área protegida por contraseña es de acceso exclusivo para clientes con vínculo activo con la nutricionista. El acceso no autorizado está prohibido. La contraseña es personal e intransferible; el cliente es responsable de su confidencialidad.</p>
+      <h2>4. Propiedad intelectual</h2>
+      <p>Todo el contenido de este sitio web — incluidos textos, metodologías, planners, marcas e identidad visual — es propiedad exclusiva de Tamiris Tirloni Bueno Drumond y está protegido por la legislación aplicable. Se prohíbe su reproducción, distribución o uso comercial sin autorización previa y expresa por escrito.</p>
+      <h2>5. Limitación de responsabilidad</h2>
+      <p>La información disponible en este sitio tiene carácter educativo e informativo. Tamiris Drumond no se hace responsable de las decisiones tomadas con base en el contenido del sitio sin el acompañamiento profesional adecuado.</p>
+      <h2>6. Enlaces externos</h2>
+      <p>Este sitio puede contener enlaces a recursos externos. No nos responsabilizamos del contenido ni de las prácticas de privacidad de sitios web de terceros.</p>
+      <h2>7. Ley aplicable y fuero</h2>
+      <p>Estos Términos se rigen por las leyes de la República Federativa de Brasil. Se establece el fuero de la comarca de Blumenau – SC para resolver cualquier controversia, con renuncia expresa a cualquier otro fuero, por más privilegiado que sea.</p>
+      <h2>8. Contacto</h2>
+      <p>Dudas sobre estos Términos: <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a></p>`,
+
+    aviso: `
+      <h1><em>Aviso</em> Legal</h1>
+      <span class="updated">Última actualización: mayo de 2025</span>
+      <h2>Responsable del sitio web</h2>
+      <p>
+        <strong>Nombre completo:</strong> Tamiris Tirloni Bueno Drumond<br>
+        <strong>CPF:</strong> 047.535.569-56<br>
+        <strong>Registro profesional:</strong> CRN10 nº 9098 — Conselho Regional de Nutricionistas da 10ª Região (Santa Catarina)<br>
+        <strong>Domicilio fiscal:</strong> Rua João Ambrósio da Silva, nº 1123, Bairro Ipiranga, Blumenau – SC, CEP 89057-111, Brasil<br>
+        <strong>Correo electrónico de contacto:</strong> <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a><br>
+        <strong>Teléfono / WhatsApp:</strong> +34 645 463 470<br>
+        <strong>Instagram:</strong> @tamiris.drumond
+      </p>
+      <h2>Actividad profesional regulada</h2>
+      <p>Tamiris Tirloni Bueno Drumond es nutricionista debidamente inscrita en el Conselho Federal de Nutricionistas (CFN) y en el Conselho Regional de Nutricionistas da 10ª Região (CRN10 – Santa Catarina), habilitada para el ejercicio de la profesión conforme a la Ley nº 8.234/1991.</p>
+      <h2>Naturaleza del contenido</h2>
+      <p>El contenido de este sitio web es de naturaleza informativa y comercial, destinado a la presentación del programa de nutrición clínica conductual in.curta. No constituye asesoramiento médico, diagnóstico ni prescripción.</p>
+      <h2>Jurisdicción</h2>
+      <p>La responsable del sitio tiene domicilio fiscal en Brasil y está sujeta a la legislación brasileña, incluida la LGPD (Ley nº 13.709/2018) y el Código de Defensa del Consumidor (Ley nº 8.078/1990).</p>`,
+
+    cookies: `
+      <h1><em>Política de</em> Cookies</h1>
+      <span class="updated">Última actualización: mayo de 2025</span>
+      <h2>Qué son las cookies</h2>
+      <p>Las cookies son pequeños archivos de texto almacenados en su dispositivo cuando accede a un sitio web. Pueden utilizarse para diversas finalidades, incluido el funcionamiento técnico, la personalización y el seguimiento.</p>
+      <h2>Cookies que utilizamos</h2>
+      <p>Este sitio utiliza <strong>únicamente cookies esenciales</strong>, estrictamente necesarias para su funcionamiento básico:</p>
+      <ul>
+        <li><strong>cookie-consent</strong> — almacena su preferencia sobre el aviso de cookies para no mostrar el banner repetidamente. Duración: sesión / hasta que sea eliminada por el usuario.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>No utilizamos</strong> cookies de publicidad, de seguimiento, herramientas de análisis (como Google Analytics), píxeles de redes sociales ni ningún otro mecanismo de monitorización del comportamiento en línea.
+      </div>
+      <h2>Cookies de sesión de autenticación Odoo</h2>
+      <p>Cuando un cliente accede al área protegida y envía los formularios de cuestionario, el sistema utiliza cookies de sesión técnicas generadas por el servidor Odoo (<code>session_id</code>) para la autenticación. Estas cookies son esenciales, temporales y no se utilizan para el seguimiento.</p>
+      <h2>Visitantes de la Unión Europea</h2>
+      <p>Dado que este sitio no utiliza cookies no esenciales, no es necesario obtener consentimiento previo en virtud de la Directiva ePrivacy europea (2002/58/CE) con fines de seguimiento. El banner informativo que se muestra sirve únicamente para la transparencia y el cumplimiento de las buenas prácticas.</p>
+      <h2>Cómo gestionar las cookies</h2>
+      <p>Puede gestionar o eliminar las cookies en cualquier momento a través de la configuración de su navegador. Eliminar la cookie <code>cookie-consent</code> hará que el banner informativo se muestre de nuevo en la próxima visita. Eliminar la cookie de sesión de Odoo cerrará la sesión en el área del cliente.</p>
+      <p>Para más información sobre la gestión de cookies en su navegador:</p>
+      <ul>
+        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+        <li><a href="https://support.mozilla.org/kb/enable-and-disable-cookies-website-preferences" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+        <li><a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471" target="_blank" rel="noopener">Safari</a></li>
+      </ul>
+      <h2>Contacto</h2>
+      <p>Dudas sobre esta política: <a href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a></p>`
+  }
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let activeSection = 'privacidade';
+
+function renderSection(sectionId) {
+  const lang = getLang();
+  const content = LEGAL[lang] && LEGAL[lang][sectionId]
+    ? LEGAL[lang][sectionId]
+    : LEGAL['pt'][sectionId];
+
+  const area = document.getElementById('legal-content-area');
+  area.innerHTML = `<div class="legal-section visible" id="${sectionId}">${content}</div>`;
+}
+
+function showSection(id) {
+  activeSection = id;
+  renderSection(id);
+  document.querySelectorAll('.legal-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Override setLang to also re-render the current section
+const _origSetLang = typeof setLang === 'function' ? setLang : null;
+function setLang(lang) {
+  if (_origSetLang) _origSetLang(lang);
+  else {
+    // Minimal fallback if translations.js setLang isn't yet available
+    localStorage.setItem('incurta-lang', lang);
+    applyTranslations(lang);
+  }
+  renderSection(activeSection);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  // Handle anchor from external links (#termos, #aviso, #cookies)
+  const hash = window.location.hash.replace('#', '');
+  if (['termos','aviso','cookies','privacidade'].includes(hash)) {
+    activeSection = hash;
+    document.querySelectorAll('.legal-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + hash).classList.add('active');
+  }
+  renderSection(activeSection);
+  applyTranslations(getLang());
+
+  // Wire lang buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+});
+</script>
+</body>
+</html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>in.curta — Informações Legais</title>
