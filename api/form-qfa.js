@@ -381,7 +381,10 @@ window.__qfaI18n = ${i18nJson};
 const FOOD_ITEMS = ${foodItemsJson};
 
 // ─── QFA NAVIGATION ──────────────────────────────────────────────────────────
-function openQfa() {
+// NOTE: This function is intentionally named _qfaReveal, not openQfa.
+// openQfa() is defined in questionarios.html and handles the fetch + injection.
+// This internal function just makes the already-injected QFA section visible.
+function _qfaReveal() {
   document.getElementById('selector').style.display = 'none';
   document.getElementById('qfa-section').style.display = 'block';
   window.scrollTo(0,0);
@@ -583,8 +586,7 @@ async function submitQfa() {
   }
 }
 </script>
-</div><!-- /qfa-section -->
-</div><!-- /app -->`;
+</div><!-- /qfa-section -->`;
 }
 
 export default function handler(req, res) {
