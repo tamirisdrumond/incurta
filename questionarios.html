@@ -751,9 +751,23 @@
         document.body.appendChild(ns);
         s.remove();
       });
-      appEl.appendChild(tempDiv.firstElementChild || tempDiv);
+      // Drain all element children (HTML starts with a comment, so firstElementChild
+      // is safe here, but looping is more robust)
+      while (tempDiv.firstChild) {
+        if (tempDiv.firstChild.nodeType === 8) { // comment node — skip
+          tempDiv.removeChild(tempDiv.firstChild);
+        } else {
+          appEl.appendChild(tempDiv.firstChild);
+        }
+      }
 
-      document.getElementById('selector').style.display = 'none';
+      // _qfaReveal() is defined in the injected script; show the section
+      if (typeof _qfaReveal === 'function') _qfaReveal();
+      else {
+        document.getElementById('selector').style.display = 'none';
+        const qs = document.getElementById('qfa-section');
+        if (qs) qs.style.display = 'block';
+      }
       // If resuming at a specific QFA step, navigate there
       if (resumeQfaStep && typeof qfaGoStep === 'function') {
         qfaGoStep(resumeQfaStep);
