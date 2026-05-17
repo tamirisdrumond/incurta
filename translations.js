@@ -147,6 +147,12 @@ const translations = {
     q_alertFillNameEmail:'Por favor, preencha pelo menos nome e email antes de enviar.',
     q_alertSendError:    'Erro ao enviar: ',
     q_loadError:         'Erro ao carregar. Recarregue a página.',
+    q_selectorTitle:    'Bem-vinda ao seu<br><em>espaço de autoconhecimento</em>',
+    q_selectorSub:      'Suas respostas são confidenciais e serão analisadas antes da sua consulta.',
+    q_backBtn:          '← Escolher outro questionário',
+    q_successTitle:     'Obrigada por compartilhar!',
+    q_successText:      'Suas respostas foram registradas com segurança. A Tamiris irá analisá-las antes da sua consulta e entrará em contato em breve.',
+    q_successBackBtn:   'Preencher outro questionário',
   },
 
   // ─────────────────────────────────────────────────────────────────
@@ -280,6 +286,12 @@ const translations = {
     q_alertFillNameEmail:'Por favor, completa al menos el nombre y el email antes de enviar.',
     q_alertSendError:    'Error al enviar: ',
     q_loadError:         'Error al cargar. Recarga la página.',
+    q_selectorTitle:    'Bienvenida a tu<br><em>espacio de autoconocimiento</em>',
+    q_selectorSub:      'Tus respuestas son confidenciales y serán analizadas antes de tu consulta.',
+    q_backBtn:          '← Elegir otro cuestionario',
+    q_successTitle:     '¡Gracias por compartir!',
+    q_successText:      'Tus respuestas han sido registradas de forma segura. Tamiris las analizará antes de tu consulta y se pondrá en contacto pronto.',
+    q_successBackBtn:   'Rellenar otro cuestionario',
   },
 
 };
