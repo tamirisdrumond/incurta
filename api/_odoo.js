@@ -29,8 +29,19 @@ export async function pingOdoo(ODOO_URL, timeoutMs = PING_TIMEOUT_MS) {
     // /odoo/contacts specifically — confirmed to be the path that actually
     // wakes this instance when reloaded manually. Other paths (e.g.
     // /web/login) may not be wired through the same wake trigger.
+    //
+    // Browser-like headers are deliberate: a bare server-side fetch() sends
+    // none of the headers a real browser reload does (User-Agent, Accept,
+    // Accept-Language), and whatever fronts this instance may only route
+    // browser-looking requests through to the actual wake trigger.
     const r = await fetch(`${ODOO_URL}/odoo/contacts`, {
       method: 'GET',
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8'
+      },
       signal: AbortSignal.timeout(timeoutMs)
     });
     return r.ok;
