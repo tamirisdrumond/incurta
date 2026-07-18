@@ -10,11 +10,33 @@ const WAKE_DEADLINE_MS    = 45_000; // total time to keep retrying login while O
 const AUTH_ATTEMPT_MS     = 8_000;  // per-attempt timeout during the wake loop
 const AUTH_RETRY_DELAY_MS = 2_000;
 const CALL_TIMEOUT_MS     = 20_000; // timeout for calls made after Odoo is confirmed awake
+const PING_TIMEOUT_MS     = 9_000;
+
+// Plain GET against the Odoo web app — the same kind of request a browser
+// makes when someone reloads the page, which is the one thing confirmed to
+// reliably wake this instance up. Used both as a background keep-warm ping
+// (see api/wake-odoo.js) and as a priming step before the JSON-RPC login below.
+export async function pingOdoo(ODOO_URL, timeoutMs = PING_TIMEOUT_MS) {
+  try {
+    const r = await fetch(`${ODOO_URL}/web/login`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(timeoutMs)
+    });
+    return r.ok;
+  } catch (err) {
+    return false;
+  }
+}
 
 export async function authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS) {
   const deadline = Date.now() + WAKE_DEADLINE_MS;
   let authData = null;
   let authRes = null;
+
+  // Prime the wake-up with a plain page-style GET first (mirrors what actually
+  // wakes the instance when reloading it manually), then fall back to the
+  // normal JSON-RPC retry loop below regardless of whether the ping succeeded.
+  await pingOdoo(ODOO_URL);
 
   while (true) {
     try {
