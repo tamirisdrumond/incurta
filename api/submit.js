@@ -6,6 +6,11 @@
 //   ODOO_USER  — e.g. admin
 //   ODOO_PASS  — Odoo user password
 
+import { authenticateOdoo, makeOdooCall } from './_odoo.js';
+
+// Odoo can be asleep and take up to ~45s to wake up — give the function room to wait it out.
+export const config = { maxDuration: 60 };
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -28,45 +33,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Authenticate
-    const authRes = await fetch(`${ODOO_URL}/web/session/authenticate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0', method: 'call', id: 1,
-        params: { db: ODOO_DB, login: ODOO_USER, password: ODOO_PASS }
-      })
-    });
-    const authData = await authRes.json();
-    if (!authData.result?.uid) {
-      const errDetail = JSON.stringify(authData.error || authData.result || 'no uid');
-      throw new Error(`Odoo authentication failed: ${errDetail}`);
-    }
-
-    // Extract session cookie — try response body first (Odoo 16+), then header
-    const sessionId = authData.result?.session_id;
-    const rawCookie = authRes.headers.get('set-cookie') || '';
-    const sessionMatch = rawCookie.match(/session_id=[^;]+/);
-    const cookieHeader = sessionId
-      ? `session_id=${sessionId}`
-      : (sessionMatch ? sessionMatch[0] : rawCookie);
-
-    async function odooCall(model, method, args, kwargs = {}) {
-      const r = await fetch(`${ODOO_URL}/web/dataset/call_kw`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': cookieHeader
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0', method: 'call', id: 2,
-          params: { model, method, args, kwargs }
-        })
-      });
-      const d = await r.json();
-      if (d.error) throw new Error(JSON.stringify(d.error));
-      return d.result;
-    }
+    // 1. Authenticate (retries/waits while Odoo wakes up from sleep)
+    const { cookieHeader } = await authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS);
+    const odooCall = makeOdooCall(ODOO_URL, cookieHeader);
 
     // 2. Find or create partner
     const found = await odooCall(
@@ -89,6 +58,8 @@ export default async function handler(req, res) {
     // 3. Attach note
     const subject = type === 'fisica'
       ? `Definição Física — ${name}`
+      : type === 'qfa'
+      ? `QFA — Frequência Alimentar — ${name}`
       : `Definição Emocional — ${name}`;
 
     await odooCall('mail.message', 'create', [{
