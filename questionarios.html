@@ -336,6 +336,37 @@
   let activeForm = null;
   let activeStep = 1;
 
+  // ─── ODOO WAKE-UP (background, non-blocking) ───────────────
+  // Odoo sleeps when idle and can take well over a minute to wake up — too
+  // long to make a client wait at submit time. Instead we start pinging it
+  // in the background as soon as the user is inside the app (right after the
+  // password gate), well before they reach any submit button.
+  //
+  // Each /api/wake-odoo call holds a connection open for up to ~55s (that's
+  // how long a sleeping instance's proxy takes to respond once ready — it
+  // doesn't fail fast). So pings are chained sequentially, one at a time,
+  // waiting for each to finish before firing the next — never overlapping —
+  // rather than firing on a fixed interval which would stack up many
+  // concurrent long-lived requests. The submit endpoint still retries on its
+  // own as a fallback for anyone who submits before this completes.
+  let _odooAwake = false;
+  let _odooWaking = false;
+  function startOdooWakeup() {
+    if (_odooAwake || _odooWaking) return;
+    _odooWaking = true;
+    (async function loop() {
+      while (!_odooAwake) {
+        try {
+          const res = await fetch('/api/wake-odoo', { method: 'POST' });
+          const data = await res.json().catch(() => ({}));
+          if (data.awake) { _odooAwake = true; break; }
+        } catch (e) { /* try again below */ }
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      _odooWaking = false;
+    })();
+  }
+
   // ─── GATE ─────────────────────────────────────────────────
   async function checkPassword() {
     const pwd = document.getElementById('gate-access-field').value;
@@ -359,6 +390,9 @@
         // Re-apply translations so shell elements with data-i18n render in active lang
         applyTranslations(getLang());
         window.scrollTo(0, 0);
+        // Start waking Odoo in the background now — by the time the user
+        // finishes a questionnaire and hits submit, it's very likely already awake.
+        startOdooWakeup();
       } else {
         err.style.display = 'block';
         document.getElementById('gate-access-field').value = '';
