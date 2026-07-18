@@ -33,7 +33,7 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding: 1.25rem 4rem;
     display: flex; justify-content: space-between; align-items: center;
-    background: var(--espresso);
+    background: var(--burgundy);
   }
   /* lang-toggle is a direct nav child — always visible even on mobile */
   nav > .lang-toggle { flex-shrink: 0; }
@@ -90,7 +90,7 @@
   .about-visual { position: relative; }
   .about-image { width: 100%; height: auto; display: block; margin-bottom: 2rem; }
   .about-card { background: var(--cream); padding: 2.5rem; border-left: 3px solid var(--burgundy); margin-top: 2rem; }
-  .about-quote { font-family: 'Libre Baskerville', Georgia, serif; font-size: 1.5rem; font-style: italic; font-weight: 400; color: var(--espresso); line-height: 1.5; margin-bottom: 1.5rem; }
+  .about-quote { font-family: 'Libre Baskerville', Georgia, serif; font-size: 1rem; font-style: italic; font-weight: 400; color: var(--espresso); line-height: 1.5; margin-bottom: 1.5rem; }
   .about-cite { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); }
   .about-accent { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 140px; height: 140px; border: 2px solid rgba(201,157,137,0.3); }
   .about-text p { font-size: 1rem; line-height: 1.85; color: var(--text-mid); margin-bottom: 1.25rem; font-weight: 300; }
@@ -112,23 +112,56 @@
 
   /* ─── HOW IT WORKS ─── */
   #how { background: var(--cream-light); }
-  .how-intro { max-width: 600px; margin-bottom: 4rem; }
+  .how-intro { max-width: 1000px; margin: 0 auto 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
   .how-intro p { font-size: 1rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; }
+  .how-intro-block h4 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--burgundy); margin-bottom: 0.6rem; }
   .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
   .step-card { background: #fff; padding: 2.5rem 2rem; border-bottom: 3px solid transparent; transition: border-color 0.2s; position: relative; }
   .step-card:hover { border-color: var(--burgundy); }
   .step-card::after { content: '→'; position: absolute; right: -1.25rem; top: 2rem; color: var(--gold); font-size: 1.2rem; }
   .step-card:last-child::after { display: none; }
   .step-num { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 0.85rem; color: var(--burgundy); letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+  .step-num:empty { display: none; }
   .step-card h3 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.3rem; font-weight: 500; color: var(--espresso); margin-bottom: 0.75rem; }
   .step-card p { font-size: 0.85rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
-  .program-pillars { margin-top: 5rem; background: var(--burgundy); padding: 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .program-pillars { margin-top: 5rem; background: var(--burgundy); padding: 4rem; display: grid; grid-template-columns: 1fr 1.8fr; gap: 3rem; align-items: start; }
   .pillar-text h3 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem; }
   .pillar-text p { font-size: 0.9rem; line-height: 1.8; color: rgba(232,220,215,0.75); font-weight: 300; }
+  .pillar-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .pillar-box h4 { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--cream); margin-bottom: 0.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.15); }
   .pillar-list { list-style: none; }
   .pillar-list li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.88rem; color: rgba(232,220,215,0.8); font-weight: 300; display: flex; align-items: center; gap: 1rem; }
   .pillar-list li:last-child { border-bottom: none; }
   .pillar-list li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blush); flex-shrink: 0; }
+
+  /* ─── PRICING ─── */
+  .pricing-block { margin-top: 5rem; }
+  .pricing-group { margin-bottom: 3rem; }
+  .pricing-group:last-child { margin-bottom: 0; }
+  .pricing-group-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--burgundy); font-weight: 600; margin-bottom: 1.25rem; }
+  .price-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 700px; margin: 0 auto; }
+  .price-card { background: #fff; padding: 2rem; border-left: 3px solid var(--burgundy); }
+  .price-value { font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--burgundy); line-height: 1; margin-bottom: 0.5rem; }
+  .price-label { font-size: 0.85rem; color: var(--text-mid); font-weight: 300; line-height: 1.5; }
+  .pricing-note-card { background: #fff; padding: 2rem; border-left: 3px solid var(--burgundy); max-width: 700px; }
+  .pricing-note-card p { font-size: 0.95rem; line-height: 1.8; color: var(--text-mid); font-weight: 300; }
+  .pricing-intro-line { font-size: 0.9rem; line-height: 1.7; color: var(--text-mid); font-weight: 300; margin-bottom: 1.5rem; }
+  .pricing-currency-note { font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; font-size: 0.9rem; color: var(--text-light); text-align: center; margin-top: 2.5rem; }
+
+  /* ─── TESTIMONIALS ─── */
+  #testimonials { background: #fff; text-align: center; }
+  #testimonials .section-label { justify-content: center; }
+  #testimonials h2 { text-align: center; }
+  .testimonial-carousel { position: relative; max-width: 320px; margin: 3rem auto 0; overflow: hidden; }
+  .testimonial-track { display: flex; transition: transform 0.5s ease; }
+  .testimonial-slide { flex: 0 0 100%; padding: 0 1rem; }
+  .testimonial-screenshot { display: block; width: 100%; height: auto; margin: 0 auto; border-radius: 12px; box-shadow: 0 8px 32px rgba(59,33,34,0.12); }
+  .testimonial-controls { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 2.5rem; }
+  .testimonial-arrow { background: transparent; border: 1px solid var(--cream); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; color: var(--burgundy); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .testimonial-arrow:hover { background: var(--burgundy); color: #fff; border-color: var(--burgundy); }
+  .testimonial-dots { display: flex; gap: 0.5rem; }
+  .testimonial-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cream); border: none; cursor: pointer; padding: 0; transition: background 0.2s; }
+  .testimonial-dot.active { background: var(--burgundy); }
 
   /* ─── CONTACT ─── */
   #contact { background: var(--espresso); }
@@ -141,7 +174,8 @@
   .contact-detail { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
   .contact-detail-icon { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; color: var(--blush); }
   .contact-detail-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(201,157,137,0.6); margin-bottom: 0.25rem; }
-  .contact-detail-value { font-size: 0.9rem; color: var(--cream); }
+  .contact-detail-value { font-size: 0.9rem; color: var(--cream); text-decoration: none; display: inline-block; transition: color 0.2s; }
+  a.contact-detail-value:hover { color: var(--blush); text-decoration: underline; }
   .contact-form .field input, .contact-form .field textarea { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--cream); }
   .contact-form .field input::placeholder, .contact-form .field textarea::placeholder { color: rgba(201,157,137,0.4); }
   .contact-form .field input:focus, .contact-form .field textarea:focus { border-color: var(--blush); background: rgba(255,255,255,0.06); }
@@ -205,7 +239,7 @@
     .hero-tag.tag-1 { bottom: 16%; left: 2%; }
     .hero-tag.tag-2 { top: 5%; right: 2%; }
     section { padding: 4rem 1.5rem; }
-    #about, .how-steps, .why-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    #about, .how-steps, .why-grid, .contact-grid, .how-intro, .pillar-groups, .price-cards { grid-template-columns: 1fr; gap: 2rem; }
     .how-steps { gap: 1rem; }
     .step-card::after { display: none; }
     .program-pillars { grid-template-columns: 1fr; gap: 2rem; }
@@ -238,6 +272,7 @@
     <li><a href="#why" data-i18n="navMethod">O Método</a></li>
     <li><a href="#how" data-i18n="navProgram">Programa</a></li>
     <!--<li><a href="#resources">Recursos</a></li>-->
+    <li><a href="#testimonials" data-i18n="navTestimonials">Depoimentos</a></li>
     <li><a href="#questionnaire" data-i18n="navQuestionnaire">Questionário</a></li>
     <li><a href="#contact" data-i18n="navContact">Contato</a></li>
   </ul>
@@ -254,8 +289,8 @@
   <div class="hero-bg"></div>
   <div class="hero-text">
     <div class="hero-label" data-i18n="heroLabel">Nutrição Clínica Comportamental</div>
-    <h1 data-i18n="heroTitle">Emagrecer não é força<br>de vontade. É <em>neurotreinamento</em>.</h1>
-    <p class="hero-sub" data-i18n="heroSub">Aprenda a controlar os impulsos alimentares, reprogramar seus gatilhos e construir hábitos definitivos sem dietas restritivas e sem culpa.</p>
+    <h1 data-i18n="heroTitle">Seu cérebro aprende. Seus hábitos mudam.<br>Seu <em>corpo acompanha</em>.</h1>
+    <p class="hero-sub" data-i18n="heroSub">Uma metodologia que une neurociência, nutrição comportamental e psicologia positiva para ajudar mulheres a emagrecer com equilíbrio ou viver uma gestação mais saudável.</p>
     <div>
       <a href="#questionnaire" class="btn-primary" data-i18n="heroCta">Começar agora</a>
       <a href="#about" class="btn-outline" data-i18n="heroCtaAlt">Conhecer o método</a>
@@ -299,7 +334,7 @@
       <span class="cred-tag" data-i18n="credYears">+15 anos de experiência</span>
     </div>
     <div class="about-card">
-      <div class="about-quote" data-i18n="aboutQuote">"Criei o in.curta porque percebi que muitas mulheres vivem presas no ciclo da restrição: começam motivadas, tentam mudar tudo de uma vez, falham, sentem culpa e recomeçam toda semana."</div>
+      <div class="about-quote" data-i18n="aboutQuote">"Criei o in.curta porque percebi que muitas mulheres enfrentam desafios diferentes, mas compartilham a mesma necessidade: aprender a cuidar da alimentação sem culpa, medo ou excesso de cobrança. Seja para emagrecer ou viver uma gestação mais saudável, acredito que mudanças duradouras começam com hábitos construídos de forma leve e consciente."</div>
       <div class="about-cite">— Tamiris Drumond</div>
     </div>
   </div>
@@ -333,13 +368,20 @@
   <div class="section-label" data-i18n="howLabel">O Programa</div>
   <h2 data-i18n="howTitle">Como <em>funciona</em></h2>
   <div class="how-intro">
-    <p data-i18n="howIntroP">O In.curta é um programa de 3 meses porque as mudanças reais no comportamento alimentar precisam de tempo para se consolidar. Durante esse período trabalhamos gradualmente impulsos alimentares, disciplina e construção de hábitos.</p>
+    <div class="how-intro-block">
+      <h4 data-i18n="howIntroTitle1">IN.CURTA Emagrecimento</h4>
+      <p data-i18n="howIntroP1">Um programa de 3 meses, desenvolvido para que as mudanças no comportamento alimentar aconteçam de forma gradual. Durante esse período, trabalhamos o controle dos impulsos alimentares, a construção de hábitos e um plano nutricional personalizado para que os resultados sejam sustentáveis.</p>
+    </div>
+    <div class="how-intro-block">
+      <h4 data-i18n="howIntroTitle2">IN.CURTA Gestante</h4>
+      <p data-i18n="howIntroP2">Cada gestação tem um começo diferente. Algumas mulheres iniciam o acompanhamento nas primeiras semanas, enquanto outras chegam mais tarde. Independentemente do momento em que você começar, estarei ao seu lado até o nascimento do bebê, adaptando a alimentação às necessidades de cada trimestre e acompanhando as mudanças do seu corpo e o desenvolvimento do seu bebê.</p>
+    </div>
   </div>
   <div class="how-steps">
     <div class="step-card">
       <div class="step-num" data-i18n="step1Num">Consulta Online</div>
-      <h3 data-i18n="step1Title">6 Consultas ao Vivo</h3>
-      <p data-i18n="step1Text">Uma consulta a cada 15 dias. Explicação prática sobre impulsos alimentares e hábitos, com construção gradual de disciplina alimentar e plano nutricional personalizado.</p>
+      <h3 data-i18n="step1Title">Suporte Contínuo</h3>
+      <p data-i18n="step1Text">O cuidado não termina quando a consulta acaba. Você tem acesso ao suporte via chat para tirar dúvidas e receber orientação sempre que necessário durante o acompanhamento.</p>
     </div>
     <div class="step-card">
       <div class="step-num" data-i18n="step2Num">Aplicativo</div>
@@ -348,29 +390,114 @@
     </div>
     <div class="step-card">
       <div class="step-num" data-i18n="step3Num">Planner</div>
-      <h3 data-i18n="step3Title">Planner Quinzenal</h3>
+      <h3 data-i18n="step3Title">Consolidar Hábitos</h3>
       <p data-i18n="step3Text">Exercícios de nutrição comportamental, neurociência e psicologia positiva para lidar com os impulsos, desenvolver disciplina e consolidar hábitos saudáveis.</p>
     </div>
     <div class="step-card">
       <div class="step-num" data-i18n="step4Num">Resultado</div>
       <h3 data-i18n="step4Title">Hábitos Definitivos</h3>
-      <p data-i18n="step4Text">Emagreça de forma consciente, sem dietas restritivas e sem culpa reprogramando seus gatilhos e consolidando hábitos de forma definitiva.</p>
+      <p data-i18n="step4Text">Construa hábitos que acompanham você em todas as fases da vida. Com acompanhamento próximo e um plano personalizado, você conquista resultados duradouros, seja para emagrecer ou viver uma gestação mais saudável.</p>
     </div>
   </div>
 
   <div class="program-pillars">
     <div class="pillar-text">
       <h3 data-i18n="pillarTitle">O que está incluído no programa</h3>
-      <p data-i18n="pillarText">Cada elemento do In.curta foi desenhado para trabalhar em conjunto oferecendo a estrutura, a ciência e o suporte que a mudança duradoura exige.</p>
+      <p data-i18n="pillarText">Cada etapa do IN.CURTA complementa a outra, criando uma jornada de acompanhamento, orientação e prática para que a mudança aconteça de forma consistente.</p>
     </div>
-    <ul class="pillar-list">
-      <li data-i18n="pillar1">6 consultas online ao vivo (1 a cada 15 dias)</li>
-      <li data-i18n="pillar2">Plano alimentar personalizado</li>
-      <li data-i18n="pillar3">Acompanhamento pelo aplicativo</li>
-      <li data-i18n="pillar4">Planner quinzenal com exercícios comportamentais</li>
-      <li data-i18n="pillar5">Esclarecimento de dúvidas a qualquer momento</li>
-      <li data-i18n="pillar6">Lista de compras e registo de refeições</li>
-    </ul>
+    <div class="pillar-groups">
+      <div class="pillar-box">
+        <h4 data-i18n="pillarEmagTitle">IN.CURTA Emagrecimento</h4>
+        <ul class="pillar-list">
+          <li data-i18n="pillarEmag1">6 consultas online ao vivo (1 a cada 15 dias)</li>
+          <li data-i18n="pillarEmag2">Plano alimentar personalizado</li>
+          <li data-i18n="pillarEmag3">Reprogramação de hábitos e comportamento alimentar</li>
+          <li data-i18n="pillarEmag4">Planner com exercícios de neurociência e nutrição comportamental</li>
+          <li data-i18n="pillarEmag5">Acompanhamento pelo aplicativo</li>
+          <li data-i18n="pillarEmag6">Suporte via chat entre as consultas</li>
+          <li data-i18n="pillarEmag7">Registro de refeições, peso, exercícios e ingestão de água</li>
+          <li data-i18n="pillarEmag8">Lista de compras e receitas práticas</li>
+          <li data-i18n="pillarEmag9">Estratégias para controlar impulsos e episódios de compulsão</li>
+          <li data-i18n="pillarEmag10">Ajustes do plano conforme sua evolução</li>
+        </ul>
+      </div>
+      <div class="pillar-box">
+        <h4 data-i18n="pillarGestTitle">IN.CURTA Gestante</h4>
+        <ul class="pillar-list">
+          <li data-i18n="pillarGest1">Consultas online mensais até o nascimento do bebê</li>
+          <li data-i18n="pillarGest2">Plano alimentar personalizado para cada trimestre</li>
+          <li data-i18n="pillarGest3">Entenda as mudanças hormonais e do seu corpo em cada fase</li>
+          <li data-i18n="pillarGest4">Desmistificação dos principais mitos da gestação</li>
+          <li data-i18n="pillarGest5">Orientações sobre sintomas comuns e como a alimentação pode ajudar</li>
+          <li data-i18n="pillarGest6">Acompanhamento do desenvolvimento do bebê e das suas necessidades nutricionais</li>
+          <li data-i18n="pillarGest7">Suplementação individualizada e interpretação dos exames</li>
+          <li data-i18n="pillarGest8">Suporte via chat entre as consultas</li>
+          <li data-i18n="pillarGest9">Planner exclusivo da gestante</li>
+          <li data-i18n="pillarGest10">Aplicativo com registro da alimentação, hidratação e evolução</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="pricing-block">
+    <div class="pricing-group">
+      <div class="pricing-group-label" data-i18n="pricingEmagLabel">IN.CURTA Emagrecimento</div>
+      <div class="price-cards">
+        <div class="price-card">
+          <div class="price-value" data-i18n="priceEmagFullValue">150€</div>
+          <div class="price-label" data-i18n="priceEmagFullLabel">Investimento total — pagamento único</div>
+        </div>
+        <div class="price-card">
+          <div class="price-value" data-i18n="priceEmagInstallValue">3x 60€</div>
+          <div class="price-label" data-i18n="priceEmagInstallLabel">Pagamento facilitado</div>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-group">
+      <div class="pricing-group-label" data-i18n="pricingGestLabel">IN.CURTA Gestante</div>
+      <p class="pricing-intro-line" data-i18n="pricingGestIntro">Você pode iniciar em qualquer tempo da gestação e renovar o acompanhamento conforme a necessidade.</p>
+      <div class="price-cards">
+        <div class="price-card">
+          <div class="price-value" data-i18n="priceGestFullValue">120€</div>
+          <div class="price-label" data-i18n="priceGestFullLabel">Investimento à vista — Pacote de 3 consultas</div>
+        </div>
+        <div class="price-card">
+          <div class="price-value" data-i18n="priceGestInstallValue">3x 50€</div>
+          <div class="price-label" data-i18n="priceGestInstallLabel">Pagamento facilitado</div>
+        </div>
+      </div>
+    </div>
+    <p class="pricing-currency-note" data-i18n="pricingCurrencyNote">Preços em reais (R$) disponíveis mediante consulta.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label" data-i18n="testimonialsLabel">Depoimentos</div>
+  <h2 data-i18n="testimonialsTitle">O que dizem <em>nossas clientes</em></h2>
+
+  <div class="testimonial-carousel">
+    <div class="testimonial-track" id="testimonial-track">
+      <div class="testimonial-slide">
+        <img class="testimonial-screenshot" src="images/testimonial-1.jpeg" alt="Depoimento de cliente">
+      </div>
+      <div class="testimonial-slide">
+        <img class="testimonial-screenshot" src="images/testimonial-2.jpeg" alt="Depoimento de cliente">
+      </div>
+      <div class="testimonial-slide">
+        <img class="testimonial-screenshot" src="images/testimonial-3.jpeg" alt="Depoimento de cliente">
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonial-controls">
+    <button class="testimonial-arrow" onclick="testimonialPrev()" aria-label="Anterior">‹</button>
+    <div class="testimonial-dots" id="testimonial-dots">
+      <button class="testimonial-dot active" onclick="testimonialGoTo(0); resetTestimonialTimer();" aria-label="Depoimento 1"></button>
+      <button class="testimonial-dot" onclick="testimonialGoTo(1); resetTestimonialTimer();" aria-label="Depoimento 2"></button>
+      <button class="testimonial-dot" onclick="testimonialGoTo(2); resetTestimonialTimer();" aria-label="Depoimento 3"></button>
+    </div>
+    <button class="testimonial-arrow" onclick="testimonialNext()" aria-label="Próximo">›</button>
   </div>
 </section>
 
@@ -394,21 +521,21 @@
         <div class="contact-detail-icon">✉</div>
         <div>
           <div class="contact-detail-label" data-i18n="contactEmailLbl">Email</div>
-          <div class="contact-detail-value">contato.tamirisdrumond@gmail.com</div>
+          <a class="contact-detail-value" href="mailto:contato.tamirisdrumond@gmail.com">contato.tamirisdrumond@gmail.com</a>
         </div>
       </div>
       <div class="contact-detail">
         <div class="contact-detail-icon">☏</div>
         <div>
           <div class="contact-detail-label" data-i18n="contactPhoneLbl">Telefone / WhatsApp</div>
-          <div class="contact-detail-value">+34 645 463 470</div>
+          <a class="contact-detail-value" href="tel:+34645463470">+34 645 463 470</a>
         </div>
       </div>
       <div class="contact-detail">
         <div class="contact-detail-icon">◎</div>
         <div>
           <div class="contact-detail-label" data-i18n="contactIgLbl">Instagram</div>
-          <div class="contact-detail-value">@tamiris.drumond</div>
+          <a class="contact-detail-value" href="https://instagram.com/tamiris.drumond" target="_blank" rel="noopener noreferrer">@tamiris.drumond</a>
         </div>
       </div>
     </div>
@@ -457,6 +584,24 @@
 </div>
 
 <script>
+  // ─── TESTIMONIAL CAROUSEL ───────────────────────────────────
+  let testiIndex = 0;
+  let testiTimer = null;
+  function testimonialGoTo(n) {
+    const slides = document.querySelectorAll('.testimonial-slide');
+    if (!slides.length) return;
+    testiIndex = (n + slides.length) % slides.length;
+    document.getElementById('testimonial-track').style.transform = `translateX(-${testiIndex * 100}%)`;
+    document.querySelectorAll('.testimonial-dot').forEach((d, i) => d.classList.toggle('active', i === testiIndex));
+  }
+  function testimonialNext() { testimonialGoTo(testiIndex + 1); resetTestimonialTimer(); }
+  function testimonialPrev() { testimonialGoTo(testiIndex - 1); resetTestimonialTimer(); }
+  function resetTestimonialTimer() {
+    clearInterval(testiTimer);
+    testiTimer = setInterval(() => testimonialGoTo(testiIndex + 1), 7000);
+  }
+  resetTestimonialTimer();
+
   function dismissCookie(accepted) {
     document.getElementById('cookie-banner').style.display = 'none';
     localStorage.setItem('cookie-consent', accepted ? 'accepted' : 'essential');
