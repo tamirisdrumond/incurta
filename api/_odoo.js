@@ -26,7 +26,10 @@ const PING_TIMEOUT_MS     = 55_000;
 // waits; we have to do the same, for as long as our budget allows.
 export async function pingOdoo(ODOO_URL, timeoutMs = PING_TIMEOUT_MS) {
   try {
-    const r = await fetch(`${ODOO_URL}/web/login`, {
+    // /odoo/contacts specifically — confirmed to be the path that actually
+    // wakes this instance when reloaded manually. Other paths (e.g.
+    // /web/login) may not be wired through the same wake trigger.
+    const r = await fetch(`${ODOO_URL}/odoo/contacts`, {
       method: 'GET',
       signal: AbortSignal.timeout(timeoutMs)
     });
