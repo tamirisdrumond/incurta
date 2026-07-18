@@ -1,21 +1,29 @@
 // api/_odoo.js
 // Shared Odoo JSON-RPC session + call helpers.
 //
-// The Odoo instance sleeps when idle and can take up to ~45s to wake up and
-// start responding. authenticateOdoo() retries the login call with backoff
-// until Odoo answers (each attempt itself acts as a wake trigger) or the
-// deadline is hit, so callers don't need their own wake-up logic.
+// The Odoo instance sleeps when idle. Waking it back up requires a request
+// that stays open long enough to receive the response once the app finishes
+// booting (see pingOdoo() below) — short, frequently-retried requests never
+// actually catch that response. authenticateOdoo() primes with one such
+// long-held request, then logs in, so callers don't need their own wake-up
+// logic.
 
-const WAKE_DEADLINE_MS    = 45_000; // total time to keep retrying login while Odoo wakes up
-const AUTH_ATTEMPT_MS     = 8_000;  // per-attempt timeout during the wake loop
+const WAKE_DEADLINE_MS    = 50_000; // total time to keep trying while Odoo wakes up (stays under Hobby's 60s cap)
+const AUTH_ATTEMPT_MS     = 15_000; // per-attempt timeout once we believe Odoo is warm
 const AUTH_RETRY_DELAY_MS = 2_000;
 const CALL_TIMEOUT_MS     = 20_000; // timeout for calls made after Odoo is confirmed awake
-const PING_TIMEOUT_MS     = 9_000;
+const PING_TIMEOUT_MS     = 55_000;
 
 // Plain GET against the Odoo web app — the same kind of request a browser
 // makes when someone reloads the page, which is the one thing confirmed to
-// reliably wake this instance up. Used both as a background keep-warm ping
-// (see api/wake-odoo.js) and as a priming step before the JSON-RPC login below.
+// reliably wake this instance up. Important: this must be held open for as
+// long as the caller's budget allows. A sleeping instance's proxy typically
+// holds the connection open (not responding with a quick "still starting")
+// until the app underneath is actually ready, then forwards the response —
+// so a *short* per-attempt timeout (what this used to do) means every retry
+// gets aborted before it can ever receive that response, no matter how many
+// times it's retried. A manual browser reload works because the browser just
+// waits; we have to do the same, for as long as our budget allows.
 export async function pingOdoo(ODOO_URL, timeoutMs = PING_TIMEOUT_MS) {
   try {
     const r = await fetch(`${ODOO_URL}/web/login`, {
@@ -33,12 +41,21 @@ export async function authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS) 
   let authData = null;
   let authRes = null;
 
-  // Prime the wake-up with a plain page-style GET first (mirrors what actually
-  // wakes the instance when reloading it manually), then fall back to the
-  // normal JSON-RPC retry loop below regardless of whether the ping succeeded.
-  await pingOdoo(ODOO_URL);
+  // Prime the wake-up with one long-held GET first, giving it nearly the
+  // whole budget — this is the request that actually has to survive the
+  // cold boot. Only fall through to the login retry loop once that returns
+  // (successfully or not); by then Odoo should be warm if it's going to be.
+  const pingBudget = Math.max(deadline - Date.now() - 5_000, 5_000);
+  await pingOdoo(ODOO_URL, pingBudget);
 
   while (true) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) {
+      const errDetail = authData
+        ? JSON.stringify(authData.error || authData.result || 'no uid')
+        : 'Odoo did not respond in time (still waking up?)';
+      throw new Error(`Odoo authentication failed: ${errDetail}`);
+    }
     try {
       authRes = await fetch(`${ODOO_URL}/web/session/authenticate`, {
         method: 'POST',
@@ -47,7 +64,7 @@ export async function authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS) 
           jsonrpc: '2.0', method: 'call', id: 1,
           params: { db: ODOO_DB, login: ODOO_USER, password: ODOO_PASS }
         }),
-        signal: AbortSignal.timeout(AUTH_ATTEMPT_MS)
+        signal: AbortSignal.timeout(Math.min(remaining, AUTH_ATTEMPT_MS))
       });
       authData = await authRes.json();
       if (authData.result?.uid) break;

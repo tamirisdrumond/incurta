@@ -1,10 +1,16 @@
 // api/wake-odoo.js
-// Lightweight, single-attempt wake ping — meant to be called repeatedly by
-// the client (short interval, background) while a client fills out a
-// questionnaire, so Odoo has minutes to wake up instead of racing a single
-// request's time budget at submit time. See pingOdoo() in api/_odoo.js.
-
+// Wake ping — called by the client while a questionnaire is being filled
+// out, so Odoo has minutes (not seconds) to wake up before submit time.
+//
+// Each call holds one GET open for up to ~55s (see pingOdoo() in
+// api/_odoo.js) rather than failing fast, because a sleeping instance's
+// proxy holds the connection open until the app is actually ready instead
+// of responding quickly. Needs its own maxDuration — Vercel's function
+// default (10s on Hobby) would otherwise kill this long before Odoo has a
+// chance to respond, no matter how long pingOdoo() is willing to wait.
 import { pingOdoo } from './_odoo.js';
+
+export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
