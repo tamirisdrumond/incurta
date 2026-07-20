@@ -70,6 +70,30 @@ export default async function handler(req, res) {
       body: note
     }]);
 
+    // 4. Backup copy — Odoo's HTML sanitizer runs on mail.message.body and can
+    // silently strip/alter table content (seen intermittently on the QFA food
+    // table). An ir.attachment's `datas` field is binary, never sanitized, so
+    // this guarantees an exact, recoverable copy of what was submitted even if
+    // the chatter note above gets mangled. Failure here must never fail the
+    // request — the chatter note is already saved by this point.
+    try {
+      const safeName = name.replace(/[^a-z0-9]+/gi, '_').slice(0, 40);
+      await odooCall('ir.attachment', 'create', [{
+        name: `${type}-backup-${safeName}-${Date.now()}.html`,
+        type: 'binary',
+        datas: Buffer.from(note, 'utf-8').toString('base64'),
+        res_model: 'res.partner',
+        res_id: partnerId,
+        mimetype: 'text/html'
+      }]);
+    } catch (backupErr) {
+      console.error('Backup attachment failed (non-fatal):', backupErr.message);
+    }
+
+    // Also log the raw submitted content server-side as a last-resort audit
+    // trail, independent of Odoo entirely.
+    console.log(`Submission received [${type}] ${email}:`, note);
+
     return res.status(200).json({ ok: true });
 
   } catch (err) {
