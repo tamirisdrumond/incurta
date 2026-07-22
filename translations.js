@@ -283,7 +283,7 @@ const translations = {
     // PRICING
     pricingEmagLabel:      'IN.CURTA Adelgazamiento',
     priceEmagFullValue:    '150€',
-    priceEmagFullLabel:    'Pago único',
+    priceEmagFullLabel:    'Pago — Paquete de 6 consultas',
     priceEmagInstallValue: '3x 60€',
     priceEmagInstallLabel: 'Pago facilitado',
     pricingGestLabel:      'IN.CURTA Gestante',
