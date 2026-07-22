@@ -101,7 +101,7 @@ const translations = {
     // PRICING
     pricingEmagLabel:      'IN.CURTA Emagrecimento',
     priceEmagFullValue:    '150€',
-    priceEmagFullLabel:    'Investimento total — pagamento único',
+    priceEmagFullLabel:    'Investimento total — Pacote de 6 consultas',
     priceEmagInstallValue: '3x 60€',
     priceEmagInstallLabel: 'Pagamento facilitado',
     pricingGestLabel:      'IN.CURTA Gestante',
