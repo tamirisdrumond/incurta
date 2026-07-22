@@ -76,7 +76,7 @@ const translations = {
     pillarTitle: 'O que está incluído no programa',
     pillarText:  'Cada etapa do IN.CURTA complementa a outra, criando uma jornada de acompanhamento, orientação e prática para que a mudança aconteça de forma consistente.',
     pillarEmagTitle: 'IN.CURTA Emagrecimento',
-    pillarEmag1:  '6 consultas online ao vivo (1 a cada 15 dias)',
+    pillarEmag1:  'as online ao vivo (1 a cada 15 dias)',
     pillarEmag2:  'Plano alimentar personalizado',
     pillarEmag3:  'Reprogramação de hábitos e comportamento alimentar',
     pillarEmag4:  'Planner com exercícios de neurociência e nutrição comportamental',
@@ -101,7 +101,7 @@ const translations = {
     // PRICING
     pricingEmagLabel:      'IN.CURTA Emagrecimento',
     priceEmagFullValue:    '150€',
-    priceEmagFullLabel:    'Investimento total — Pacote de 6 consultas',
+    priceEmagFullLabel:    'Investimento total — Pacote de 6 consultas (3 meses)',
     priceEmagInstallValue: '3x 60€',
     priceEmagInstallLabel: 'Pagamento facilitado',
     pricingGestLabel:      'IN.CURTA Gestante',
@@ -283,7 +283,7 @@ const translations = {
     // PRICING
     pricingEmagLabel:      'IN.CURTA Adelgazamiento',
     priceEmagFullValue:    '150€',
-    priceEmagFullLabel:    'Pago — Paquete de 6 consultas',
+    priceEmagFullLabel:    'Pago — Paquete de 6 consultas (3 meses)',
     priceEmagInstallValue: '3x 60€',
     priceEmagInstallLabel: 'Pago facilitado',
     pricingGestLabel:      'IN.CURTA Gestante',
