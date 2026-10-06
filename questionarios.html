@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>in.curta — Área do Cliente</title>
+<link rel="icon" type="image/webp" href="images/favicon.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -336,35 +337,108 @@
   let activeForm = null;
   let activeStep = 1;
 
-  // ─── ODOO WAKE-UP (background, non-blocking) ───────────────
-  // Odoo sleeps when idle and can take well over a minute to wake up — too
-  // long to make a client wait at submit time. Instead we start pinging it
-  // in the background as soon as the user is inside the app (right after the
-  // password gate), well before they reach any submit button.
+  const _sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  // ─── ODOO WAKE-UP + KEEP-ALIVE (background, non-blocking) ───
+  // The Odoo instance (Skysize free tier) goes to sleep when idle. We start
+  // waking it as soon as the user is inside the client area, and then KEEP it
+  // awake with a light ping every 90s while the page is open — questionnaires
+  // take 10–20 minutes, long enough for it to fall asleep again mid-form.
   //
-  // Each /api/wake-odoo call holds a connection open for up to ~55s (that's
-  // how long a sleeping instance's proxy takes to respond once ready — it
-  // doesn't fail fast). So pings are chained sequentially, one at a time,
-  // waiting for each to finish before firing the next — never overlapping —
-  // rather than firing on a fixed interval which would stack up many
-  // concurrent long-lived requests. The submit endpoint still retries on its
-  // own as a fallback for anyone who submits before this completes.
-  let _odooAwake = false;
-  let _odooWaking = false;
+  // /api/wake-odoo only answers {awake:true} once Odoo's own health check
+  // passes. If it isn't up yet the call has already waited ~50s on the server,
+  // so we just call again straight away. Calls never overlap.
+  const KEEPALIVE_MS     = 90 * 1000;
+  const KEEPALIVE_MAX_MS = 2 * 60 * 60 * 1000; // stop pinging after 2h so a forgotten tab doesn't keep it awake all night
+  let _odooKeepAliveStarted = false;
   function startOdooWakeup() {
-    if (_odooAwake || _odooWaking) return;
-    _odooWaking = true;
+    if (_odooKeepAliveStarted) return;
+    _odooKeepAliveStarted = true;
+    const startedAt = Date.now();
     (async function loop() {
-      while (!_odooAwake) {
+      while (Date.now() - startedAt < KEEPALIVE_MAX_MS) {
+        let awake = false;
         try {
           const res = await fetch('/api/wake-odoo', { method: 'POST' });
           const data = await res.json().catch(() => ({}));
-          if (data.awake) { _odooAwake = true; break; }
-        } catch (e) { /* try again below */ }
-        await new Promise(r => setTimeout(r, 2000));
+          awake = !!data.awake;
+        } catch (e) { /* network hiccup — retry below */ }
+        await _sleep(awake ? KEEPALIVE_MS : 2000);
       }
-      _odooWaking = false;
     })();
+  }
+
+  // ─── RELIABLE SUBMIT (used by all three questionnaires) ─────
+  // 1. The answers are saved on this device BEFORE sending and removed only
+  //    once the server confirms they reached Odoo — so they can't be lost if
+  //    the tab closes or Odoo stays down.
+  // 2. If Odoo is still waking up, the server answers 503 {retryable:true} and
+  //    we retry (up to SUBMIT_MAX_ATTEMPTS × ~30s ≈ 3 minutes) instead of
+  //    showing an error. Nothing is written to Odoo on those attempts.
+  // 3. Anything left over is re-sent automatically the next time the client
+  //    area is opened (flushPendingSubmissions).
+  const SUBMIT_MAX_ATTEMPTS = 6;
+  const PENDING_KEY = 'incurta-pending';
+
+  function readPending() {
+    try { return JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function writePending(list) {
+    try { localStorage.setItem(PENDING_KEY, JSON.stringify(list)); } catch (e) { /* storage unavailable — carry on without the backup */ }
+  }
+
+  async function postSubmission(payload, onWaiting) {
+    for (let attempt = 1; attempt <= SUBMIT_MAX_ATTEMPTS; attempt++) {
+      let res = null, data = {};
+      try {
+        res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        data = await res.json().catch(() => ({}));
+      } catch (netErr) { res = null; } // offline or connection dropped
+
+      if (res && res.ok && data.ok) return;
+
+      const retryable = !res || (res.status === 503 && data.retryable) || res.status === 502 || res.status === 504;
+      if (!retryable) {
+        const e = new Error(data.detail || data.error || `HTTP ${res.status}`);
+        e.serverDetail = data.detail || data.error || `HTTP ${res.status}`;
+        e.status = res.status;
+        throw e;
+      }
+      if (onWaiting) onWaiting(attempt);
+      await _sleep(2000);
+    }
+    const e = new Error('server unavailable');
+    e.exhausted = true;
+    throw e;
+  }
+
+  async function submitReliably(payload, onWaiting) {
+    const id = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+    // A newer attempt for the same questionnaire + email replaces an older queued one (no duplicates).
+    writePending(readPending()
+      .filter(p => !(p.type === payload.type && p.email === payload.email))
+      .concat([{ id, savedAt: new Date().toISOString(), ...payload }]));
+    try {
+      await postSubmission(payload, onWaiting);
+    } catch (e) {
+      if (e.status === 400) writePending(readPending().filter(p => p.id !== id)); // invalid payload: retrying can never work
+      throw e; // otherwise it stays queued
+    }
+    writePending(readPending().filter(p => p.id !== id));
+  }
+
+  async function flushPendingSubmissions() {
+    for (const item of readPending()) {
+      const { id, savedAt, ...payload } = item;
+      try {
+        await postSubmission(payload);
+        writePending(readPending().filter(p => p.id !== id));
+      } catch (e) { /* stays queued; tried again on the next visit */ }
+    }
   }
 
   // ─── GATE ─────────────────────────────────────────────────
@@ -390,9 +464,10 @@
         // Re-apply translations so shell elements with data-i18n render in active lang
         applyTranslations(getLang());
         window.scrollTo(0, 0);
-        // Start waking Odoo in the background now — by the time the user
-        // finishes a questionnaire and hits submit, it's very likely already awake.
+        // Start waking Odoo (and keeping it awake) in the background, and
+        // re-send any answers a previous visit couldn't deliver.
         startOdooWakeup();
+        flushPendingSubmissions();
       } else {
         err.style.display = 'block';
         document.getElementById('gate-access-field').value = '';
@@ -664,26 +739,23 @@
     const note = type === 'fisica' ? buildFisicaNote() : buildEmocionalNote();
 
     try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type, name, email, note })
+      await submitReliably({ type, name, email, note }, () => {
+        btn.innerHTML = `<span class="spinner"></span>${t('q_waking')}`;
       });
-      const resData = await res.json().catch(() => ({}));
-      if (!res.ok || !resData.ok) {
-        const e = new Error(resData.detail || resData.error || `HTTP ${res.status}`);
-        e.serverDetail = resData.detail || resData.error || `HTTP ${res.status}`;
-        throw e;
-      }
 
       document.querySelector(`#${type[0]}-step-${TOTAL_STEPS[type]}`).classList.remove('visible');
       document.getElementById('form-success').style.display = 'block';
       window.scrollTo(0, 0);
     } catch (err) {
       console.error(err);
-      const errMsg = err.serverDetail || err.message || 'erro desconhecido';
-      document.getElementById('submit-error-msg') && (document.getElementById('submit-error-msg').textContent = 'Erro: ' + errMsg);
-      alert(t('q_alertSendError') + errMsg);
+      if (err.exhausted) {
+        // Odoo never came up in time; answers are safely queued on this device.
+        alert(t('q_savedLocally'));
+      } else {
+        const errMsg = err.serverDetail || err.message || 'erro desconhecido';
+        document.getElementById('submit-error-msg') && (document.getElementById('submit-error-msg').textContent = 'Erro: ' + errMsg);
+        alert(t('q_alertSendError') + errMsg);
+      }
       btn.disabled = false;
       btn.innerHTML = t('q_submitBtn');
     }
