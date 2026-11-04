@@ -13,7 +13,6 @@ const translations = {
     // <title>
     pageTitle:   'In.curta · Tamiris Drumond · Nutrição Comportamental',
     q_pageTitle: 'in.curta — Área do Cliente',
-    pagePrivTitle: 'in.curta — Informações Legais',
 
     // NAV
     navAbout:         'Sobre',
@@ -126,14 +125,6 @@ const translations = {
     q_gateConnError:    'Erro de ligação. Tente novamente.',
     q_gateBtn:          'Entrar',
 
-    // Selector shell — must match i18n.js values so applyTranslations() works on injected shell
-    q_selectorTitle:    'Bem-vinda ao seu<br><em>espaço de autoconhecimento</em>',
-    q_selectorSub:      'Suas respostas são confidenciais e serão analisadas antes da sua consulta.',
-    q_backBtn:          '← Escolher outro questionário',
-    q_successTitle:     'Obrigada por compartilhar!',
-    q_successText:      'Suas respostas foram registradas com segurança. A Tamiris irá analisá-las antes da sua consulta e entrará em contato em breve.',
-    q_successBackBtn:   'Preencher outro questionário',
-
     // Selector cards
     q_card1Title:  'Definição Física',
     q_card1Desc:   'Sobre seu corpo, sintomas, rotina, sono, alimentação e objetivos físicos.',
@@ -154,7 +145,7 @@ const translations = {
     q_sending:           'Enviando…',
     q_submitBtn:         'Enviar respostas',
     q_alertFillNameEmail:'Por favor, preencha pelo menos nome e email antes de enviar.',
-    q_alertSendError:    'Erro ao enviar: ',
+    q_alertSendError:    'Algo deu errado ao enviar. Por favor, tente novamente.',
     q_loadError:         'Erro ao carregar. Recarregue a página.',
   },
 
@@ -165,7 +156,6 @@ const translations = {
 
     pageTitle:   'In.curta · Tamiris Drumond · Nutrición Conductual',
     q_pageTitle: 'in.curta — Área del Cliente',
-    pagePrivTitle: 'in.curta — Información Legal',
 
     navAbout:         'Sobre',
     navMethod:        'El Método',
@@ -268,14 +258,6 @@ const translations = {
     q_gateConnError:    'Error de conexión. Inténtalo de nuevo.',
     q_gateBtn:          'Entrar',
 
-    // Selector shell
-    q_selectorTitle:    'Bienvenida a tu<br><em>espacio de autoconocimiento</em>',
-    q_selectorSub:      'Tus respuestas son confidenciales y serán analizadas antes de tu consulta.',
-    q_backBtn:          '← Elegir otro cuestionario',
-    q_successTitle:     '¡Gracias por compartir!',
-    q_successText:      'Tus respuestas han sido registradas de forma segura. Tamiris las analizará antes de tu consulta y se pondrá en contacto pronto.',
-    q_successBackBtn:   'Rellenar otro cuestionario',
-
     // Selector cards
     q_card1Title:  'Definición Física',
     q_card1Desc:   'Sobre tu cuerpo, síntomas, rutina, sueño, alimentación y objetivos físicos.',
@@ -296,32 +278,41 @@ const translations = {
     q_sending:           'Enviando…',
     q_submitBtn:         'Enviar respuestas',
     q_alertFillNameEmail:'Por favor, completa al menos el nombre y el email antes de enviar.',
-    q_alertSendError:    'Error al enviar: ',
+    q_alertSendError:    'Algo salió mal al enviar. Por favor, inténtalo de nuevo.',
     q_loadError:         'Error al cargar. Recarga la página.',
   },
 
 };
 
 // ─── Engine ────────────────────────────────────────────────────────
+// Reads / writes the chosen language to localStorage so the choice
+// persists across all pages of the site.
+
 const STORAGE_KEY = 'incurta-lang';
 
+/** Returns the active language code ('pt' | 'es'). */
 function getLang() {
   return localStorage.getItem(STORAGE_KEY) || 'pt';
 }
 
+/** Returns the translated string for `key` in the active language. */
 function t(key) {
   const lang = getLang();
   return (translations[lang] && translations[lang][key]) || translations['pt'][key] || key;
 }
 
+/** Applies all translations to the DOM and updates the toggle buttons. */
 function applyTranslations(lang) {
+  // Update <html lang>
   document.documentElement.lang = translations[lang].htmlLang;
 
+  // Update <title> — uses data-title-key on <html> if present, else falls back to pageTitle
   const titleKey = document.documentElement.dataset.titleKey || 'pageTitle';
   if (translations[lang][titleKey]) {
     document.title = translations[lang][titleKey];
   }
 
+  // Update all elements with data-i18n (innerHTML — supports <em>, <br>, etc.)
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key] !== undefined) {
@@ -329,6 +320,7 @@ function applyTranslations(lang) {
     }
   });
 
+  // Update placeholders (data-i18n-ph)
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     const key = el.getAttribute('data-i18n-ph');
     if (translations[lang][key] !== undefined) {
@@ -336,20 +328,24 @@ function applyTranslations(lang) {
     }
   });
 
+  // Highlight the active lang button
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
 }
 
+/** Called by the PT / ES toggle buttons. */
 function setLang(lang) {
   if (!translations[lang]) return;
   localStorage.setItem(STORAGE_KEY, lang);
   applyTranslations(lang);
 }
 
+// Run on page load
 document.addEventListener('DOMContentLoaded', () => {
   applyTranslations(getLang());
 
+  // Wire up the toggle buttons
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => setLang(btn.dataset.lang));
   });

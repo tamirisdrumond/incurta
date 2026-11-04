@@ -1,14 +1,11 @@
 // api/submit.js
-// Vercel serverless function.
-// Required environment variables (set in Vercel Dashboard):
-//   ODOO_URL   — e.g. https://incurta-odoo19.com
-//   ODOO_DB    — e.g. Main
-//   ODOO_USER  — e.g. admin
-//   ODOO_PASS  — Odoo user password
+// Required env vars: ODOO_URL, ODOO_USER, ODOO_PASS
+// ODOO_DB is optional — the DB name is discovered automatically via /web/database/list.
+//          Set it only as a fallback if discovery ever fails.
 
 import { authenticateOdoo, makeOdooCall } from './_odoo.js';
 
-// Odoo can be asleep and take up to ~45s to wake up — give the function room to wait it out.
+// Odoo can be asleep and take up to ~45s to wake — give the function room to wait it out.
 export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
@@ -23,17 +20,17 @@ export default async function handler(req, res) {
   }
 
   const ODOO_URL  = process.env.ODOO_URL;
-  const ODOO_DB   = process.env.ODOO_DB;
+  const ODOO_DB   = process.env.ODOO_DB;   // optional fallback
   const ODOO_USER = process.env.ODOO_USER;
   const ODOO_PASS = process.env.ODOO_PASS;
 
-  if (!ODOO_URL || !ODOO_DB || !ODOO_USER || !ODOO_PASS) {
+  if (!ODOO_URL || !ODOO_USER || !ODOO_PASS) {
     console.error('One or more Odoo environment variables are not set');
     return res.status(500).json({ error: 'Server misconfiguration' });
   }
 
   try {
-    // 1. Authenticate (retries/waits while Odoo wakes up from sleep)
+    // 1. Authenticate (auto-discovers DB; retries while Odoo wakes from sleep)
     const { cookieHeader } = await authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS);
     const odooCall = makeOdooCall(ODOO_URL, cookieHeader);
 
@@ -55,7 +52,7 @@ export default async function handler(req, res) {
       }]);
     }
 
-    // 3. Attach note
+    // 3. Attach note as chatter message
     const subject = type === 'fisica'
       ? `Definição Física — ${name}`
       : type === 'qfa'
@@ -70,12 +67,9 @@ export default async function handler(req, res) {
       body: note
     }]);
 
-    // 4. Backup copy — Odoo's HTML sanitizer runs on mail.message.body and can
-    // silently strip/alter table content (seen intermittently on the QFA food
-    // table). An ir.attachment's `datas` field is binary, never sanitized, so
-    // this guarantees an exact, recoverable copy of what was submitted even if
-    // the chatter note above gets mangled. Failure here must never fail the
-    // request — the chatter note is already saved by this point.
+    // 4. Backup attachment — Odoo's HTML sanitizer can silently strip table content
+    // from mail.message.body. ir.attachment.datas is binary (never sanitized), so
+    // this is an exact, recoverable copy. Failure here must never fail the request.
     try {
       const safeName = name.replace(/[^a-z0-9]+/gi, '_').slice(0, 40);
       await odooCall('ir.attachment', 'create', [{
@@ -90,14 +84,13 @@ export default async function handler(req, res) {
       console.error('Backup attachment failed (non-fatal):', backupErr.message);
     }
 
-    // Also log the raw submitted content server-side as a last-resort audit
-    // trail, independent of Odoo entirely.
+    // Server-side audit log, independent of Odoo
     console.log(`Submission received [${type}] ${email}:`, note);
 
     return res.status(200).json({ ok: true });
 
   } catch (err) {
     console.error('Odoo submission error:', err.message);
-    return res.status(500).json({ error: 'Submission failed', detail: err.message });
+    return res.status(500).json({ error: 'Submission failed' });
   }
 }

@@ -1,6 +1,9 @@
+// api/contact.js
+// Required env vars: ODOO_URL, ODOO_USER, ODOO_PASS
+// ODOO_DB is optional — DB name is discovered automatically via /web/database/list.
+
 import { authenticateOdoo, makeOdooCall } from './_odoo.js';
 
-// Odoo can be asleep and take up to ~45s to wake up — give the function room to wait it out.
 export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
@@ -14,20 +17,19 @@ export default async function handler(req, res) {
   }
 
   const ODOO_URL  = process.env.ODOO_URL;
-  const ODOO_DB   = process.env.ODOO_DB;
+  const ODOO_DB   = process.env.ODOO_DB;   // optional fallback
   const ODOO_USER = process.env.ODOO_USER;
   const ODOO_PASS = process.env.ODOO_PASS;
 
-  if (!ODOO_URL || !ODOO_DB || !ODOO_USER || !ODOO_PASS) {
+  if (!ODOO_URL || !ODOO_USER || !ODOO_PASS) {
     return res.status(500).json({ error: 'Server misconfiguration' });
   }
 
   try {
-    // 1. Authenticate (retries/waits while Odoo wakes up from sleep)
-    const { uid: userId, cookieHeader } = await authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS);
+    const { cookieHeader, uid: userId } = await authenticateOdoo(ODOO_URL, ODOO_DB, ODOO_USER, ODOO_PASS);
     const odooCall = makeOdooCall(ODOO_URL, cookieHeader);
 
-    // 2. Find or create contact (res.partner)
+    // Find or create contact
     const existing = await odooCall(
       'res.partner', 'search_read',
       [[['email', '=', email]]],
@@ -45,7 +47,7 @@ export default async function handler(req, res) {
       }]);
     }
 
-    // 3. Create CRM lead
+    // Create CRM lead
     const leadId = await odooCall('crm.lead', 'create', [{
       name: `Contato via site: ${name}`,
       contact_name: name,
@@ -58,7 +60,7 @@ export default async function handler(req, res) {
       throw new Error(`crm.lead create returned invalid id: ${JSON.stringify(leadId)}`);
     }
 
-    // 4. Get res_model_id — the integer ID of 'crm.lead' in ir.model
+    // Get res_model_id for crm.lead
     const irModels = await odooCall(
       'ir.model', 'search_read',
       [[['model', '=', 'crm.lead']]],
@@ -67,7 +69,7 @@ export default async function handler(req, res) {
     if (!irModels.length) throw new Error('Could not find ir.model for crm.lead');
     const resModelId = irModels[0].id;
 
-    // 5. Get activity type
+    // Get activity type
     const activityTypes = await odooCall(
       'mail.activity.type', 'search_read',
       [[['name', 'in', ['Email', 'To-Do', 'Todo']]]],
@@ -76,10 +78,9 @@ export default async function handler(req, res) {
     const actType = activityTypes.find(t => t.name.toLowerCase() === 'email')
       || activityTypes.find(t => t.name.toLowerCase().includes('todo') || t.name.toLowerCase().includes('to-do'))
       || activityTypes[0];
-
     if (!actType) throw new Error('No activity type found');
 
-    // 6. Create activity with both res_model_id (int) AND res_model (string)
+    // Create follow-up activity
     const today = new Date().toISOString().slice(0, 10);
     await odooCall('mail.activity', 'create', [{
       res_model_id: resModelId,
@@ -96,6 +97,6 @@ export default async function handler(req, res) {
 
   } catch (err) {
     console.error('Contact Odoo error:', err.message);
-    return res.status(500).json({ error: 'Internal server error', detail: err.message });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
