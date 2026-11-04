@@ -743,6 +743,9 @@
       });
       // Append remaining HTML to app
       appEl.appendChild(tempDiv.firstElementChild || tempDiv);
+      // qfa-section is injected with display:none — show it now
+      const qfaEl = document.getElementById('qfa-section');
+      if (qfaEl) qfaEl.style.display = 'block';
       document.getElementById('selector').style.display = 'none';
       window.scrollTo(0, 0);
     } catch(e) {
