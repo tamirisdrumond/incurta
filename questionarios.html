@@ -703,9 +703,16 @@
       window.scrollTo(0, 0);
     } catch(e) {
       console.error('Form load error:', e);
-      // Restore cards on error
-      document.getElementById('selector').style.display = 'flex';
-      document.getElementById('app').innerHTML = `<p style="padding:2rem;color:var(--burgundy)">${t('q_loadError')}</p>`;
+      // backToSelector rebuilds cards if they were replaced with the loading div
+      backToSelector();
+      // Show inline error below the cards (never destroy the DOM)
+      const cardsEl = document.querySelector('.q-cards');
+      if (cardsEl) {
+        const errEl = document.createElement('p');
+        errEl.style.cssText = 'grid-column:1/-1;text-align:center;padding:0.5rem 1rem 1rem;color:var(--burgundy);font-size:0.88rem;';
+        errEl.textContent = t('q_loadError');
+        cardsEl.appendChild(errEl);
+      }
     }
   }
 
@@ -740,6 +747,14 @@
       window.scrollTo(0, 0);
     } catch(e) {
       console.error('QFA load error:', e);
+      backToSelector();
+      const cardsEl = document.querySelector('.q-cards');
+      if (cardsEl) {
+        const errEl = document.createElement('p');
+        errEl.style.cssText = 'grid-column:1/-1;text-align:center;padding:0.5rem 1rem 1rem;color:var(--burgundy);font-size:0.88rem;';
+        errEl.textContent = t('q_loadError');
+        cardsEl.appendChild(errEl);
+      }
     }
   }
 
