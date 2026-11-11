@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receitas Descomplicadas · In.curta</title>
+<meta name="description" content="Mais de 30 receitas rápidas (5 a 10 minutos), fáceis, saudáveis e leves em calorias. Pague por Pix ou Bizum.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burgundy: #8B1538;
+    --burgundy-vivid: #C41E3A;
+    --blush: #D4A5A5;
+    --espresso: #2C2C2C;
+    --cream: #F5EBE0;
+    --cream-light: #F5EBE0;
+    --gold: #C9A86A;
+    --text-dark: #2C2C2C;
+    --text-mid: #5a4a3a;
+    --text-light: #9A7B78;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream-light);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    padding-top: 89px;
+  }
+  img { max-width: 100%; }
+
+  /* ─── NAV (same as index.html) ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(245,240,238,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(139,21,54,0.08);
+  }
+  .nav-logo-img { height: 48px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-mid); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--burgundy); }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    display: inline-block; padding: 0.95rem 2.5rem;
+    background: var(--burgundy); color: #fff;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    font-family: 'Inter', sans-serif; font-weight: 500;
+    text-decoration: none; transition: background 0.2s, transform 0.15s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { background: #6e1029; transform: translateY(-1px); }
+
+  /* ─── SHARED ─── */
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--blush); font-weight: 500; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before {
+    content: ''; display: inline-block; width: 28px; height: 1px; background: var(--blush);
+  }
+  h1, h2, h3 {
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
+    color: var(--burgundy); font-weight: 800;
+  }
+  h1 { font-size: clamp(2.4rem, 4.6vw, 4rem); line-height: 1.08; margin-bottom: 1.25rem; }
+  h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.15; margin-bottom: 1.25rem; }
+  h3 { font-weight: 700; }
+  .detail {
+    font-family: 'Libre Baskerville', Georgia, serif;
+  }
+
+  /* ─── INTRO ─── */
+  .intro { padding: 4rem 4rem 5rem; }
+  .intro-grid {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 4rem; align-items: center;
+  }
+  .intro-sub {
+    font-family: 'Libre Baskerville', Georgia, serif; font-style: italic;
+    font-size: 1.15rem; line-height: 1.6; color: var(--text-mid); margin-bottom: 1.5rem;
+  }
+  .intro-text p {
+    font-size: 0.98rem; line-height: 1.8; color: var(--text-mid); font-weight: 300;
+    margin-bottom: 2rem; max-width: 520px;
+  }
+  .price-tag {
+    display: inline-flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .price-main {
+    font-family: 'Jost', 'Futura', sans-serif; font-weight: 800;
+    font-size: 2.6rem; color: var(--burgundy); line-height: 1;
+  }
+  .price-alt {
+    font-family: 'Libre Baskerville', Georgia, serif; font-size: 1rem; color: var(--text-mid);
+  }
+
+  /* image slots: cream card, caption sits behind the image */
+  .slot {
+    position: relative; background: #fff; border: 1px solid rgba(139,21,54,0.12);
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  .slot span {
+    position: absolute; font-family: 'Libre Baskerville', Georgia, serif; font-style: italic;
+    font-size: 0.85rem; color: var(--text-light); padding: 1rem; text-align: center;
+  }
+  .slot img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .cover { aspect-ratio: 3 / 4; max-width: 400px; margin: 0 auto; width: 100%;
+    box-shadow: 0 24px 60px rgba(44,44,44,0.18); }
+
+
+  /* ─── CAROUSEL ─── */
+  .carousel { position: relative; max-width: 400px; margin: 0 auto; width: 100%;
+    box-shadow: 0 24px 60px rgba(44,44,44,0.18); background: #fff; }
+  .track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    aspect-ratio: 3 / 4; }
+  .track::-webkit-scrollbar { display: none; }
+  .slide { flex: 0 0 100%; scroll-snap-align: center; position: relative; }
+  .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .car-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem;
+    border: none; border-radius: 50%; background: rgba(245,235,224,0.92); color: var(--burgundy);
+    font-size: 1.6rem; line-height: 1; cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .car-btn:hover { background: var(--burgundy); color: #fff; }
+  .car-btn.prev { left: 0.6rem; } .car-btn.next { right: 0.6rem; }
+  .dots { position: absolute; left: 0; right: 0; bottom: 0.8rem; display: flex; justify-content: center; gap: 0.45rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--burgundy); background: rgba(245,235,224,0.9); padding: 0; cursor: pointer; }
+  .dot.on { background: var(--burgundy); }
+  .carousel.empty .track::after { content: attr(data-empty); display: flex; flex: 0 0 100%; align-items: center; justify-content: center;
+    font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; color: var(--text-light); }
+  .carousel.single .car-btn, .carousel.single .dots, .carousel.empty .car-btn, .carousel.empty .dots { display: none; }
+
+  /* ─── HIGHLIGHTS ─── */
+  .highlights { background: #fff; padding: 5rem 4rem; }
+  .hl-list {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; margin-top: 2.5rem;
+  }
+  .hl {
+    flex: 1 1 200px; max-width: 250px; background: var(--cream);
+    padding: 1.75rem 1.5rem; border-top: 3px solid var(--gold); text-align: center;
+  }
+  .hl-num {
+    font-family: 'Jost', 'Futura', sans-serif; font-weight: 800; font-size: 1.9rem;
+    color: var(--burgundy); line-height: 1.1; margin-bottom: 0.6rem;
+  }
+  .hl-text { font-size: 0.88rem; line-height: 1.6; color: var(--text-mid); }
+  .center { text-align: center; }
+  .center .section-label { justify-content: center; }
+
+  /* ─── PREVIEW ─── */
+  .preview { padding: 5rem 4rem; }
+  .preview-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem;
+  }
+  .preview-grid .slot { aspect-ratio: 4 / 5; }
+
+  /* ─── PAYMENT ─── */
+  .pay { background: var(--espresso); padding: 5rem 4rem; }
+  .pay h2 { color: var(--cream); }
+  .pay .lead {
+    color: rgba(245,235,224,0.75); font-size: 0.98rem; line-height: 1.8; font-weight: 300;
+    max-width: 640px; margin: 0 auto 2.5rem;
+  }
+  .steps {
+    list-style: none; counter-reset: s; display: grid;
+    grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 3rem;
+  }
+  .steps li {
+    counter-increment: s; position: relative; padding: 1.5rem 1.25rem 1.25rem;
+    border: 1px solid rgba(201,168,106,0.35); color: var(--cream);
+    font-size: 0.9rem; line-height: 1.6;
+  }
+  .steps li::before {
+    content: counter(s); display: block; font-family: 'Jost', sans-serif; font-weight: 800;
+    font-size: 1.6rem; color: var(--gold); margin-bottom: 0.4rem;
+  }
+  .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .method { background: var(--cream); padding: 2.25rem 2rem; }
+  .method-from {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-light); font-weight: 500; margin-bottom: 0.5rem;
+  }
+  .method h3 { font-size: 1.7rem; margin-bottom: 0.25rem; }
+  .method-price {
+    font-family: 'Jost', sans-serif; font-weight: 800; font-size: 2.1rem;
+    color: var(--espresso); margin-bottom: 1.25rem;
+  }
+  .num-row {
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    background: #fff; border: 1px solid rgba(139,21,54,0.15);
+    padding: 0.85rem 1rem; margin-bottom: 1.25rem;
+  }
+  .pay-num {
+    font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1.25rem;
+    letter-spacing: 0.04em; color: var(--espresso); flex: 1 1 auto; word-break: break-all;
+  }
+  .copy {
+    background: transparent; border: 1px solid var(--burgundy); color: var(--burgundy);
+    font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 500; padding: 0.45rem 0.9rem; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy:hover { background: var(--burgundy); color: #fff; }
+  .method p { font-size: 0.9rem; line-height: 1.7; color: var(--text-mid); }
+  .method p strong { color: var(--burgundy); }
+  .email-note {
+    margin-top: 2rem; text-align: center; font-size: 0.85rem;
+    color: rgba(245,235,224,0.7); font-family: 'Libre Baskerville', Georgia, serif;
+    font-style: italic;
+  }
+  .todo { background: #ffe58a; color: #000; padding: 0 0.3em; }
+
+  /* ─── LANGUAGE SWITCH ─── */
+  .lang { padding: 3rem 4rem; text-align: center; }
+  .lang a {
+    font-family: 'Libre Baskerville', Georgia, serif; font-style: italic;
+    font-size: 1rem; color: var(--burgundy); text-decoration: none;
+    border-bottom: 1px solid var(--gold); padding-bottom: 0.15rem;
+    transition: color 0.2s;
+  }
+  .lang a:hover { color: var(--burgundy-vivid); }
+
+  /* ─── FOOTER (same as index.html) ─── */
+  footer {
+    background: #2a1819; padding: 2rem 4rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Jost', 'Futura', 'Trebuchet MS', sans-serif;
+    font-size: 1rem; color: rgba(232,220,215,0.5); font-weight: 300;
+  }
+  .footer-copy { font-size: 0.75rem; color: rgba(232,220,215,0.3); }
+  .footer-legal { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-legal a {
+    font-size: 0.72rem; color: rgba(232,220,215,0.35); text-decoration: none;
+    letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .footer-legal a:hover { color: var(--blush); }
+
+  @media (max-width: 900px) {
+    body { padding-top: 81px; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .intro, .highlights, .preview, .pay, .lang { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .intro { padding-top: 2.5rem; padding-bottom: 3.5rem; }
+    .intro-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .intro-text { text-align: center; }
+    .intro-text .section-label { justify-content: center; }
+    .intro-text p { margin-left: auto; margin-right: auto; }
+    .highlights, .preview, .pay { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+    .preview-grid { grid-template-columns: 1fr; }
+    .preview-grid .slot { aspect-ratio: 4 / 3; }
+    .steps, .methods { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 0.75rem; text-align: center; padding: 2rem 1.5rem; }
+    .footer-legal { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html"><img src="images/logo.png" alt="in.curta logo" class="nav-logo-img"></a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">Sobre</a></li>
+    <li><a href="index.html#why">O Método</a></li>
+    <li><a href="index.html#how">Programa</a></li>
+    <li><a href="index.html#questionnaire">Questionário</a></li>
+    <li><a href="index.html#contact">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="wrap intro-grid">
+    <div class="intro-text">
+      <div class="section-label">Livro de receitas</div>
+      <h1>Receitas Descomplicadas</h1>
+      <div class="intro-sub">Mais de 30 receitas rápidas, fáceis e saudáveis para o seu dia a dia.</div>
+      <p>Cozinhar bem não precisa levar uma hora. Este livro reúne mais de 30 receitas que ficam prontas em 5 a 10 minutos, com ingredientes simples do dia a dia, leves em calorias, testadas e sempre aprovadas.</p>
+      <div class="price-tag">
+        <span class="price-main">R$ 19,90</span>
+        <span class="price-alt">ou € 5 pagando com Bizum</span>
+      </div>
+      <div><a href="#pagamento" class="btn-primary">Quero o livro</a></div>
+    </div>
+    <div class="carousel" data-empty="Capa do livro">
+      <div class="track">
+        <div class="slide"><img src="images/book-1_pt.jpg" alt="Capa do livro Receitas Descomplicadas"></div>
+        <div class="slide"><img src="images/book-2_pt.jpg" alt="Capa do livro Receitas Descomplicadas"></div>
+        <div class="slide"><img src="images/book-3_pt.jpg" alt="Capa do livro Receitas Descomplicadas"></div>
+        <div class="slide"><img src="images/book-4_pt.jpg" alt="Capa do livro Receitas Descomplicadas"></div>
+        <div class="slide"><img src="images/book-5_pt.jpg" alt="Capa do livro Receitas Descomplicadas"></div>
+      </div>
+      <button type="button" class="car-btn prev" aria-label="Anterior">‹</button>
+      <button type="button" class="car-btn next" aria-label="Próxima">›</button>
+      <div class="dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section class="highlights">
+  <div class="wrap center">
+    <div class="section-label">O que você vai encontrar</div>
+    <h2>Cozinha gostosa, sem complicação</h2>
+    <div class="hl-list">
+      <div class="hl"><div class="hl-num">+30</div><div class="hl-text">Mais de 30 receitas</div></div>
+      <div class="hl"><div class="hl-num">5–10 min</div><div class="hl-text">Rápidas de preparar</div></div>
+      <div class="hl"><div class="hl-num">Fáceis</div><div class="hl-text">Com ingredientes simples do dia a dia</div></div>
+      <div class="hl"><div class="hl-num">Leves</div><div class="hl-text">Saudáveis e sem muitas calorias</div></div>
+      <div class="hl"><div class="hl-num">Aprovadas</div><div class="hl-text">Testadas e sempre aprovadas</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section class="pay" id="pagamento">
+  <div class="wrap center">
+    <div class="section-label">Como adquirir</div>
+    <h2>Pague por Pix ou por Bizum</h2>
+    <p class="lead">Escolha a forma que for mais prática para você. O valor é R$ 19,90 por Pix ou € 5 por Bizum.</p>
+    <ol class="steps" style="text-align:left;">
+      <li>Escolha como pagar: Pix (Brasil) ou Bizum (Espanha).</li>
+      <li>Faça a transferência e escreva seu e-mail no campo de mensagem ou conceito.</li>
+      <li>Receba o livro no seu e-mail.</li>
+    </ol>
+    <div class="methods" style="text-align:left;">
+      <div class="method">
+        <div class="method-from">Do Brasil</div>
+        <h3>Pix</h3>
+        <div class="method-price">R$ 19,90</div>
+        <div class="num-row">
+          <span class="pay-num todo" id="num-pix">[NÚMERO PIX]</span>
+          <button type="button" class="copy" data-target="num-pix" data-done="Copiado!">Copiar</button>
+        </div>
+        <p>Envie <strong>R$ 19,90</strong> por Pix para esta chave. No campo de <strong>mensagem</strong>, escreva seu <strong>e-mail</strong> para que eu possa enviar o livro.</p>
+      </div>
+      <div class="method">
+        <div class="method-from">Da Espanha</div>
+        <h3>Bizum</h3>
+        <div class="method-price">€ 5</div>
+        <div class="num-row">
+          <span class="pay-num todo" id="num-bizum">[NÚMERO BIZUM]</span>
+          <button type="button" class="copy" data-target="num-bizum" data-done="Copiado!">Copiar</button>
+        </div>
+        <p>Envie <strong>€ 5</strong> por Bizum para este número. No campo de <strong>conceito</strong>, escreva seu <strong>e-mail</strong> para que eu possa enviar o livro.</p>
+      </div>
+    </div>
+    <div class="email-note">Confira seu e-mail com atenção: é o endereço para onde vou enviar o livro.</div>
+  </div>
+</section>
+
+<!-- LANGUAGE SWITCH -->
+<section class="lang">
+  <a href="recetario.html" hreflang="es">Também disponível em espanhol →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">In.curta · Tamiris Drumond</div>
+  <div class="footer-legal">
+    <a href="privacidade.html">Política de Privacidade</a>
+    <a href="privacidade.html#termos">Termos de Uso</a>
+    <a href="privacidade.html#aviso">Aviso Legal</a>
+    <a href="privacidade.html#cookies">Política de Cookies</a>
+  </div>
+  <div class="footer-copy">© 2025 · Nutrição Clínica Comportamental</div>
+</footer>
+
+<script>
+  (function () {
+    var car = document.querySelector('.carousel');
+    var track = car.querySelector('.track');
+    var dots = car.querySelector('.dots');
+    function build() {
+      var n = track.children.length;
+      dots.innerHTML = '';
+      car.classList.toggle('empty', n === 0);
+      car.classList.toggle('single', n === 1);
+      if (n === 0) { track.setAttribute('data-empty', car.dataset.empty); return; }
+      for (var i = 0; i < n; i++) {
+        (function (i) {
+          var d = document.createElement('button');
+          d.type = 'button'; d.className = 'dot'; d.setAttribute('aria-label', (i + 1) + '/' + n);
+          d.onclick = function () { track.scrollTo({ left: i * track.clientWidth, behavior: 'smooth' }); };
+          dots.appendChild(d);
+        })(i);
+      }
+      mark();
+    }
+    function mark() {
+      var i = Math.round(track.scrollLeft / (track.clientWidth || 1));
+      Array.prototype.forEach.call(dots.children, function (d, k) { d.classList.toggle('on', k === i); });
+    }
+    track.addEventListener('scroll', mark);
+    car.querySelector('.prev').onclick = function () { track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' }); };
+    car.querySelector('.next').onclick = function () { track.scrollBy({ left: track.clientWidth, behavior: 'smooth' }); };
+    Array.prototype.slice.call(track.querySelectorAll('img')).forEach(function (img) {
+      img.addEventListener('error', function () { if (img.parentNode) { img.parentNode.remove(); build(); } });
+      if (img.complete && img.naturalWidth === 0) { img.parentNode.remove(); }
+    });
+    build();
+  })();
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.dataset.target);
+      if (!el || !navigator.clipboard) return;
+      var original = btn.textContent;
+      navigator.clipboard.writeText(el.textContent.trim()).then(function () {
+        btn.textContent = btn.dataset.done;
+        setTimeout(function () { btn.textContent = original; }, 1800);
+      });
+    });
+  });
+</script>
+</body>
+</html>
