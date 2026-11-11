@@ -20,6 +20,12 @@ const translations = {
     navProgram:       'Programa',
     navQuestionnaire: 'Questionário',
     navContact:       'Contato',
+    navTestimonials:  'Depoimentos',
+
+    // RECIPE BOOK
+    recipeBanner:     'Livro de receitas disponível. <strong>Clique aqui.</strong>',
+    recipeBannerHref: 'receitas.html',
+    r_pageTitle:      'Receitas Descomplicadas · In.curta',
 
     // HERO
     heroLabel:   'Nutrição Clínica Comportamental',
@@ -162,6 +168,11 @@ const translations = {
     navProgram:       'Programa',
     navQuestionnaire: 'Cuestionario',
     navContact:       'Contacto',
+    navTestimonials:  'Testimonios',
+
+    recipeBanner:     'Recetario disponible. <strong>Haz clic aquí.</strong>',
+    recipeBannerHref: 'recetario.html',
+    r_pageTitle:      'Recetas sin Complicaciones · In.curta',
 
     heroLabel:   'Nutrición Clínica Conductual',
     heroTitle:   'Adelgazar no es fuerza<br>de voluntad. Es <em>neuroentrenamiento</em>.',
@@ -320,6 +331,14 @@ function applyTranslations(lang) {
     }
   });
 
+  // Update link targets (data-i18n-href)
+  document.querySelectorAll('[data-i18n-href]').forEach(el => {
+    const key = el.getAttribute('data-i18n-href');
+    if (translations[lang][key] !== undefined) {
+      el.setAttribute('href', translations[lang][key]);
+    }
+  });
+
   // Update placeholders (data-i18n-ph)
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     const key = el.getAttribute('data-i18n-ph');
@@ -338,6 +357,10 @@ function applyTranslations(lang) {
 function setLang(lang) {
   if (!translations[lang]) return;
   localStorage.setItem(STORAGE_KEY, lang);
+  // Pages that exist as one file per language (recipe book) declare them on <html>:
+  // data-page-es="recetario.html" data-page-pt="receitas.html"
+  const target = document.documentElement.dataset['page' + lang.charAt(0).toUpperCase() + lang.slice(1)];
+  if (target && !location.pathname.endsWith('/' + target)) { location.href = target; return; }
   applyTranslations(lang);
 }
 
