@@ -51,6 +51,14 @@
   .lang-btn.active { background: var(--burgundy); color: #fff; }
   .lang-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); }
 
+
+  /* ─── RECIPE BANNER ─── */
+  .recipe-banner { display: block; margin-top: 88px; background: var(--gold); color: var(--espresso); text-align: center; text-decoration: none;
+    padding: 0.85rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; transition: background 0.2s; }
+  .recipe-banner strong { color: var(--burgundy); font-weight: 700; }
+  .recipe-banner:hover { background: #d4b67a; }
+  .recipe-banner + #hero { padding-top: 0; }
+
   /* ─── HERO ─── */
   #hero { min-height: 100vh; padding-top: 80px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; }
   .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 80% at 80% 50%, rgba(201,157,137,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 15% 80%, rgba(139,21,54,0.06) 0%, transparent 50%); }
@@ -224,6 +232,7 @@
 
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
+    .recipe-banner { margin-top: 80px; font-size: 0.74rem; letter-spacing: 0.1em; padding: 0.8rem 1rem; }
     .nav-links { display: none; }
     #hero { display: flex; flex-direction: column; min-height: auto; padding-top: 70px; width: 100%; max-width: 100vw; overflow-x: hidden; }
     .hero-text { padding: 2.5rem 1.5rem 1.5rem; text-align: center; width: 100%; max-width: 100%; }
@@ -284,6 +293,9 @@
     <button class="lang-btn" data-lang="es">ES</button>
   </div>
 </nav>
+
+<!-- RECIPE BOOK BANNER -->
+<a href="receitas.html" class="recipe-banner" data-i18n-href="recipeBannerHref" data-i18n="recipeBanner">Livro de receitas disponível. <strong>Clique aqui.</strong></a>
 
 <!-- HERO -->
 <section id="hero">
